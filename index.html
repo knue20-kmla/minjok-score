@@ -39,16 +39,17 @@
       align-items: center;
       justify-content: space-between;
       gap: 24px;
-      padding: 32px 0 28px;
+      padding: 38px 0 30px;
     }
-    .brand { display: flex; align-items: center; gap: 17px; }
+    .brand { display: flex; align-items: center; gap: 19px; min-width: 0; }
+    .brand > div:last-child { min-width: 0; }
     .brand-mark {
-      width: 60px;
-      height: 60px;
+      width: 76px;
+      height: 76px;
       display: grid;
       place-items: center;
       flex: 0 0 auto;
-      border-radius: 14px;
+      border-radius: 16px;
       overflow: hidden;
       background: white;
       border: 1px solid #cddfd9;
@@ -60,25 +61,32 @@
       height: 100%;
       object-fit: contain;
     }
-    .brand h1 { margin: 0; font-size: 26px; letter-spacing: 0; }
-    .brand p { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+    .brand h1 { margin: 0; font-size: 31px; letter-spacing: 0; }
+    .brand p {
+      max-width: 100%;
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
     .top-actions {
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      flex-wrap: wrap;
-      gap: 8px;
+      flex-wrap: nowrap;
+      gap: 6px;
+      margin-left: auto;
     }
     .view-switch {
       display: flex;
-      gap: 6px;
-      padding: 4px;
+      gap: 2px;
+      padding: 2px;
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: 7px;
       background: rgba(255, 255, 255, 0.72);
     }
     .view-switch .button {
-      min-width: 92px;
+      min-width: 72px;
       border: 0;
       background: transparent;
       color: var(--muted);
@@ -100,6 +108,14 @@
     .button:hover { border-color: #9cbab5; background: #f9fdfb; }
     .button.primary { color: white; background: var(--teal); border-color: var(--teal); }
     .button.primary:hover { background: var(--teal-dark); }
+    .top-actions .button {
+      min-height: 32px;
+      height: 32px;
+      padding: 0 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
     .button.action {
       color: var(--teal-dark);
       border-color: #b8d8d1;
@@ -308,7 +324,11 @@
       font-size: 12px;
       line-height: 1.55;
     }
-    .side-column { position: sticky; top: 18px; }
+    .side-column {
+      position: sticky;
+      top: 18px;
+      padding-top: 97px;
+    }
     .score-panel {
       border: 1px solid #b9ddd6;
       border-radius: 8px;
@@ -397,16 +417,46 @@
     .invalid { border-color: #e5a29d; background: #fff8f7; }
     @media (max-width: 1100px) {
       .layout { grid-template-columns: 1fr; }
-      .side-column { position: static; }
+      .side-column { position: static; padding-top: 0; }
       .score-panel { display: grid; grid-template-columns: 1fr 1.5fr; }
       .score-panel-header { display: flex; flex-direction: column; justify-content: center; }
       .side-section { margin-top: 14px; }
     }
     @media (max-width: 760px) {
-      .shell { width: min(100% - 24px, 680px); }
-      .topbar { align-items: flex-start; padding-top: 20px; }
-      .top-actions { flex-direction: column; }
-      .top-actions .button { padding: 0 10px; font-size: 12px; }
+      body { overflow-x: hidden; }
+      .shell {
+        width: calc(100% - 24px);
+        max-width: calc(100% - 24px);
+      }
+      .topbar { display: block; padding-top: 24px; }
+      .brand { width: 100%; }
+      .brand > div:last-child { flex: 1 1 0; width: 0; }
+      .brand p { max-width: 250px; }
+      .top-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        margin-top: 16px;
+      }
+      .top-actions .button {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        min-height: 32px;
+        padding: 6px 8px;
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+      .top-actions .view-switch {
+        grid-column: 1 / -1;
+        width: max-content;
+        max-width: 100%;
+      }
       .intro { display: block; }
       .intro h2 { font-size: 23px; }
       .status { display: inline-block; margin-top: 12px; }
@@ -419,8 +469,8 @@
     }
     @media (max-width: 470px) {
       .brand { gap: 12px; }
-      .brand-mark { width: 50px; height: 50px; border-radius: 11px; }
-      .brand h1 { font-size: 19px; }
+      .brand-mark { width: 58px; height: 58px; border-radius: 12px; }
+      .brand h1 { font-size: 21px; }
       .brand p { font-size: 11px; }
       .semester-grid { grid-template-columns: 1fr; }
       .attendance-grid { grid-template-columns: 1fr 1fr; }
