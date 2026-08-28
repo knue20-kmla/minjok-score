@@ -369,7 +369,7 @@
     .side-column {
       position: sticky;
       top: 18px;
-      padding-top: 60px;
+      padding-top: 0;
     }
     .score-panel {
       border: 1px solid #b9ddd6;
@@ -611,10 +611,6 @@
             <p id="pdfStudentLine">학생 성적 및 출결 산출 결과</p>
           </div>
         </div>
-        <div class="intro">
-          <div class="status" id="saveStatus">현재 화면에서만 계산</div>
-        </div>
-
         <section class="section">
           <div class="section-heading">
             <div>
@@ -1331,7 +1327,6 @@
 
     function saveState() {
       localStorage.removeItem(storageKey);
-      document.getElementById("saveStatus").textContent = "현재 화면에서만 계산";
     }
 
     function loadState() {
