@@ -779,15 +779,15 @@
   <dialog id="emailDialog">
     <form class="dialog-inner" id="emailForm" method="dialog">
       <h2>결과 보내기</h2>
-      <p>받는 사람의 이메일 주소를 입력하면 성적 계산 결과가 메일 본문에 자동으로 채워집니다.</p>
+      <p>받는 사람의 이메일 주소를 입력하면 로그인된 Gmail의 새 메일 작성창에 결과가 자동으로 채워집니다.</p>
       <div class="field">
         <label for="emailTo">받는 이메일 주소</label>
         <input id="emailTo" type="email" placeholder="example@email.com" autocomplete="email" required>
       </div>
-      <p class="email-help">메일 발송은 기기에 설정된 기본 이메일 앱을 통해 진행됩니다.</p>
+      <p class="email-help">Gmail 작성창에서 내용을 확인한 뒤 직접 보내기를 눌러 발송합니다.</p>
       <div class="dialog-actions">
         <button class="button" id="cancelEmailButton" type="button">취소</button>
-        <button class="button primary" type="submit">메일 작성</button>
+        <button class="button primary" type="submit">Gmail 작성</button>
       </div>
     </form>
   </dialog>
@@ -1130,13 +1130,20 @@
       ].join("\n");
     }
 
+    function openGmailComposer(address) {
+      const subject = "민족사관고 1단계 성적 계산 결과";
+      const composeUrl = `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${encodeURIComponent(address)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(buildEmailBody())}`;
+      const popup = window.open(composeUrl, "_blank", "noopener,noreferrer");
+      if (!popup) window.location.href = composeUrl;
+    }
+
     function openEmailDialog() {
       emailForm.reset();
       if (typeof emailDialog.showModal === "function") {
         emailDialog.showModal();
       } else {
         const address = window.prompt("받는 이메일 주소를 입력하세요.");
-        if (address) window.location.href = `mailto:${address}?subject=${encodeURIComponent("민족사관고 1단계 성적 계산 결과")}&body=${encodeURIComponent(buildEmailBody())}`;
+        if (address) openGmailComposer(address);
       }
       window.setTimeout(() => document.getElementById("emailTo").focus(), 50);
     }
@@ -1329,7 +1336,7 @@
       const address = document.getElementById("emailTo").value.trim();
       if (!address) return;
       emailDialog.close();
-      window.location.href = `mailto:${address}?subject=${encodeURIComponent("민족사관고 1단계 성적 계산 결과")}&body=${encodeURIComponent(buildEmailBody())}`;
+      openGmailComposer(address);
     });
     studentModeButton.addEventListener("click", () => setMode("student"));
     adminModeButton.addEventListener("click", openAdminAccess);
