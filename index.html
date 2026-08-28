@@ -780,6 +780,7 @@
         </div>
         <div class="admin-actions">
           <span class="status">관리자 잠금 해제됨</span>
+          <button class="button" id="studentModeButton" type="button">학생 화면</button>
           <button class="button" id="changePasswordButton" type="button">비밀번호 변경</button>
           <button class="button" id="adminLogoutButton" type="button">관리자 잠금</button>
         </div>
@@ -879,12 +880,14 @@
     const gradePoints = { A: 40, B: 20, C: 10, D: 5, E: 0 };
     const storageKey = "minjok-score-calculator-v1";
     const settingsStorageKey = "minjok-score-calculator-settings-v1";
+    const settingsApiUrl = "";
 
     const semesterGrid = document.getElementById("semesterGrid");
     const semesterWeights = document.getElementById("semesterWeights");
     const subjectWeights = document.getElementById("subjectWeights");
     const studentView = document.getElementById("studentView");
     const adminView = document.getElementById("adminView");
+    const studentModeButton = document.getElementById("studentModeButton");
     const adminModeButton = document.getElementById("adminModeButton");
     const adminModeButtonMobile = document.getElementById("adminModeButtonMobile");
     const adminModeButtons = [adminModeButton, adminModeButtonMobile];
@@ -898,6 +901,7 @@
     const emailForm = document.getElementById("emailForm");
     const emailSubmitButton = document.getElementById("emailSubmitButton");
     let emailState = "idle";
+    let pendingSettingsSave = null;
     let latestCalculation = {
       subjectTotal: 0,
       deduction: 0,
@@ -947,6 +951,105 @@
       };
     }
 
+    function getSettingsApiUrl() {
+      return settingsApiUrl || document.getElementById("mailEndpoint").value.trim() || readStoredSettings().mailEndpoint;
+    }
+
+    function normalizeHttpsUrl(value) {
+      try {
+        const endpoint = new URL(value);
+        return endpoint.protocol === "https:" ? endpoint.toString() : "";
+      } catch (error) {
+        return "";
+      }
+    }
+
+    function appendQueryParams(url, params) {
+      const endpoint = new URL(url);
+      Object.entries(params).forEach(([key, value]) => endpoint.searchParams.set(key, value));
+      return endpoint.toString();
+    }
+
+    function loadSharedSettings() {
+      const endpoint = normalizeHttpsUrl(getSettingsApiUrl());
+      if (!endpoint) return Promise.resolve(null);
+      return new Promise(resolve => {
+        const callback = `minjokScoreSettings_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+        const script = document.createElement("script");
+        const timeout = window.setTimeout(() => {
+          cleanup();
+          resolve(null);
+        }, 8000);
+
+        function cleanup() {
+          window.clearTimeout(timeout);
+          delete window[callback];
+          script.remove();
+        }
+
+        window[callback] = data => {
+          cleanup();
+          resolve(data && data.settings ? data.settings : null);
+        };
+
+        try {
+          script.src = appendQueryParams(endpoint, { action: "settings", callback });
+        } catch (error) {
+          cleanup();
+          resolve(null);
+          return;
+        }
+        script.onerror = () => {
+          cleanup();
+          resolve(null);
+        };
+        document.head.appendChild(script);
+      });
+    }
+
+    function saveSharedSettings(settings) {
+      const endpoint = normalizeHttpsUrl(getSettingsApiUrl());
+      const token = settings.mailToken || "";
+      if (!endpoint || !token) return false;
+      cleanupPendingSettingsSave();
+      const frameName = `settings-result-${Date.now()}`;
+      const iframe = document.createElement("iframe");
+      iframe.name = frameName;
+      iframe.hidden = true;
+      document.body.appendChild(iframe);
+
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = endpoint;
+      form.target = frameName;
+      form.hidden = true;
+
+      const actionField = document.createElement("input");
+      actionField.name = "action";
+      actionField.value = "saveSettings";
+      const tokenField = document.createElement("input");
+      tokenField.name = "token";
+      tokenField.value = token;
+      const payloadField = document.createElement("input");
+      payloadField.name = "payload";
+      payloadField.value = JSON.stringify(settings);
+
+      form.append(actionField, tokenField, payloadField);
+      document.body.appendChild(form);
+      form.submit();
+      const timeout = window.setTimeout(cleanupPendingSettingsSave, 15000);
+      pendingSettingsSave = { iframe, form, timeout };
+      return true;
+    }
+
+    function cleanupPendingSettingsSave() {
+      if (!pendingSettingsSave) return;
+      window.clearTimeout(pendingSettingsSave.timeout);
+      pendingSettingsSave.iframe.remove();
+      pendingSettingsSave.form.remove();
+      pendingSettingsSave = null;
+    }
+
     function readStoredSettings() {
       const defaults = defaultSettings();
       const legacySubjectDefaults = {
@@ -989,6 +1092,19 @@
         }
       }
       return defaults;
+    }
+
+    async function bootstrapSharedSettings() {
+      const local = readStoredSettings();
+      const remote = await loadSharedSettings();
+      if (remote) {
+        localStorage.setItem(settingsStorageKey, JSON.stringify({
+          semesterWeights: { ...local.semesterWeights, ...(remote.semesterWeights || {}) },
+          subjectWeights: { ...local.subjectWeights, ...(remote.subjectWeights || {}) },
+          mailEndpoint: remote.mailEndpoint || local.mailEndpoint,
+          mailToken: remote.mailToken || local.mailToken
+        }));
+      }
     }
 
     function applySettings(settings) {
@@ -1157,10 +1273,20 @@
         document.getElementById("adminSettingsStatus").style.color = "var(--red)";
         return;
       }
+      if (settings.mailEndpoint && !normalizeHttpsUrl(settings.mailEndpoint)) {
+        document.getElementById("adminSettingsStatus").textContent = "Apps Script 웹 앱 URL은 https:// 주소여야 합니다.";
+        document.getElementById("adminSettingsStatus").style.color = "var(--red)";
+        return;
+      }
       localStorage.setItem(settingsStorageKey, JSON.stringify(settings));
       saveState();
-      document.getElementById("adminSettingsStatus").textContent = "설정이 이 브라우저에 저장되었습니다.";
-      document.getElementById("adminSettingsStatus").style.color = "var(--teal-dark)";
+      if (saveSharedSettings(settings)) {
+        document.getElementById("adminSettingsStatus").textContent = "공용 저장소에 저장 요청을 보냈습니다.";
+        document.getElementById("adminSettingsStatus").style.color = "var(--amber)";
+      } else {
+        document.getElementById("adminSettingsStatus").textContent = "설정이 이 브라우저에 저장되었습니다.";
+        document.getElementById("adminSettingsStatus").style.color = "var(--teal-dark)";
+      }
     }
 
     function studentLabel() {
@@ -1327,13 +1453,16 @@
       form.action = settings.mailEndpoint;
       form.target = frameName;
       form.hidden = true;
+      const actionField = document.createElement("input");
+      actionField.name = "action";
+      actionField.value = "sendMail";
       const tokenField = document.createElement("input");
       tokenField.name = "token";
       tokenField.value = settings.mailToken;
       const payloadField = document.createElement("input");
       payloadField.name = "payload";
       payloadField.value = JSON.stringify(buildEmailPayload(address));
-      form.append(tokenField, payloadField);
+      form.append(actionField, tokenField, payloadField);
       document.body.appendChild(form);
       form.submit();
       markEmailRequested();
@@ -1351,12 +1480,26 @@
 
     window.addEventListener("message", event => {
       const data = event.data;
-      if (!data || data.type !== "minjok-score-mail-result") return;
-      if (data.ok) {
-        setEmailStatus("성적표 PDF 이메일 발송이 완료되었습니다.");
-      } else {
-        allowEmailRetry();
-        setEmailStatus(data.message || "PDF 이메일 발송에 실패했습니다.", true);
+      if (!data) return;
+      if (data.type === "minjok-score-settings-result") {
+        cleanupPendingSettingsSave();
+        const status = document.getElementById("adminSettingsStatus");
+        if (data.ok) {
+          status.textContent = "공용 설정이 저장되었습니다. 다른 브라우저에도 반영됩니다.";
+          status.style.color = "var(--teal-dark)";
+        } else {
+          status.textContent = data.message || "공용 설정 저장에 실패했습니다.";
+          status.style.color = "var(--red)";
+        }
+        return;
+      }
+      if (data.type === "minjok-score-mail-result") {
+        if (data.ok) {
+          setEmailStatus("성적표 PDF 이메일 발송이 완료되었습니다.");
+        } else {
+          allowEmailRetry();
+          setEmailStatus(data.message || "PDF 이메일 발송에 실패했습니다.", true);
+        }
       }
     });
 
@@ -1499,8 +1642,12 @@
     createSemesterCards();
     createWeightFields();
     loadState();
-    applySettings(readStoredSettings());
-    setMode("student");
+    bootstrapSharedSettings().finally(() => {
+      createWeightFields();
+      applySettings(readStoredSettings());
+      setMode("student");
+      update();
+    });
     document.addEventListener("input", update);
     document.addEventListener("change", update);
     document.getElementById("resetButton").addEventListener("click", reset);
@@ -1523,15 +1670,17 @@
     });
     adminModeButton.addEventListener("click", openAdminAccess);
     adminModeButtonMobile.addEventListener("click", openAdminAccess);
+    studentModeButton.addEventListener("click", () => setMode("student"));
     document.getElementById("cancelAdminButton").addEventListener("click", () => adminDialog.close());
     document.getElementById("changePasswordButton").addEventListener("click", () => openAdminDialog("change"));
     document.getElementById("adminLogoutButton").addEventListener("click", lockAdmin);
     document.getElementById("saveSettingsButton").addEventListener("click", saveSettings);
-    document.querySelectorAll(".semester-weight, .subject-weight, #mailEndpoint, #mailToken").forEach(input => {
-      input.addEventListener("input", markSettingsDirty);
+    document.addEventListener("input", event => {
+      if (event.target.matches(".semester-weight, .subject-weight, #mailEndpoint, #mailToken")) {
+        markSettingsDirty();
+      }
     });
     adminForm.addEventListener("submit", submitAdminForm);
-    update();
   </script>
 </body>
 </html>
