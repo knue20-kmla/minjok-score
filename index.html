@@ -829,7 +829,7 @@
       <p class="email-status" id="emailStatus" role="status"></p>
       <div class="dialog-actions">
         <button class="button" id="cancelEmailButton" type="button">취소</button>
-        <button class="button primary" type="submit">PDF 이메일 보내기</button>
+        <button class="button primary" id="emailSubmitButton" type="submit">PDF 이메일 보내기</button>
       </div>
     </form>
   </dialog>
@@ -869,6 +869,8 @@
     let adminDialogMode = "login";
     const emailDialog = document.getElementById("emailDialog");
     const emailForm = document.getElementById("emailForm");
+    const emailSubmitButton = document.getElementById("emailSubmitButton");
+    let emailState = "idle";
     let latestCalculation = {
       subjectTotal: 0,
       deduction: 0,
@@ -1221,6 +1223,10 @@
 
     function openEmailDialog() {
       emailForm.reset();
+      emailState = "idle";
+      emailSubmitButton.type = "submit";
+      emailSubmitButton.disabled = false;
+      emailSubmitButton.textContent = "PDF 이메일 보내기";
       document.getElementById("emailStatus").textContent = "";
       document.getElementById("emailStatus").classList.remove("error");
       if (typeof emailDialog.showModal === "function") {
@@ -1238,7 +1244,22 @@
       status.classList.toggle("error", isError);
     }
 
+    function markEmailRequested() {
+      emailState = "requested";
+      emailSubmitButton.type = "button";
+      emailSubmitButton.disabled = false;
+      emailSubmitButton.textContent = "보내기 완료";
+    }
+
+    function allowEmailRetry() {
+      emailState = "idle";
+      emailSubmitButton.type = "submit";
+      emailSubmitButton.disabled = false;
+      emailSubmitButton.textContent = "PDF 이메일 다시 보내기";
+    }
+
     function sendPdfEmail(address) {
+      if (emailState !== "idle") return;
       const settings = readStoredSettings();
       if (!settings.mailEndpoint || !settings.mailToken) {
         setEmailStatus("관리자 화면에서 Apps Script URL과 앱 토큰을 먼저 저장하세요.", true);
@@ -1277,6 +1298,7 @@
       form.append(tokenField, payloadField);
       document.body.appendChild(form);
       form.submit();
+      markEmailRequested();
 
       window.setTimeout(() => {
         if (!emailDialog.open) return;
@@ -1292,11 +1314,10 @@
     window.addEventListener("message", event => {
       const data = event.data;
       if (!data || data.type !== "minjok-score-mail-result") return;
-      const submitButton = emailForm.querySelector('button[type="submit"]');
-      submitButton.disabled = false;
       if (data.ok) {
         setEmailStatus("성적표 PDF 이메일 발송이 완료되었습니다.");
       } else {
+        allowEmailRetry();
         setEmailStatus(data.message || "PDF 이메일 발송에 실패했습니다.", true);
       }
     });
@@ -1486,9 +1507,16 @@
     document.getElementById("cancelEmailButton").addEventListener("click", () => emailDialog.close());
     emailForm.addEventListener("submit", event => {
       event.preventDefault();
+      if (emailState === "requested") {
+        emailDialog.close();
+        return;
+      }
       const address = document.getElementById("emailTo").value.trim();
       if (!address) return;
       sendPdfEmail(address);
+    });
+    emailSubmitButton.addEventListener("click", () => {
+      if (emailState === "requested") emailDialog.close();
     });
     studentModeButton.addEventListener("click", () => setMode("student"));
     adminModeButton.addEventListener("click", openAdminAccess);
