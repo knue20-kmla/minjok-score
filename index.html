@@ -158,6 +158,23 @@
       font-size: 12px;
       font-weight: 700;
     }
+    .mail-settings {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+    .mail-settings h4 { margin: 0 0 8px; font-size: 13px; }
+    .mail-settings-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      gap: 10px;
+    }
+    .mail-settings-note {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
     .layout {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 330px;
@@ -422,6 +439,15 @@
     .dialog-inner p { margin: 7px 0 18px; color: var(--muted); font-size: 13px; line-height: 1.55; }
     .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
     .email-help { margin-top: 8px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .email-status {
+      min-height: 18px;
+      margin: 10px 0 0;
+      color: var(--teal-dark);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+    .email-status.error { color: var(--red); }
     .dialog-error {
       min-height: 18px;
       margin: 10px 0 0;
@@ -490,6 +516,7 @@
       .semester-grid { grid-template-columns: 1fr; }
       .attendance-grid { grid-template-columns: 1fr 1fr; }
       .subject-weight-list { grid-template-columns: 1fr; }
+      .mail-settings-grid { grid-template-columns: 1fr; }
       .section-heading { align-items: flex-start; }
     }
     @media print {
@@ -744,6 +771,20 @@
             <p class="weight-help">사회/역사와 음악/미술은 각 학기 이수 과목 중 높은 성취도를 입력하는 영역입니다.</p>
           </div>
         </div>
+        <div class="mail-settings">
+          <h4>PDF 이메일 자동 발송 설정</h4>
+          <div class="mail-settings-grid">
+            <div class="weight-field">
+              <label for="mailEndpoint">Apps Script 웹 앱 URL</label>
+              <input id="mailEndpoint" type="url" placeholder="https://script.google.com/macros/s/.../exec">
+            </div>
+            <div class="weight-field">
+              <label for="mailToken">앱 토큰</label>
+              <input id="mailToken" type="password" placeholder="Apps Script의 APP_TOKEN과 동일하게 입력">
+            </div>
+          </div>
+          <p class="mail-settings-note">관리자 Google 계정에서 Apps Script 웹 앱을 배포한 뒤 URL과 토큰을 입력하세요. 저장 후 학생이 이메일을 입력하면 해당 계정에서 성적표 PDF를 발송합니다.</p>
+        </div>
         <div class="admin-settings-footer">
           <span class="admin-settings-status" id="adminSettingsStatus">저장된 설정을 사용 중입니다.</span>
           <button class="button primary" id="saveSettingsButton" type="button">설정 저장</button>
@@ -778,16 +819,17 @@
 
   <dialog id="emailDialog">
     <form class="dialog-inner" id="emailForm" method="dialog">
-      <h2>결과 보내기</h2>
-      <p>받는 사람의 이메일 주소를 입력하면 로그인된 Gmail의 새 메일 작성창에 결과가 자동으로 채워집니다.</p>
+      <h2>성적표 PDF 보내기</h2>
+      <p>이메일 주소를 입력하면 관리자 Gmail 계정에서 성적표 PDF를 자동으로 발송합니다.</p>
       <div class="field">
         <label for="emailTo">받는 이메일 주소</label>
         <input id="emailTo" type="email" placeholder="example@email.com" autocomplete="email" required>
       </div>
-      <p class="email-help">Gmail 작성창에서 내용을 확인한 뒤 직접 보내기를 눌러 발송합니다.</p>
+      <p class="email-help">관리자 화면에서 Apps Script 이메일 발송 설정을 먼저 저장해야 합니다.</p>
+      <p class="email-status" id="emailStatus" role="status"></p>
       <div class="dialog-actions">
         <button class="button" id="cancelEmailButton" type="button">취소</button>
-        <button class="button primary" type="submit">Gmail 작성</button>
+        <button class="button primary" type="submit">PDF 이메일 보내기</button>
       </div>
     </form>
   </dialog>
@@ -870,7 +912,9 @@
     function defaultSettings() {
       return {
         semesterWeights: Object.fromEntries(semesters.map(semester => [semester.id, semester.rate])),
-        subjectWeights: Object.fromEntries(subjects.map(subject => [subject.id, subject.weight]))
+        subjectWeights: Object.fromEntries(subjects.map(subject => [subject.id, subject.weight])),
+        mailEndpoint: "",
+        mailToken: ""
       };
     }
 
@@ -896,7 +940,9 @@
           const parsed = JSON.parse(candidate);
           return {
             semesterWeights: { ...defaults.semesterWeights, ...(parsed.semesterWeights || {}) },
-            subjectWeights: { ...defaults.subjectWeights, ...(parsed.subjectWeights || {}) }
+            subjectWeights: { ...defaults.subjectWeights, ...(parsed.subjectWeights || {}) },
+            mailEndpoint: parsed.mailEndpoint || "",
+            mailToken: parsed.mailToken || ""
           };
         } catch (error) {
           // Try the next candidate.
@@ -914,6 +960,8 @@
         const input = document.querySelector(`.subject-weight[data-subject="${id}"]`);
         if (input) input.value = value;
       });
+      document.getElementById("mailEndpoint").value = settings.mailEndpoint || "";
+      document.getElementById("mailToken").value = settings.mailToken || "";
     }
 
     function createWeightFields() {
@@ -1059,7 +1107,9 @@
     function saveSettings() {
       const settings = {
         semesterWeights: currentSemesterWeights(),
-        subjectWeights: currentSubjectWeights()
+        subjectWeights: currentSubjectWeights(),
+        mailEndpoint: document.getElementById("mailEndpoint").value.trim(),
+        mailToken: document.getElementById("mailToken").value.trim()
       };
       const semesterTotal = Object.values(settings.semesterWeights).reduce((sum, value) => sum + value, 0);
       if (semesterTotal !== 100) {
@@ -1130,23 +1180,126 @@
       ].join("\n");
     }
 
-    function openGmailComposer(address) {
-      const subject = "민족사관고 1단계 성적 계산 결과";
-      const composeUrl = `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${encodeURIComponent(address)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(buildEmailBody())}`;
-      const popup = window.open(composeUrl, "_blank", "noopener,noreferrer");
-      if (!popup) window.location.href = composeUrl;
+    function buildEmailPayload(recipient) {
+      const gradeRows = semesters.map(semester => ({
+        id: semester.id,
+        label: semester.label,
+        short: semester.short,
+        rate: latestCalculation.semesterResults.find(item => item.id === semester.id)?.rate || 0,
+        score: latestCalculation.semesterResults.find(item => item.id === semester.id)?.score,
+        entered: latestCalculation.semesterResults.find(item => item.id === semester.id)?.entered || 0,
+        contribution: latestCalculation.semesterResults.find(item => item.id === semester.id)?.contribution || 0,
+        grades: subjects.map(subject => ({
+          label: subject.label,
+          value: document.querySelector(`[data-semester="${semester.id}"][data-subject="${subject.id}"]`).value || ""
+        }))
+      }));
+      return {
+        recipient,
+        student: {
+          name: document.getElementById("studentName").value.trim() || "미입력",
+          school: document.getElementById("studentSchool").value.trim() || "미입력"
+        },
+        attendance: {
+          absences: latestCalculation.absenceDays,
+          lates: numberValue("lates"),
+          earlyLeaves: numberValue("earlyLeaves"),
+          results: numberValue("results"),
+          convertedAbsences: latestCalculation.convertedAbsences,
+          totalAbsences: latestCalculation.absenceDays + latestCalculation.convertedAbsences
+        },
+        calculation: {
+          subjectTotal: latestCalculation.subjectTotal,
+          deduction: latestCalculation.deduction,
+          finalScore: latestCalculation.finalScore,
+          maxScore: 40
+        },
+        semesters: gradeRows,
+        generatedAt: new Date().toISOString()
+      };
     }
 
     function openEmailDialog() {
       emailForm.reset();
+      document.getElementById("emailStatus").textContent = "";
+      document.getElementById("emailStatus").classList.remove("error");
       if (typeof emailDialog.showModal === "function") {
         emailDialog.showModal();
       } else {
         const address = window.prompt("받는 이메일 주소를 입력하세요.");
-        if (address) openGmailComposer(address);
+        if (address) sendPdfEmail(address.trim());
       }
       window.setTimeout(() => document.getElementById("emailTo").focus(), 50);
     }
+
+    function setEmailStatus(message, isError = false) {
+      const status = document.getElementById("emailStatus");
+      status.textContent = message;
+      status.classList.toggle("error", isError);
+    }
+
+    function sendPdfEmail(address) {
+      const settings = readStoredSettings();
+      if (!settings.mailEndpoint || !settings.mailToken) {
+        setEmailStatus("관리자 화면에서 Apps Script URL과 앱 토큰을 먼저 저장하세요.", true);
+        return;
+      }
+      try {
+        const endpoint = new URL(settings.mailEndpoint);
+        if (endpoint.protocol !== "https:") throw new Error("HTTPS URL required");
+      } catch (error) {
+        setEmailStatus("Apps Script 웹 앱 URL을 확인하세요.", true);
+        return;
+      }
+
+      const submitButton = emailForm.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      setEmailStatus("PDF 생성 및 이메일 발송을 요청하고 있습니다...");
+
+      const frameName = `mail-result-${Date.now()}`;
+      const iframe = document.createElement("iframe");
+      iframe.name = frameName;
+      iframe.title = "이메일 발송 상태";
+      iframe.hidden = true;
+      document.body.appendChild(iframe);
+
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = settings.mailEndpoint;
+      form.target = frameName;
+      form.hidden = true;
+      const tokenField = document.createElement("input");
+      tokenField.name = "token";
+      tokenField.value = settings.mailToken;
+      const payloadField = document.createElement("input");
+      payloadField.name = "payload";
+      payloadField.value = JSON.stringify(buildEmailPayload(address));
+      form.append(tokenField, payloadField);
+      document.body.appendChild(form);
+      form.submit();
+
+      window.setTimeout(() => {
+        if (!emailDialog.open) return;
+        setEmailStatus("발송 요청을 보냈습니다. 관리자 Gmail 계정에서 PDF를 생성해 발송합니다.");
+      }, 1500);
+      window.setTimeout(() => {
+        iframe.remove();
+        form.remove();
+        submitButton.disabled = false;
+      }, 15000);
+    }
+
+    window.addEventListener("message", event => {
+      const data = event.data;
+      if (!data || data.type !== "minjok-score-mail-result") return;
+      const submitButton = emailForm.querySelector('button[type="submit"]');
+      submitButton.disabled = false;
+      if (data.ok) {
+        setEmailStatus("성적표 PDF 이메일 발송이 완료되었습니다.");
+      } else {
+        setEmailStatus(data.message || "PDF 이메일 발송에 실패했습니다.", true);
+      }
+    });
 
     function saveState() {
       const state = {
@@ -1335,8 +1488,7 @@
       event.preventDefault();
       const address = document.getElementById("emailTo").value.trim();
       if (!address) return;
-      emailDialog.close();
-      openGmailComposer(address);
+      sendPdfEmail(address);
     });
     studentModeButton.addEventListener("click", () => setMode("student"));
     adminModeButton.addEventListener("click", openAdminAccess);
@@ -1344,7 +1496,7 @@
     document.getElementById("changePasswordButton").addEventListener("click", () => openAdminDialog("change"));
     document.getElementById("adminLogoutButton").addEventListener("click", lockAdmin);
     document.getElementById("saveSettingsButton").addEventListener("click", saveSettings);
-    document.querySelectorAll(".semester-weight, .subject-weight").forEach(input => {
+    document.querySelectorAll(".semester-weight, .subject-weight, #mailEndpoint, #mailToken").forEach(input => {
       input.addEventListener("input", markSettingsDirty);
     });
     adminForm.addEventListener("submit", submitAdminForm);
