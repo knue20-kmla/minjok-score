@@ -61,7 +61,15 @@
       height: 100%;
       object-fit: contain;
     }
-    .brand h1 { margin: 0; font-size: 31px; letter-spacing: 0; }
+    .brand h1 {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin: 0;
+      font-size: 31px;
+      letter-spacing: 0;
+    }
+    .brand h1 > span { min-width: 0; }
     .brand p {
       max-width: 100%;
       margin: 8px 0 0;
@@ -112,6 +120,7 @@
       border-color: var(--teal);
       background: var(--teal);
     }
+    .mobile-settings-button { display: none; }
     .button.action {
       color: var(--teal-dark);
       border-color: #b8d8d1;
@@ -500,8 +509,27 @@
         overflow-wrap: anywhere;
       }
       .top-actions .settings-button {
-        grid-column: 2;
-        justify-self: end;
+        display: none;
+      }
+      .mobile-settings-button {
+        display: inline-grid;
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        margin-left: 4px;
+        padding: 0;
+        border: 0;
+        border-radius: 4px;
+        color: var(--muted);
+        background: transparent;
+        font-size: 16px;
+        line-height: 1;
+        vertical-align: middle;
+      }
+      .mobile-settings-button:hover,
+      .mobile-settings-button.active {
+        color: var(--teal-dark);
+        background: var(--teal-soft);
       }
       .intro { display: block; }
       .intro h2 { font-size: 23px; }
@@ -581,7 +609,10 @@
           <img src="https://i.imgur.com/Mo4ogKc.png" alt="민족사관고등학교 로고">
         </div>
         <div>
-          <h1>민족사관고등학교 입학 성적 계산기</h1>
+          <h1>
+            <span>민족사관고등학교 입학 성적 계산기</span>
+            <button class="settings-button mobile-settings-button" id="adminModeButtonMobile" type="button" aria-label="설정" title="설정">⚙</button>
+          </h1>
           <p>2027학년도 신입생 모집요강 기준, 1단계 교과성적(출결)</p>
         </div>
       </div>
@@ -855,6 +886,8 @@
     const studentView = document.getElementById("studentView");
     const adminView = document.getElementById("adminView");
     const adminModeButton = document.getElementById("adminModeButton");
+    const adminModeButtonMobile = document.getElementById("adminModeButtonMobile");
+    const adminModeButtons = [adminModeButton, adminModeButtonMobile];
     const adminDialog = document.getElementById("adminDialog");
     const adminForm = document.getElementById("adminForm");
     const adminPasswordKey = "minjok-score-admin-password-sha256-v1";
@@ -1328,7 +1361,7 @@
       const isAdmin = mode === "admin" && adminUnlocked;
       studentView.classList.toggle("view-hidden", isAdmin);
       adminView.classList.toggle("view-hidden", !isAdmin);
-      adminModeButton.classList.toggle("active", isAdmin);
+      adminModeButtons.forEach(button => button.classList.toggle("active", isAdmin));
       if (!isAdmin) adminDialog.close();
     }
 
@@ -1478,6 +1511,7 @@
       if (emailState === "requested") emailDialog.close();
     });
     adminModeButton.addEventListener("click", openAdminAccess);
+    adminModeButtonMobile.addEventListener("click", openAdminAccess);
     document.getElementById("cancelAdminButton").addEventListener("click", () => adminDialog.close());
     document.getElementById("changePasswordButton").addEventListener("click", () => openAdminDialog("change"));
     document.getElementById("adminLogoutButton").addEventListener("click", lockAdmin);
