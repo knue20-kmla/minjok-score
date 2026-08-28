@@ -143,6 +143,21 @@
       font-size: 12px;
       font-weight: 800;
     }
+    .admin-settings-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+    .admin-settings-status {
+      margin-right: auto;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
     .layout {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 330px;
@@ -729,6 +744,10 @@
             <p class="weight-help">사회/역사와 음악/미술은 각 학기 이수 과목 중 높은 성취도를 입력하는 영역입니다.</p>
           </div>
         </div>
+        <div class="admin-settings-footer">
+          <span class="admin-settings-status" id="adminSettingsStatus">저장된 설정을 사용 중입니다.</span>
+          <button class="button primary" id="saveSettingsButton" type="button">설정 저장</button>
+        </div>
       </div>
     </section>
   </div>
@@ -791,6 +810,7 @@
     ];
     const gradePoints = { A: 40, B: 20, C: 10, D: 5, E: 0 };
     const storageKey = "minjok-score-calculator-v1";
+    const settingsStorageKey = "minjok-score-calculator-settings-v1";
 
     const semesterGrid = document.getElementById("semesterGrid");
     const semesterWeights = document.getElementById("semesterWeights");
@@ -847,17 +867,67 @@
       `).join("");
     }
 
+    function defaultSettings() {
+      return {
+        semesterWeights: Object.fromEntries(semesters.map(semester => [semester.id, semester.rate])),
+        subjectWeights: Object.fromEntries(subjects.map(subject => [subject.id, subject.weight]))
+      };
+    }
+
+    function readStoredSettings() {
+      const defaults = defaultSettings();
+      const candidates = [localStorage.getItem(settingsStorageKey)];
+      const legacyState = localStorage.getItem(storageKey);
+      if (legacyState) {
+        try {
+          const parsed = JSON.parse(legacyState);
+          candidates.push(JSON.stringify({
+            semesterWeights: parsed.semesterWeights,
+            subjectWeights: parsed.subjectWeights
+          }));
+        } catch (error) {
+          // Ignore invalid legacy state and use defaults.
+        }
+      }
+
+      for (const candidate of candidates) {
+        if (!candidate) continue;
+        try {
+          const parsed = JSON.parse(candidate);
+          return {
+            semesterWeights: { ...defaults.semesterWeights, ...(parsed.semesterWeights || {}) },
+            subjectWeights: { ...defaults.subjectWeights, ...(parsed.subjectWeights || {}) }
+          };
+        } catch (error) {
+          // Try the next candidate.
+        }
+      }
+      return defaults;
+    }
+
+    function applySettings(settings) {
+      Object.entries(settings.semesterWeights || {}).forEach(([id, value]) => {
+        const input = document.querySelector(`.semester-weight[data-semester="${id}"]`);
+        if (input) input.value = value;
+      });
+      Object.entries(settings.subjectWeights || {}).forEach(([id, value]) => {
+        const input = document.querySelector(`.subject-weight[data-subject="${id}"]`);
+        if (input) input.value = value;
+      });
+    }
+
     function createWeightFields() {
+      const settings = readStoredSettings();
       semesterWeights.innerHTML = semesters.map(semester => `
         <div class="weight-field">
           <label for="weight-${semester.id}">${semester.short}</label>
-          <input id="weight-${semester.id}" class="semester-weight" data-semester="${semester.id}" type="number" min="0" max="100" step="1" value="${semester.rate}">
+          <input id="weight-${semester.id}" class="semester-weight" data-semester="${semester.id}" type="number" min="0" max="100" step="1" value="${settings.semesterWeights[semester.id]}">
         </div>
       `).join("");
       subjectWeights.innerHTML = subjects.map(subject => `
         <div class="weight-field">
           <label for="weight-${subject.id}">${subject.label}</label>
-          <input id="weight-${subject.id}" class="subject-weight" data-subject="${subject.id}" type="number" min="0" step="1" value="${subject.weight}">
+          <input id="weight-${subject.id}" class="subject-weight" data-subject="${subject.id}" type="number" min="0" step="1" value="${settings.subjectWeights[subject.id]}">
         </div>
       `).join("");
     }
@@ -981,6 +1051,28 @@
       saveState();
     }
 
+    function markSettingsDirty() {
+      document.getElementById("adminSettingsStatus").textContent = "변경사항이 있습니다. 설정 저장을 눌러 반영하세요.";
+      document.getElementById("adminSettingsStatus").style.color = "var(--amber)";
+    }
+
+    function saveSettings() {
+      const settings = {
+        semesterWeights: currentSemesterWeights(),
+        subjectWeights: currentSubjectWeights()
+      };
+      const semesterTotal = Object.values(settings.semesterWeights).reduce((sum, value) => sum + value, 0);
+      if (semesterTotal !== 100) {
+        document.getElementById("adminSettingsStatus").textContent = `학기 반영 비율 합계가 ${semesterTotal}%입니다. 100%가 되도록 확인하세요.`;
+        document.getElementById("adminSettingsStatus").style.color = "var(--red)";
+        return;
+      }
+      localStorage.setItem(settingsStorageKey, JSON.stringify(settings));
+      saveState();
+      document.getElementById("adminSettingsStatus").textContent = "설정이 이 브라우저에 저장되었습니다.";
+      document.getElementById("adminSettingsStatus").style.color = "var(--teal-dark)";
+    }
+
     function studentLabel() {
       const name = document.getElementById("studentName").value.trim();
       const school = document.getElementById("studentSchool").value.trim();
@@ -1082,14 +1174,6 @@
         Object.entries(state.grades || {}).forEach(([key, value]) => {
           const [semester, subject] = key.split(".");
           const input = document.querySelector(`[data-semester="${semester}"][data-subject="${subject}"]`);
-          if (input) input.value = value;
-        });
-        Object.entries(state.semesterWeights || {}).forEach(([id, value]) => {
-          const input = document.querySelector(`.semester-weight[data-semester="${id}"]`);
-          if (input) input.value = value;
-        });
-        Object.entries(state.subjectWeights || {}).forEach(([id, value]) => {
-          const input = document.querySelector(`.subject-weight[data-subject="${id}"]`);
           if (input) input.value = value;
         });
       } catch (error) {
@@ -1231,6 +1315,7 @@
     createSemesterCards();
     createWeightFields();
     loadState();
+    applySettings(readStoredSettings());
     setMode("student");
     document.addEventListener("input", update);
     document.addEventListener("change", update);
@@ -1251,6 +1336,10 @@
     document.getElementById("cancelAdminButton").addEventListener("click", () => adminDialog.close());
     document.getElementById("changePasswordButton").addEventListener("click", () => openAdminDialog("change"));
     document.getElementById("adminLogoutButton").addEventListener("click", lockAdmin);
+    document.getElementById("saveSettingsButton").addEventListener("click", saveSettings);
+    document.querySelectorAll(".semester-weight, .subject-weight").forEach(input => {
+      input.addEventListener("input", markSettingsDirty);
+    });
     adminForm.addEventListener("submit", submitAdminForm);
     update();
   </script>
