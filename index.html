@@ -77,24 +77,6 @@
       gap: 6px;
       margin-left: auto;
     }
-    .view-switch {
-      display: flex;
-      gap: 2px;
-      padding: 2px;
-      border: 1px solid var(--line);
-      border-radius: 7px;
-      background: rgba(255, 255, 255, 0.72);
-    }
-    .view-switch .button {
-      min-width: 72px;
-      border: 0;
-      background: transparent;
-      color: var(--muted);
-    }
-    .view-switch .button.active {
-      color: white;
-      background: var(--teal);
-    }
     .view-hidden { display: none !important; }
     .button {
       min-height: 38px;
@@ -115,6 +97,20 @@
       border-radius: 6px;
       font-size: 12px;
       white-space: nowrap;
+    }
+    .top-actions .settings-button {
+      width: 32px;
+      min-width: 32px;
+      padding: 0;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1;
+    }
+    .top-actions .settings-button:hover,
+    .top-actions .settings-button.active {
+      color: white;
+      border-color: var(--teal);
+      background: var(--teal);
     }
     .button.action {
       color: var(--teal-dark);
@@ -503,10 +499,9 @@
         white-space: normal;
         overflow-wrap: anywhere;
       }
-      .top-actions .view-switch {
-        grid-column: 1 / -1;
-        width: max-content;
-        max-width: 100%;
+      .top-actions .settings-button {
+        grid-column: 2;
+        justify-self: end;
       }
       .intro { display: block; }
       .intro h2 { font-size: 23px; }
@@ -587,18 +582,15 @@
         </div>
         <div>
           <h1>민족사관고등학교 입학 성적 계산기</h1>
-          <p>2027학년도 신입생 모집요강 기준 · 1단계 교과성적 및 출결</p>
+          <p>2027학년도 신입생 모집요강 기준, 1단계 교과성적(출결)</p>
         </div>
       </div>
       <div class="top-actions">
-        <div class="view-switch" role="tablist" aria-label="화면 전환">
-          <button class="button active" id="studentModeButton" type="button">학생 화면</button>
-          <button class="button" id="adminModeButton" type="button">관리자 화면</button>
-        </div>
         <button class="button action" id="pdfButton" type="button">결과 저장 (PDF)</button>
         <button class="button email-action" id="emailButton" type="button">결과 보내기 (이메일)</button>
         <button class="button" id="printButton" type="button">결과 인쇄</button>
         <button class="button" id="resetButton" type="button">입력 초기화</button>
+        <button class="button settings-button" id="adminModeButton" type="button" aria-label="설정" title="설정">⚙</button>
       </div>
     </header>
 
@@ -639,7 +631,7 @@
               <h3>교과성적 입력</h3>
               <p>각 학기의 성취도 A~E 또는 이수하지 않은 경우 ‘없음’을 선택하세요.</p>
             </div>
-            <strong id="enteredCount">0 / 28 입력</strong>
+            <strong id="enteredCount">0/28</strong>
           </div>
           <div class="section-body">
             <div class="semester-grid" id="semesterGrid"></div>
@@ -862,7 +854,6 @@
     const subjectWeights = document.getElementById("subjectWeights");
     const studentView = document.getElementById("studentView");
     const adminView = document.getElementById("adminView");
-    const studentModeButton = document.getElementById("studentModeButton");
     const adminModeButton = document.getElementById("adminModeButton");
     const adminDialog = document.getElementById("adminDialog");
     const adminForm = document.getElementById("adminForm");
@@ -1087,7 +1078,7 @@
       document.getElementById("attendanceDeduction").textContent = `- ${deduction.toFixed(2)}점`;
       document.getElementById("convertedAbsences").textContent = `${absenceDays + convertedAbsences}일`;
       document.getElementById("finalScore").innerHTML = `${finalScore.toFixed(2)} <span>/ 40점</span>`;
-      document.getElementById("enteredCount").textContent = `${entered} / 28 입력`;
+      document.getElementById("enteredCount").textContent = `${entered}/28`;
       document.getElementById("inputHint").textContent = entered
         ? `${semesterResults.filter(item => item.score !== null).length}개 학기, 28개 영역 중 ${entered}개가 입력되었습니다. ‘없음’은 미이수 과목으로 처리됩니다.`
         : "28개 영역 중 입력된 성취도가 없습니다.";
@@ -1337,10 +1328,7 @@
       const isAdmin = mode === "admin" && adminUnlocked;
       studentView.classList.toggle("view-hidden", isAdmin);
       adminView.classList.toggle("view-hidden", !isAdmin);
-      studentModeButton.classList.toggle("active", !isAdmin);
       adminModeButton.classList.toggle("active", isAdmin);
-      studentModeButton.setAttribute("aria-selected", String(!isAdmin));
-      adminModeButton.setAttribute("aria-selected", String(isAdmin));
       if (!isAdmin) adminDialog.close();
     }
 
@@ -1489,7 +1477,6 @@
     emailSubmitButton.addEventListener("click", () => {
       if (emailState === "requested") emailDialog.close();
     });
-    studentModeButton.addEventListener("click", () => setMode("student"));
     adminModeButton.addEventListener("click", openAdminAccess);
     document.getElementById("cancelAdminButton").addEventListener("click", () => adminDialog.close());
     document.getElementById("changePasswordButton").addEventListener("click", () => openAdminDialog("change"));
