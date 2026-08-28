@@ -880,7 +880,7 @@
     const gradePoints = { A: 40, B: 20, C: 10, D: 5, E: 0 };
     const storageKey = "minjok-score-calculator-v1";
     const settingsStorageKey = "minjok-score-calculator-settings-v1";
-    const settingsApiUrl = "";
+    const settingsApiUrl = "https://script.google.com/macros/s/AKfycbwuT1ZNF1i8LorXvqZp2vaybDS1gtJydZwAv1Xjwj79B4vvi327d_KTE-zYgtO8fQN6uQ/exec";
 
     const semesterGrid = document.getElementById("semesterGrid");
     const semesterWeights = document.getElementById("semesterWeights");
@@ -946,7 +946,7 @@
       return {
         semesterWeights: Object.fromEntries(semesters.map(semester => [semester.id, semester.rate])),
         subjectWeights: Object.fromEntries(subjects.map(subject => [subject.id, subject.weight])),
-        mailEndpoint: "",
+        mailEndpoint: settingsApiUrl,
         mailToken: ""
       };
     }
@@ -1084,7 +1084,7 @@
           return {
             semesterWeights: { ...defaults.semesterWeights, ...(parsed.semesterWeights || {}) },
             subjectWeights: isLegacyDefault ? defaults.subjectWeights : { ...defaults.subjectWeights, ...storedSubjects },
-            mailEndpoint: parsed.mailEndpoint || "",
+            mailEndpoint: parsed.mailEndpoint || settingsApiUrl || "",
             mailToken: parsed.mailToken || ""
           };
         } catch (error) {
@@ -1101,7 +1101,7 @@
         localStorage.setItem(settingsStorageKey, JSON.stringify({
           semesterWeights: { ...local.semesterWeights, ...(remote.semesterWeights || {}) },
           subjectWeights: { ...local.subjectWeights, ...(remote.subjectWeights || {}) },
-          mailEndpoint: remote.mailEndpoint || local.mailEndpoint,
+          mailEndpoint: remote.mailEndpoint || local.mailEndpoint || settingsApiUrl,
           mailToken: remote.mailToken || local.mailToken
         }));
       }
@@ -1264,7 +1264,7 @@
       const settings = {
         semesterWeights: currentSemesterWeights(),
         subjectWeights: currentSubjectWeights(),
-        mailEndpoint: document.getElementById("mailEndpoint").value.trim(),
+        mailEndpoint: document.getElementById("mailEndpoint").value.trim() || settingsApiUrl,
         mailToken: document.getElementById("mailToken").value.trim()
       };
       const semesterTotal = Object.values(settings.semesterWeights).reduce((sum, value) => sum + value, 0);
