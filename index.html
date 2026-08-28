@@ -794,7 +794,7 @@
           <div>
             <h4>과목별 가중치</h4>
             <div class="subject-weight-list" id="subjectWeights"></div>
-            <p class="weight-help">사회/역사와 음악/미술은 각 학기 이수 과목 중 높은 성취도를 입력하는 영역입니다.</p>
+            <p class="weight-help">기본값은 국어·영어·수학 3, 사회/역사·과학 2, 음악/미술·체육 1입니다. 필요하면 관리자 화면에서 조정하세요.</p>
           </div>
         </div>
         <div class="mail-settings">
@@ -869,10 +869,10 @@
     ];
     const subjects = [
       { id: "korean", label: "국어", weight: 3 },
-      { id: "english", label: "영어", weight: 2 },
+      { id: "english", label: "영어", weight: 3 },
       { id: "math", label: "수학", weight: 3 },
       { id: "social", label: "사회/역사", weight: 2 },
-      { id: "science", label: "과학", weight: 3 },
+      { id: "science", label: "과학", weight: 2 },
       { id: "arts", label: "음악/미술", weight: 1 },
       { id: "pe", label: "체육", weight: 1 }
     ];
@@ -949,6 +949,15 @@
 
     function readStoredSettings() {
       const defaults = defaultSettings();
+      const legacySubjectDefaults = {
+        korean: 3,
+        english: 2,
+        math: 3,
+        social: 2,
+        science: 3,
+        arts: 1,
+        pe: 1
+      };
       const candidates = [localStorage.getItem(settingsStorageKey)];
       const legacyState = localStorage.getItem(storageKey);
       if (legacyState) {
@@ -967,9 +976,11 @@
         if (!candidate) continue;
         try {
           const parsed = JSON.parse(candidate);
+          const storedSubjects = parsed.subjectWeights || {};
+          const isLegacyDefault = subjects.every(subject => storedSubjects[subject.id] === legacySubjectDefaults[subject.id]);
           return {
             semesterWeights: { ...defaults.semesterWeights, ...(parsed.semesterWeights || {}) },
-            subjectWeights: { ...defaults.subjectWeights, ...(parsed.subjectWeights || {}) },
+            subjectWeights: isLegacyDefault ? defaults.subjectWeights : { ...defaults.subjectWeights, ...storedSubjects },
             mailEndpoint: parsed.mailEndpoint || "",
             mailToken: parsed.mailToken || ""
           };
