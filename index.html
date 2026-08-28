@@ -192,6 +192,16 @@
     }
     .intro h2 { margin: 0; font-size: 28px; letter-spacing: 0; }
     .intro p { margin: 8px 0 0; color: var(--muted); line-height: 1.55; }
+    .privacy-notice {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-left: 4px solid var(--teal);
+      color: var(--teal-dark);
+      background: #eefaf7;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.55;
+    }
     .status {
       flex: 0 0 auto;
       padding: 8px 10px;
@@ -604,16 +614,15 @@
         <div class="intro">
           <div>
             <h2>학생 성적 입력</h2>
-            <p>학교생활기록부의 성취도를 학기별로 입력하면 1단계 예상점수가 자동 계산됩니다.</p>
           </div>
-          <div class="status" id="saveStatus">자동 저장 준비</div>
+          <div class="status" id="saveStatus">현재 화면에서만 계산</div>
         </div>
 
         <section class="section">
           <div class="section-heading">
             <div>
               <h3>지원자 정보</h3>
-              <p>계산 결과를 구분하기 위한 선택 입력입니다.</p>
+              <p>학교생활기록부의 성취도를 학기별로 입력하면 1단계 예상점수가 자동 계산됩니다.</p>
             </div>
           </div>
           <div class="section-body">
@@ -627,6 +636,7 @@
                 <input id="studentSchool" type="text" placeholder="예: 민족중학교">
               </div>
             </div>
+            <div class="privacy-notice">성적 정보는 저장되지 않습니다. 입력한 내용은 현재 화면에서만 계산됩니다.</div>
           </div>
         </section>
 
@@ -1323,43 +1333,12 @@
     });
 
     function saveState() {
-      const state = {
-        studentName: document.getElementById("studentName").value,
-        studentSchool: document.getElementById("studentSchool").value,
-        attendance: {
-          absences: document.getElementById("absences").value,
-          lates: document.getElementById("lates").value,
-          earlyLeaves: document.getElementById("earlyLeaves").value,
-          results: document.getElementById("results").value
-        },
-        grades: Object.fromEntries([...document.querySelectorAll("select[data-semester]")].map(input => [
-          `${input.dataset.semester}.${input.dataset.subject}`, input.value
-        ])),
-        semesterWeights: Object.fromEntries([...document.querySelectorAll(".semester-weight")].map(input => [input.dataset.semester, input.value])),
-        subjectWeights: Object.fromEntries([...document.querySelectorAll(".subject-weight")].map(input => [input.dataset.subject, input.value]))
-      };
-      localStorage.setItem(storageKey, JSON.stringify(state));
-      document.getElementById("saveStatus").textContent = "입력 내용 자동 저장됨";
+      localStorage.removeItem(storageKey);
+      document.getElementById("saveStatus").textContent = "현재 화면에서만 계산";
     }
 
     function loadState() {
-      const raw = localStorage.getItem(storageKey);
-      if (!raw) return;
-      try {
-        const state = JSON.parse(raw);
-        document.getElementById("studentName").value = state.studentName || "";
-        document.getElementById("studentSchool").value = state.studentSchool || "";
-        Object.entries(state.attendance || {}).forEach(([id, value]) => {
-          if (document.getElementById(id)) document.getElementById(id).value = value;
-        });
-        Object.entries(state.grades || {}).forEach(([key, value]) => {
-          const [semester, subject] = key.split(".");
-          const input = document.querySelector(`[data-semester="${semester}"][data-subject="${subject}"]`);
-          if (input) input.value = value;
-        });
-      } catch (error) {
-        localStorage.removeItem(storageKey);
-      }
+      localStorage.removeItem(storageKey);
     }
 
     function setMode(mode) {
