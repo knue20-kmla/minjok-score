@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0f766e">
-  <title>민족사관고 1단계 성적 계산기</title>
+  <title>민족사관고등학교 1단계 성적 계산기</title>
   <style>
     :root {
       --ink: #172323;
@@ -586,7 +586,7 @@
           <img src="https://i.imgur.com/Mo4ogKc.png" alt="민족사관고등학교 로고">
         </div>
         <div>
-          <h1>민족사관고 입학 성적 계산기</h1>
+          <h1>민족사관고등학교 입학 성적 계산기</h1>
           <p>2027학년도 신입생 모집요강 기준 · 1단계 교과성적 및 출결</p>
         </div>
       </div>
@@ -607,7 +607,7 @@
         <div class="pdf-report-header">
           <img src="https://i.imgur.com/Mo4ogKc.png" alt="민족사관고등학교 로고">
           <div>
-            <h1>민족사관고 1단계 성적 계산 결과</h1>
+            <h1>민족사관고등학교 1단계 성적 계산 결과</h1>
             <p id="pdfStudentLine">학생 성적 및 출결 산출 결과</p>
           </div>
         </div>
@@ -1143,7 +1143,7 @@
 
     function saveAsPdf() {
       const originalTitle = document.title;
-      const fileName = `${studentLabel()}_민족사관고_1단계_성적결과`;
+      const fileName = `${studentLabel()}_민족사관고등학교_1단계_성적결과`;
       document.title = fileName.replace(/[\\/:*?"<>|]/g, "_");
       setPdfMode(true);
       window.print();
@@ -1165,7 +1165,7 @@
       const earlyLeaves = numberValue("earlyLeaves");
       const results = numberValue("results");
       return [
-        "민족사관고 2027학년도 1단계 성적 계산 결과",
+        "민족사관고등학교 2027학년도 1단계 성적 계산 결과",
         "",
         `학생 이름: ${name}`,
         `중학교: ${school}`,

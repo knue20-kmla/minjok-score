@@ -1,8 +1,8 @@
 const APP_TOKEN = 'CHANGE_THIS_TO_A_LONG_RANDOM_TOKEN';
-const SCHOOL_NAME = '민족사관고';
+const SCHOOL_NAME = '민족사관고등학교';
 
 function doGet() {
-  return HtmlService.createHtmlOutput('민족사관고 성적표 메일 발송용 Apps Script가 실행 중입니다.');
+  return HtmlService.createHtmlOutput('민족사관고등학교 성적표 메일 발송용 Apps Script가 실행 중입니다.');
 }
 
 function doPost(e) {
