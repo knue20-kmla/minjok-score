@@ -286,6 +286,25 @@
       background: #f2f8f6;
     }
     .semester-card h4 { margin: 0; font-size: 14px; }
+    .semester-bulk {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 88px;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px 8px;
+      border-bottom: 1px solid #edf2f0;
+      background: #fff;
+    }
+    .semester-bulk label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .semester-bulk select {
+      height: 32px;
+      padding: 0 6px;
+      font-size: 12px;
+    }
     .semester-rate {
       min-width: 42px;
       padding: 4px 6px;
@@ -918,6 +937,18 @@
             <h4>${semester.label}</h4>
             <span class="semester-rate" id="rate-${semester.id}">${semester.rate}%</span>
           </header>
+          <div class="semester-bulk">
+            <label for="bulk-${semester.id}">학기 전체 성취도</label>
+            <select id="bulk-${semester.id}" class="semester-bulk-select" data-semester="${semester.id}" aria-label="${semester.label} 전체 성취도 일괄 입력">
+              <option value="">일괄 입력</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+              <option value="E">E</option>
+              <option value="none">없음</option>
+            </select>
+          </div>
           <div class="subject-list">
             ${subjects.map(subject => `
               <div class="subject-row">
@@ -949,6 +980,17 @@
         mailEndpoint: settingsApiUrl,
         mailToken: ""
       };
+    }
+
+    function applySemesterBulkGrade(select) {
+      const grade = select.value;
+      if (!grade) return;
+      const semesterId = select.dataset.semester;
+      document.querySelectorAll(`select[data-semester="${semesterId}"][data-subject]`)
+        .forEach(input => {
+          input.value = grade;
+        });
+      select.value = "";
     }
 
     function getSettingsApiUrl() {
@@ -1649,7 +1691,12 @@
       update();
     });
     document.addEventListener("input", update);
-    document.addEventListener("change", update);
+    document.addEventListener("change", event => {
+      if (event.target.matches(".semester-bulk-select")) {
+        applySemesterBulkGrade(event.target);
+      }
+      update();
+    });
     document.getElementById("resetButton").addEventListener("click", reset);
     document.getElementById("printButton").addEventListener("click", () => window.print());
     document.getElementById("pdfButton").addEventListener("click", saveAsPdf);
