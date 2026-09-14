@@ -891,13 +891,22 @@
        (컨테이너 자체 너비는 부모에 맞춰 고정되므로 kioskFitSlide가 측정하는
        .kiosk-slide-inner의 scrollWidth를 부풀리지 않고, 표 내용만 필요 시
        가로로 스크롤된다.) */
-    .kiosk-table-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .kiosk-table-scroll {
+      width: 100%;
+      overflow-x: scroll;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 8px;
+      /* 스크롤 가능한 내용이 더 있음을 항상 보여주기 위해 스크롤바를 눈에 띄게 스타일링 */
+      scrollbar-width: auto;
+      scrollbar-color: var(--teal) #e7e2d8;
+    }
+    .kiosk-table-scroll::-webkit-scrollbar { height: 8px; }
+    .kiosk-table-scroll::-webkit-scrollbar-track { background: #e7e2d8; border-radius: 999px; }
+    .kiosk-table-scroll::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 999px; }
     .kiosk-table-scroll table { min-width: 460px; }
     .kiosk-table-scroll table.kiosk-impact-table-lg { min-width: 640px; }
-    .kiosk-scroll-hint { display: none; margin-top: 6px; font-size: 0.74rem; color: var(--muted); text-align: right; }
-    @media (max-width: 760px) {
-      .kiosk-scroll-hint { display: block; }
-    }
+    .kiosk-scroll-hint { margin-top: 2px; font-size: 0.74rem; color: var(--muted); text-align: right; }
+    .kiosk-scroll-hint[hidden] { display: none; }
     .kiosk-missing-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
     .kiosk-missing-table th, .kiosk-missing-table td { padding: 8px 5px; text-align: center; border-bottom: 1px solid rgba(140, 100, 30, 0.3); }
     .kiosk-missing-table th { color: #6b4a12; font-weight: 900; font-size: 0.8rem; }
@@ -2240,8 +2249,23 @@
     window.addEventListener("resize", () => {
       if (!_kioskActive) return;
       const inner = document.getElementById("kioskSlideInner");
-      if (inner) kioskFitSlide(inner);
+      if (inner) {
+        kioskFitSlide(inner);
+        kioskSyncScrollHints(inner);
+      }
     });
+
+    // 표가 실제로 화면 너비보다 넓어 가로 스크롤이 필요한 경우에만
+    // "좌우로 스크롤" 안내 문구를 보여줌 (다 보이는 표에는 불필요한 안내 숨김)
+    function kioskSyncScrollHints(inner) {
+      inner.querySelectorAll(".kiosk-table-scroll").forEach(scrollBox => {
+        const hint = scrollBox.nextElementSibling;
+        const overflowing = scrollBox.scrollWidth > scrollBox.clientWidth + 1;
+        if (hint && hint.classList.contains("kiosk-scroll-hint")) {
+          hint.hidden = !overflowing;
+        }
+      });
+    }
 
     function kioskIntroHTML() {
       return `
@@ -2513,6 +2537,7 @@
         eyebrowSlot.hidden = true;
       }
       kioskFitSlide(inner);
+      kioskSyncScrollHints(inner);
       card.classList.add("kiosk-in");
       kioskRenderDots();
       clearTimeout(_kioskTimer);
