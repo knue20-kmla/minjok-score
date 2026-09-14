@@ -1690,8 +1690,8 @@
       if (missing.length === 1) {
         if (known.has("s21")) return { s21: 0, s22: 40, s31: 30, s32: 30 };
         if (known.has("s22")) return { s21: 40, s22: 0, s31: 30, s32: 30 };
-        if (known.has("s31")) return { s21: 30, s22: 30, s31: 0, s32: 40 };
-        return { s21: 30, s22: 30, s31: 40, s32: 0 };
+        if (known.has("s31")) return { s21: 20, s22: 20, s31: 0, s32: 60 };
+        return { s21: 20, s22: 20, s31: 60, s32: 0 };
       }
       if (missing.length === 2) {
         if (known.has("s21") && known.has("s22")) return { s21: 0, s22: 0, s31: 50, s32: 50 };
