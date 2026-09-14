@@ -659,6 +659,7 @@
       box-shadow: 0 24px 70px rgba(15, 55, 52, 0.22);
     }
     dialog::backdrop { background: rgba(14, 38, 36, 0.34); }
+    dialog.dialog-wide { width: min(560px, calc(100% - 32px)); max-height: min(600px, calc(100% - 64px)); overflow-y: auto; }
     .dialog-inner { padding: 22px; }
     .dialog-inner h2 { margin: 0; font-size: 19px; }
     .dialog-inner p { margin: 7px 0 18px; color: var(--muted); font-size: 13px; line-height: 1.55; }
@@ -1045,6 +1046,26 @@
     .kiosk-quota-value { text-align: right; font-weight: 900; color: var(--teal-dark); font-size: 1rem; }
     .kiosk-source-note {
       margin: 14px 0 0; font-size: 0.78rem; color: var(--muted); text-align: center; line-height: 1.5;
+    }
+    /* 전형 일정/응시 제한/자기소개서 배제사항 등을 팝업으로 여는 카드 내 버튼 */
+    .kiosk-note-link-btn {
+      display: inline-flex; align-items: center; gap: 4px; margin-top: 8px;
+      padding: 5px 12px; border-radius: 999px; border: none; cursor: pointer;
+      background: var(--teal); color: #fff; font-weight: 800; font-size: 0.78rem;
+    }
+    .kiosk-note-link-btn:hover { background: var(--teal-dark); }
+    .kiosk-note-card.warn .kiosk-note-link-btn { background: var(--amber); }
+    /* 팝업(다이얼로그) 안의 표/목록 스타일 */
+    .kiosk-dialog-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 4px; }
+    .kiosk-dialog-table th, .kiosk-dialog-table td { padding: 7px 6px; text-align: left; border-bottom: 1px solid var(--line); }
+    .kiosk-dialog-table th { color: var(--muted); font-weight: 800; font-size: 11.5px; }
+    .kiosk-dialog-list { margin: 0; padding-left: 18px; }
+    .kiosk-dialog-list li { font-size: 12.5px; color: var(--ink); line-height: 1.7; }
+    .kiosk-dialog-exclude-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 14px; margin: 0; padding: 0; list-style: none; }
+    .kiosk-dialog-exclude-grid li { font-size: 12px; color: var(--ink); line-height: 1.6; padding-left: 14px; position: relative; }
+    .kiosk-dialog-exclude-grid li::before { content: "✕"; position: absolute; left: 0; color: var(--red); font-weight: 900; font-size: 10px; top: 3px; }
+    @media (max-width: 480px) {
+      .kiosk-dialog-exclude-grid { grid-template-columns: 1fr; }
     }
 
     .kiosk-footer {
@@ -1454,6 +1475,95 @@
       <a class="qr-dialog-link" id="qrDialogLink" href="#" target="_blank" rel="noopener"></a>
       <div class="dialog-actions">
         <button class="button primary" id="closeQrDialogButton" type="button">닫기</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- 전형 개요 프리젠테이션에서 열리는 팝업들 (전형 일정 / 응시 제한 / 자기소개서 작성 배제 사항) -->
+  <dialog id="kioskScheduleDialog" class="dialog-wide">
+    <div class="dialog-inner">
+      <h2>전형 일정</h2>
+      <p>정확한 일정은 모집요강 및 홈페이지 공지를 다시 확인하세요.</p>
+      <div class="kiosk-table-scroll" style="margin:0 0 4px;">
+        <table class="kiosk-dialog-table" style="min-width:420px;">
+          <thead><tr><th>구분</th><th>일정</th><th>장소</th></tr></thead>
+          <tbody>
+            <tr><td>원서 접수(온라인)</td><td>12.8(화) 9시 ~ 12.10(목) 12시</td><td>민족사관고 홈페이지</td></tr>
+            <tr><td>원서 접수(우편)</td><td>12.8(화) ~ 12.10(목)<br>※10일 소인분까지 유효</td><td>민족사관고 입학관리실</td></tr>
+            <tr><td>1단계 합격자 발표</td><td>12.17(목) 오전 10시</td><td>민족사관고 홈페이지</td></tr>
+            <tr><td>면접 대상자 발표</td><td>12.21(월) ~ 12.22(화)</td><td>-</td></tr>
+            <tr><td>면접 및 체력검사</td><td>12.31(목) 12시(정오)</td><td>민족사관고</td></tr>
+            <tr><td>최종합격자 발표</td><td>2027.1.4(월) ~ 1.6(수)</td><td>민족사관고 홈페이지</td></tr>
+            <tr><td>합격자 등록</td><td>추후 안내</td><td>민족사관고 행정실(계좌 입금)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="dialog-actions">
+        <button class="button primary" id="closeKioskScheduleDialog" type="button">닫기</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="kioskEligibilityDialog">
+    <div class="dialog-inner">
+      <h2>응시 제한</h2>
+      <p>아래 사항에 해당하면 지원할 수 없습니다.</p>
+      <ol class="kiosk-dialog-list">
+        <li>고등학교 재학생, 휴학생, 졸업자는 지원할 수 없음</li>
+        <li>전기고 합격자 지원 금지 : 전기 고등학교 합격자는 지원할 수 없음</li>
+        <li>이중 지원 금지 : 타 자율형사립고, 외국어고, 국제고 지원자는 지원할 수 없음</li>
+      </ol>
+      <div class="dialog-actions">
+        <button class="button primary" id="closeKioskEligibilityDialog" type="button">닫기</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="kioskCommonDocsDialog" class="dialog-wide">
+    <div class="dialog-inner">
+      <h2>공통 제출 서류</h2>
+      <p>일반전형·강원인재전형 지원자는 아래 (1)~(5) 서류를 공통으로 제출합니다.</p>
+      <div class="kiosk-table-scroll" style="margin:0 0 4px;">
+        <table class="kiosk-dialog-table" style="min-width:380px;">
+          <thead><tr><th>서류</th><th>제출 방법</th></tr></thead>
+          <tbody>
+            <tr><td>(1) 입학원서 1부</td><td>온라인 입력 후 출력본 우편 제출</td></tr>
+            <tr><td>(2) 개인정보활용 동의서 1부</td><td>온라인 입력 후 출력본 우편 제출</td></tr>
+            <tr><td>(3) 교과성적(2학년 1학기~3학년 2학기)</td><td>온라인 입력(우편 제출하지 않음)</td></tr>
+            <tr><td>(4) 자기소개서</td><td>온라인 입력(우편 제출하지 않음)</td></tr>
+            <tr><td>(5) 학교생활기록부Ⅱ 2부</td><td>우편 제출</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <button type="button" class="kiosk-note-link-btn" id="openKioskExcludeFromDocsDialog" onclick="event.stopPropagation(); kioskOpenDialog('kioskExcludeDialog');">✍️ 자기소개서 작성 배제 사항 보기</button>
+      <div class="dialog-actions">
+        <button class="button primary" id="closeKioskCommonDocsDialog" type="button">닫기</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="kioskExcludeDialog" class="dialog-wide">
+    <div class="dialog-inner">
+      <h2>자기소개서 작성 배제 사항</h2>
+      <p>아래 내용을 기재하면 0점 또는 감점 처리됩니다. (지원자 본인이 온라인으로만 작성)</p>
+      <ul class="kiosk-dialog-exclude-grid">
+        <li>각종 공인어학시험 참여사실, 점수</li>
+        <li>부모 및 친인척의 사회·경제적 지위 암시 내용</li>
+        <li>교외 인증시험·대회 참여사실, 성적, 수상 실적</li>
+        <li>장학생·장학금 관련 내용</li>
+        <li>교내 인증시험·대회 참여사실, 성적, 수상 실적</li>
+        <li>구체적인 특정 대학명·기관명·상호명·강사명 등</li>
+        <li>논문 투고 또는 발표</li>
+        <li>자격증 명칭 및 취득 사실</li>
+        <li>도서출간</li>
+        <li>교과목의 점수 또는 석차</li>
+        <li>지식재산권 출원 또는 등록</li>
+        <li>영재교육원 교육 및 수료 여부</li>
+        <li>어학연수, 봉사활동 등 해외 활동</li>
+        <li>본인의 인적사항 암시 내용</li>
+      </ul>
+      <div class="dialog-actions">
+        <button class="button primary" id="closeKioskExcludeDialog" type="button">닫기</button>
       </div>
     </div>
   </dialog>
@@ -2395,7 +2505,6 @@
           <div class="kiosk-hero-logo-wrap"><img src="https://i.imgur.com/Mo4ogKc.png" class="kiosk-hero-logo" alt="민족사관고등학교"></div>
           <span class="kiosk-hero-badge">2027학년도 신입생 모집요강</span>
           <h1 class="kiosk-hero-title">민족사관고등학교</h1>
-          <p>1단계 전형 안내 · 교과성적과 출결로 산출하는 40점 만점 심사</p>
         </div>`;
     }
 
@@ -2427,6 +2536,22 @@
           </div>
         </div>
         <div class="kiosk-note-grid" style="margin-top:20px;">
+          <div class="kiosk-note-card">
+            <span class="ic">📅</span><b>전형 일정</b><span>원서 접수부터 합격자 등록까지 일정을 한눈에 확인하세요</span>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskScheduleDialog');">일정 보기</button>
+          </div>
+          <div class="kiosk-note-card warn">
+            <span class="ic">🚫</span><b>응시 제한</b><span>재학생·전기고 합격자·이중 지원자는 지원할 수 없어요</span>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskEligibilityDialog');">확인하기</button>
+          </div>
+          <div class="kiosk-note-card">
+            <span class="ic">📑</span><b>공통 제출 서류</b><span>일반전형·강원인재전형 지원자는 (1)~(5) 서류를 공통 제출</span>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskCommonDocsDialog');">자세히 보기</button>
+          </div>
+          <div class="kiosk-note-card">
+            <span class="ic">✍️</span><b>자기소개서 유의사항</b><span>기재하면 감점되는 배제 사항이 있어요</span>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskExcludeDialog');">배제 사항 보기</button>
+          </div>
           <div class="kiosk-note-card"><span class="ic">🌏</span><b>정원 외 · 특례입학</b><span>모집 정원의 2% 범위 내에서 별도 선발</span></div>
           <div class="kiosk-note-card"><span class="ic">🎖️</span><b>정원 외 · 국가유공자 자녀</b><span>모집 정원의 3% 범위 내에서 별도 선발</span></div>
         </div>
@@ -2440,9 +2565,7 @@
         <p class="kiosk-sub">본교의 건학 이념과 영어 상용 정책을 수용할 수 있는 학생이면 누구나 지원할 수 있는 기본 전형입니다.</p>
         <div class="kiosk-note-grid" style="margin-top:22px;">
           <div class="kiosk-note-card"><span class="ic">🎓</span><b>지원 자격</b><span>국내 중학교 졸업(예정)자, 검정고시 합격자, 해외 학교 재학생 등 동등 학력 인정자</span></div>
-          <div class="kiosk-note-card"><span class="ic">✍️</span><b>온라인 제출</b><span>입학원서 · 개인정보활용 동의서 · 교과성적 · 자기소개서</span></div>
-          <div class="kiosk-note-card"><span class="ic">✉️</span><b>우편 제출</b><span>입학원서 · 개인정보활용 동의서 출력본, 학교생활기록부Ⅱ 2부</span></div>
-          <div class="kiosk-note-card warn"><span class="ic">⚠️</span><b>응시 제한</b><span>고교 재학·휴학·졸업자, 전기고 합격자, 이중 지원자는 지원 불가</span></div>
+          <div class="kiosk-note-card"><span class="ic">📑</span><b>제출 서류</b><span>공통 제출 서류 (1)~(5)만 제출 — <strong>추가 서류 없음</strong></span></div>
         </div>
         ${KIOSK_YOGANG_SOURCE}`;
     }
@@ -2456,6 +2579,7 @@
           <div class="kiosk-note-card"><span class="ic">①</span><b>강원 내 중학교 졸업예정자</b><span>추가 서류 없이 학교생활기록부로 확인</span></div>
           <div class="kiosk-note-card"><span class="ic">②</span><b>강원 거주 중학교 졸업자</b><span>검정고시 합격자 포함, 주민등록등본 제출</span></div>
           <div class="kiosk-note-card"><span class="ic">③</span><b>타 시·도 중학교 졸업(예정)자</b><span>특성화·전국단위 모집 중학교 중 강원 거주자</span></div>
+          <div class="kiosk-note-card"><span class="ic">📑</span><b>추가 서류</b><span>공통 제출 서류(1)~(5) + 강원 거주 증빙 주민등록등본 1부(②·③ 유형만 해당)</span></div>
           <div class="kiosk-note-card warn"><span class="ic">📌</span><b>정원 미달 시</b><span>미달 인원은 일반전형에서 충원 선발할 수 있음 (횡성지역인재 1명 포함 선발)</span></div>
         </div>
         ${KIOSK_YOGANG_SOURCE}`;
@@ -2469,7 +2593,7 @@
         <div class="kiosk-note-grid" style="margin-top:22px;">
           <div class="kiosk-note-card"><span class="ic">⚖️</span><b>기회균등 영역</b><span>기초생활수급자·차상위계층·국가보훈대상자·한부모가족 등 법정 대상자</span></div>
           <div class="kiosk-note-card"><span class="ic">🌈</span><b>사회다양성 영역</b><span>다문화가정·북한이탈주민·다자녀가정 등 19개 유형 (기준중위소득 160% 이하)</span></div>
-          <div class="kiosk-note-card"><span class="ic">📑</span><b>공통 제출 서류</b><span>학교장·학부모 확인서, 가족관계증명서, 주민등록등본 등</span></div>
+          <div class="kiosk-note-card"><span class="ic">📑</span><b>추가 서류</b><span>공통 제출 서류(1)~(5) + 학교장·학부모 확인서(붙임1·2), 주민등록등본, 가족관계증명서 + 유형별 증빙 서류</span></div>
           <div class="kiosk-note-card warn"><span class="ic">✅</span><b>선발 원칙</b><span>기회균등 영역 대상자를 50% 이상 우선 선발</span></div>
         </div>
         ${KIOSK_YOGANG_SOURCE}`;
@@ -2485,6 +2609,7 @@
           <div class="kiosk-note-card"><span class="ic">🔬</span><b>과학기술자·교수요원 자녀</b><span>정부 초청·추천으로 귀국한 과학기술자 및 교수요원의 자녀</span></div>
           <div class="kiosk-note-card"><span class="ic">🌐</span><b>외국인 학생 · 북한이탈주민</b><span>국내 중학교 전·편입학 후 졸업(예정)자, 학력인정자 포함</span></div>
           <div class="kiosk-note-card"><span class="ic">🎖️</span><b>국가유공자 자녀</b><span>보훈청 지정 교육지원대상자(모집 정원 3% 이내)</span></div>
+          <div class="kiosk-note-card"><span class="ic">📑</span><b>추가 서류</b><span>공통 제출 서류(1)~(5) + 학교장·학부모 확인서(붙임1·2) + 유형별 증빙 서류(재학증명서, 여권사본, 가족관계증명서 등)</span></div>
         </div>
         ${KIOSK_YOGANG_SOURCE}`;
     }
@@ -2969,6 +3094,22 @@
     }
     document.getElementById("qrCardOpen").addEventListener("click", openQrDialog);
     document.getElementById("closeQrDialogButton").addEventListener("click", () => document.getElementById("qrDialog").close());
+
+    // 전형 개요 프리젠테이션 팝업(전형 일정 / 응시 제한 / 공통 제출 서류 / 자기소개서 배제 사항) 공통 열기/닫기
+    function kioskOpenDialog(id) {
+      const dialog = document.getElementById(id);
+      if (dialog && typeof dialog.showModal === "function") dialog.showModal();
+    }
+    [
+      ["closeKioskScheduleDialog", "kioskScheduleDialog"],
+      ["closeKioskEligibilityDialog", "kioskEligibilityDialog"],
+      ["closeKioskCommonDocsDialog", "kioskCommonDocsDialog"],
+      ["closeKioskExcludeDialog", "kioskExcludeDialog"]
+    ].forEach(([btnId, dialogId]) => {
+      const btn = document.getElementById(btnId);
+      const dialog = document.getElementById(dialogId);
+      if (btn && dialog) btn.addEventListener("click", () => dialog.close());
+    });
   </script>
 </body>
 </html>
