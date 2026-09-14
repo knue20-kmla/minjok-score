@@ -894,10 +894,6 @@
     /* 학기별 반영 비율 — 학년·학기가 오를수록 비율이 커지는 흐름이 한눈에
        보이도록 계단식 막대그래프로 표현 (원형 도넛은 순서가 잘 드러나지 않아 교체) */
     .kiosk-rate-chart { display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 6px 0 18px; }
-    .kiosk-rate-hint {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 0.92rem; font-weight: 800; color: var(--teal-dark);
-    }
     .kiosk-rate-bars { display: flex; align-items: flex-end; gap: 8px; }
     .kiosk-rate-step { display: flex; align-items: flex-end; }
     .kiosk-rate-arrow {
@@ -1066,7 +1062,7 @@
     @media print {
       body { background: white; }
       .shell { width: 100%; }
-      .topbar, .top-actions, .admin-section, .home-hero-row { display: none; }
+      .topbar, .topbar-second-row, .top-actions, .admin-section, .home-hero-row { display: none; }
       .layout { display: block; }
       .side-column { position: static; }
       .section, .score-panel, .side-section { box-shadow: none; }
@@ -1127,15 +1123,6 @@
           <p class="topbar-subtitle">2027학년도 신입생 모집요강 기준, 1단계 교과성적(출결)</p>
         </div>
       </div>
-      <div class="topbar-second-row">
-        <div class="top-actions">
-          <button class="button action" id="pdfButton" type="button">결과 저장 (PDF)</button>
-          <button class="button email-action" id="emailButton" type="button">결과 보내기 (이메일)</button>
-          <button class="button" id="printButton" type="button">결과 인쇄</button>
-          <button class="button" id="resetButton" type="button">입력 초기화</button>
-          <button class="button settings-button" id="adminModeButton" type="button" aria-label="설정" title="설정">⚙</button>
-        </div>
-      </div>
     </header>
 
     <div class="home-hero-row">
@@ -1160,6 +1147,16 @@
         </span>
         <span class="kiosk-banner-arrow">›</span>
       </a>
+    </div>
+
+    <div class="topbar-second-row">
+      <div class="top-actions">
+        <button class="button action" id="pdfButton" type="button">결과 저장 (PDF)</button>
+        <button class="button email-action" id="emailButton" type="button">결과 보내기 (이메일)</button>
+        <button class="button" id="printButton" type="button">결과 인쇄</button>
+        <button class="button" id="resetButton" type="button">입력 초기화</button>
+        <button class="button settings-button" id="adminModeButton" type="button" aria-label="설정" title="설정">⚙</button>
+      </div>
     </div>
 
     <main class="layout" id="studentView">
@@ -2427,7 +2424,6 @@
       return `
         <div class="kiosk-eyebrow">학기별 반영 비율</div>
         <div class="kiosk-rate-chart">
-          <div class="kiosk-rate-hint"><span>📈</span><span>학년·학기가 오를수록 반영 비율이 높아집니다</span></div>
           <div class="kiosk-rate-bars">${stepsHtml}</div>
         </div>
         <div class="kiosk-missing-note">
