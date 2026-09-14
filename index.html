@@ -819,10 +819,21 @@
     .kiosk-eyebrow[hidden] { display: none; }
     .kiosk-title { font-size: 2rem; font-weight: 800; margin: 4px 0 8px; color: var(--ink); }
     .kiosk-sub { font-size: 1.05rem; color: var(--muted); margin: 0 0 24px; line-height: 1.5; }
-    .kiosk-hero { text-align: center; padding: 40px 10px; }
+    .kiosk-hero {
+      /* margin:auto 방식은 로고 폭(260px)이 슬라이드의 실제 콘텐츠 폭보다
+         살짝 커지는 경계에서 좌우 마진이 비대칭(음수)으로 계산되어
+         로고가 한쪽으로 치우쳐 보이는 문제가 있어, flex 정렬로 항상
+         가운데 오도록 함 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 40px 10px;
+    }
     .kiosk-hero-logo-wrap {
       display: flex; align-items: center; justify-content: center;
-      width: 260px; height: 260px; margin: 0 auto 22px;
+      flex: 0 0 auto;
+      width: 260px; height: 260px; margin: 0 0 22px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(217, 242, 237, 0.25) 60%, rgba(217, 242, 237, 0) 100%);
     }
@@ -880,6 +891,31 @@
     .kiosk-bar-fill-w2 { background: linear-gradient(90deg, #1e40af, #3b82f6); }
     .kiosk-bar-fill-w1 { background: linear-gradient(90deg, var(--amber), #f2b356); }
 
+    /* 학기별 반영 비율 — 학년·학기가 오를수록 비율이 커지는 흐름이 한눈에
+       보이도록 계단식 막대그래프로 표현 (원형 도넛은 순서가 잘 드러나지 않아 교체) */
+    .kiosk-rate-chart { display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 6px 0 18px; }
+    .kiosk-rate-hint {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.92rem; font-weight: 800; color: var(--teal-dark);
+    }
+    .kiosk-rate-bars { display: flex; align-items: flex-end; gap: 8px; }
+    .kiosk-rate-step { display: flex; align-items: flex-end; }
+    .kiosk-rate-arrow {
+      align-self: center;
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--teal);
+      padding: 0 2px 34px;
+    }
+    .kiosk-rate-bar-col { display: flex; flex-direction: column; align-items: center; width: 62px; }
+    .kiosk-rate-bar-value { font-weight: 900; font-size: 1.05rem; color: var(--ink); margin-bottom: 8px; }
+    .kiosk-rate-bar-track { display: flex; align-items: flex-end; height: 150px; }
+    .kiosk-rate-bar {
+      width: 56px;
+      border-radius: 12px 12px 4px 4px;
+      box-shadow: 0 8px 18px rgba(15, 118, 110, 0.2);
+    }
+    .kiosk-rate-bar-label { margin-top: 10px; font-weight: 800; font-size: 0.92rem; color: var(--muted); }
     .kiosk-donut-wrap { display: flex; flex-direction: column; align-items: center; gap: 18px; margin: 8px 0 18px; }
     .kiosk-donut { position: relative; width: 210px; height: 210px; border-radius: 50%; flex: 0 0 auto; }
     .kiosk-donut-hole {
@@ -2270,8 +2306,14 @@
       const rowPadX = parseFloat(rowStyle.paddingLeft) + parseFloat(rowStyle.paddingRight);
       const availW = row.clientWidth - rowPadX - 4;
       const availH = row.clientHeight - rowPadY - 4;
-      const natW = inner.scrollWidth;
       const natH = inner.scrollHeight;
+      // scrollWidth는 overflow:visible로 흘러넘치는 자식(예: 폭이 넓은 flex 행)의
+      // 실제 폭을 반영하지 못하는 경우가 있어(예: 학기별 반영 비율 막대그래프),
+      // width를 잠시 max-content로 바꿔 자식까지 포함한 진짜 필요 폭을 측정한 뒤 되돌림
+      const originalWidth = inner.style.width;
+      inner.style.width = "max-content";
+      const natW = inner.scrollWidth;
+      inner.style.width = originalWidth;
       // 내용이 카드보다 작으면 확대(최대 1.5배까지), 크면 축소해서 모든 슬라이드가
       // 항상 같은 카드 크기(.kiosk-slide)를 유지하도록 함
       let scale = Math.min(availW / natW, availH / natH, 1.5);
@@ -2338,26 +2380,27 @@
     function kioskSemesterHTML() {
       const weightMap = currentSemesterWeights();
       const values = semesters.map(semester => weightMap[semester.id] != null ? weightMap[semester.id] : semester.rate);
-      const total = values.reduce((sum, value) => sum + value, 0) || 1;
-      let acc = 0;
-      const stops = [];
-      const donutLabels = [];
-      semesters.forEach((semester, i) => {
-        const start = acc / total * 360;
-        acc += values[i];
-        const end = acc / total * 360;
-        stops.push(`${KIOSK_SEMESTER_COLORS[i]} ${start}deg ${end}deg`);
-        const mid = (start + end) / 2;
-        donutLabels.push(`<span class="kiosk-donut-label" style="transform: translate(-50%, -50%) rotate(${mid}deg) translate(0, -78px) rotate(${-mid}deg);"><b>${semester.short}</b>${values[i]}%</span>`);
+      const maxValue = Math.max(...values, 1);
+      const maxBarPx = 150;
+      // 학년·학기(2-1 -> 2-2 -> 3-1 -> 3-2)가 바뀌면서 반영 비율이 어떻게
+      // 변하는지 계단식 막대그래프로 보여줌 — 원형 도넛은 순서가 잘 드러나지
+      // 않아 왼쪽에서 오른쪽으로 시간 순서를 읽을 수 있는 막대 형태로 교체
+      const barCols = semesters.map((semester, i) => {
+        const barPx = Math.max(Math.round(values[i] / maxValue * maxBarPx), 18);
+        return `
+          <div class="kiosk-rate-bar-col">
+            <span class="kiosk-rate-bar-value">${values[i]}%</span>
+            <div class="kiosk-rate-bar-track">
+              <div class="kiosk-rate-bar" style="height:${barPx}px; background:${KIOSK_SEMESTER_COLORS[i]};"></div>
+            </div>
+            <span class="kiosk-rate-bar-label">${semester.short}</span>
+          </div>`;
       });
-      const stopsCss = stops.join(", ");
-      const labelsHtml = donutLabels.join("");
-      const legend = semesters.map((semester, i) => `
-        <div class="kiosk-legend-item">
-          <span class="kiosk-legend-dot" style="background:${KIOSK_SEMESTER_COLORS[i]}"></span>
-          <span class="kiosk-legend-label">${semester.short}</span>
-          <span class="kiosk-legend-value">${values[i]}%</span>
-        </div>`).join("");
+      const stepsHtml = barCols.map((col, i) => {
+        if (i === 0) return col;
+        const arrow = values[i] > values[i - 1] ? "↗" : (values[i] < values[i - 1] ? "↘" : "→");
+        return `<span class="kiosk-rate-arrow">${arrow}</span>${col}`;
+      }).join("");
 
       // 모집요강에 실제 반영되는 재분배 규칙(effectiveSemesterRates)을 그대로 사용해
       // "성적이 없을 때" 화면에 나오는 수치가 실제 계산 로직과 항상 일치하도록 함
@@ -2383,12 +2426,9 @@
 
       return `
         <div class="kiosk-eyebrow">학기별 반영 비율</div>
-        <div class="kiosk-donut-wrap">
-          <div class="kiosk-donut" style="background: conic-gradient(${stopsCss});">
-            ${labelsHtml}
-            <div class="kiosk-donut-hole"><strong>100%</strong><span>전체 반영</span></div>
-          </div>
-          <div class="kiosk-legend-grid">${legend}</div>
+        <div class="kiosk-rate-chart">
+          <div class="kiosk-rate-hint"><span>📈</span><span>학년·학기가 오를수록 반영 비율이 높아집니다</span></div>
+          <div class="kiosk-rate-bars">${stepsHtml}</div>
         </div>
         <div class="kiosk-missing-note">
           <div class="kiosk-missing-head"><span class="ic">⚠️</span><span>특정 학기 성적이 없다면?</span></div>
