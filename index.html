@@ -79,13 +79,15 @@
       overflow-wrap: anywhere;
     }
     .top-actions {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       align-items: center;
-      justify-content: flex-end;
-      flex-wrap: nowrap;
       gap: 6px;
+      width: 100%;
+      max-width: 480px;
       margin-left: auto;
     }
+    .top-actions .cross-link-btn { grid-column: 1 / -1; height: auto; min-height: 34px; font-size: 13px; }
     .view-hidden { display: none !important; }
     .button {
       min-height: 38px;
@@ -102,10 +104,12 @@
     .top-actions .button {
       min-height: 32px;
       height: 32px;
-      padding: 0 10px;
+      padding: 0 6px;
       border-radius: 6px;
-      font-size: 12px;
+      font-size: 11px;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .top-actions .settings-button {
       width: 32px;
@@ -121,7 +125,29 @@
       border-color: var(--teal);
       background: var(--teal);
     }
-    .mobile-settings-button { display: none; }
+    /* 설정(⚙) 버튼은 항상 제목 옆(모바일 버튼)에만 두고, 아래 버튼 그룹(top-actions)에는
+       두지 않아 결과저장/이메일/인쇄/초기화 4개가 깔끔한 2×2 형태를 이루도록 함 */
+    .top-actions .settings-button { display: none; }
+    .mobile-settings-button {
+      display: inline-grid;
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      margin-left: 4px;
+      padding: 0;
+      border: 0;
+      border-radius: 4px;
+      color: var(--muted);
+      background: transparent;
+      font-size: 16px;
+      line-height: 1;
+      vertical-align: middle;
+    }
+    .mobile-settings-button:hover,
+    .mobile-settings-button.active {
+      color: white;
+      background: var(--teal);
+    }
     .button.action {
       color: var(--teal-dark);
       border-color: #b8d8d1;
@@ -194,10 +220,10 @@
     .kiosk-banner {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 10px;
       width: 100%;
       margin-bottom: 22px;
-      padding: 18px 22px;
+      padding: 11px 15px;
       border: none;
       border-radius: 14px;
       background: linear-gradient(120deg, var(--teal) 0%, #0d9488 55%, #14b8a6 100%);
@@ -222,73 +248,81 @@
       flex: 0 0 auto;
       display: grid;
       place-items: center;
-      width: 46px;
-      height: 46px;
-      border-radius: 12px;
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
       background: rgba(255, 255, 255, 0.18);
-      font-size: 22px;
+      font-size: 15px;
     }
     .kiosk-banner-text {
       flex: 1 1 auto;
       min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
     }
-    .kiosk-banner-text strong { font-size: 16px; }
-    .kiosk-banner-text span { font-size: 12.5px; opacity: 0.88; }
+    .kiosk-banner-text strong { font-size: 13px; }
+    .kiosk-banner-text span { font-size: 10.5px; opacity: 0.88; }
     .kiosk-banner-arrow {
       flex: 0 0 auto;
       display: grid;
       place-items: center;
-      width: 30px;
-      height: 30px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.2);
-      font-size: 17px;
+      font-size: 13px;
       font-weight: 900;
     }
     @media (max-width: 560px) {
       .kiosk-banner-text span { display: none; }
     }
 
-    .qr-card {
+    .home-hero-row {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 8px;
-      width: 100px;
+      gap: 14px;
       margin-bottom: 22px;
-      padding: 12px;
+    }
+    .home-hero-row .kiosk-banner { flex: 1 1 auto; min-width: 0; margin-bottom: 0; }
+    .qr-card {
+      /* 정사각형 한 변 길이는 JS에서 배너의 실제 렌더 높이에 맞춰 픽셀로 지정함
+         (width/height 인라인 스타일) — 배너 텍스트 줄바꿈 등으로 높이가 바뀌어도
+         항상 배너와 같은 높이를 유지하기 위함 */
+      position: relative;
+      flex: 0 0 auto;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
       border: 1px solid var(--line);
       border-radius: 14px;
       background: var(--paper);
       box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
-    .qr-card-box {
-      width: 84px;
-      height: 84px;
+    .qr-card:hover { transform: translateY(-1px); box-shadow: 0 18px 40px rgba(15, 55, 52, 0.14); }
+    .qr-card:active { transform: translateY(0); }
+    .qr-card-box { display: block; width: 100%; height: 100%; }
+    .qr-card-box img, .qr-card-box canvas { display: block; width: 100%; height: 100%; }
+    .qr-card-zoom-badge {
+      position: absolute;
+      right: -6px;
+      bottom: -6px;
+      width: 22px;
+      height: 22px;
       display: grid;
       place-items: center;
-      padding: 5px;
-      border-radius: 8px;
-      background: #ffffff;
-      border: 1px solid var(--line);
-    }
-    .qr-card-box img, .qr-card-box canvas { display: block; width: 100%; height: 100%; }
-    .qr-card-zoom-btn {
-      width: 100%;
-      border: 1px solid #b9ddd6;
-      border-radius: 8px;
-      padding: 5px 0;
-      background: var(--teal-soft);
-      color: var(--teal-dark);
+      border-radius: 50%;
+      background: var(--teal);
       font-size: 11px;
-      font-weight: 800;
-      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(15, 55, 52, 0.25);
     }
-    .qr-card-zoom-btn:hover { background: #c9ece5; }
-    .qr-card-zoom-btn:active { background: #b9ddd6; }
+    @media (max-width: 480px) {
+      .home-hero-row { gap: 10px; }
+    }
     .qr-dialog-inner { text-align: center; }
     .qr-dialog-box {
       display: grid;
@@ -641,7 +675,7 @@
       .brand p { max-width: 250px; }
       .top-actions {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         width: 100%;
         max-width: 100%;
         min-width: 0;
@@ -651,39 +685,13 @@
         width: 100%;
         min-width: 0;
         height: auto;
-        min-height: 32px;
-        padding: 6px 8px;
-        font-size: 12px;
+        min-height: 40px;
+        padding: 4px 3px;
+        font-size: 10px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: normal;
         overflow-wrap: anywhere;
-      }
-      .top-actions .settings-button {
-        display: none;
-      }
-      .top-actions .cross-link-btn {
-        grid-column: 1 / -1;
-      }
-      .mobile-settings-button {
-        display: inline-grid;
-        width: 24px;
-        height: 24px;
-        min-width: 24px;
-        margin-left: 4px;
-        padding: 0;
-        border: 0;
-        border-radius: 4px;
-        color: var(--muted);
-        background: transparent;
-        font-size: 16px;
-        line-height: 1;
-        vertical-align: middle;
-      }
-      .mobile-settings-button:hover,
-      .mobile-settings-button.active {
-        color: var(--teal-dark);
-        background: var(--teal-soft);
       }
       .intro { display: block; }
       .intro h2 { font-size: 23px; }
@@ -750,21 +758,21 @@
       /* eyebrow 배지가 차지하는 높이를 제외한 나머지 영역 — 실제 콘텐츠가
          이 영역 크기에 맞춰 --kiosk-fit-scale로 축소/확대됨.
          eyebrow가 별도 고정 영역으로 분리되어 있으므로 세로 가운데 정렬해도
-         eyebrow 위치에는 영향이 없다 — 화면이 위로 쏠리지 않고 카드 전체를 채운다. */
+         eyebrow 위치에는 영향이 없다 — 화면이 위로 쏠리지 않고 카드 전체를 채운다.
+         (음수 margin 대신 아래쪽 여백을 살짝 더 둬서 안전하게 위로 당김 —
+          내용이 위에서 잘리는 문제를 방지) */
       flex: 1 1 auto;
       min-height: 0;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding-bottom: 34px;
       overflow: hidden;
     }
     .kiosk-slide-inner {
       width: 100%;
       box-sizing: border-box;
       padding: 0 0 42px;
-      /* 세로 중앙 정렬 시 콘텐츠가 지나치게 아래로 치우쳐 보이지 않도록
-         살짝 위로 당겨줌(빈 아래 패딩만큼 시각적 중심이 위로 이동) */
-      margin-top: -22px;
       transform: scale(var(--kiosk-fit-scale, 1));
       transform-origin: center center;
     }
@@ -819,7 +827,7 @@
     .kiosk-max strong { color: var(--teal-dark); font-size: 1.2rem; }
 
     .kiosk-flow {
-      display: flex; align-items: stretch; gap: 10px; margin: 26px 0 8px; flex-wrap: wrap;
+      display: flex; align-items: stretch; gap: 10px; margin: 38px 0 8px; flex-wrap: wrap;
     }
     .kiosk-flow-card {
       flex: 1 1 140px; min-width: 130px;
@@ -977,7 +985,7 @@
     @media print {
       body { background: white; }
       .shell { width: 100%; }
-      .topbar, .top-actions, .admin-section, .kiosk-banner, .qr-card { display: none; }
+      .topbar, .top-actions, .admin-section, .home-hero-row { display: none; }
       .layout { display: block; }
       .side-column { position: static; }
       .section, .score-panel, .side-section { box-shadow: none; }
@@ -1040,26 +1048,28 @@
       </div>
       <div class="top-actions">
         <button class="button action" id="pdfButton" type="button">결과 저장 (PDF)</button>
-        <a class="button cross-link-btn" href="https://kmla-curriculum.netlify.app" target="_blank" rel="noopener">민사고 영재교육과정 체험</a>
         <button class="button email-action" id="emailButton" type="button">결과 보내기 (이메일)</button>
         <button class="button" id="printButton" type="button">결과 인쇄</button>
         <button class="button" id="resetButton" type="button">입력 초기화</button>
         <button class="button settings-button" id="adminModeButton" type="button" aria-label="설정" title="설정">⚙</button>
+        <a class="button cross-link-btn" href="https://kmla-curriculum.netlify.app" target="_blank" rel="noopener">민사고 영재교육과정 체험</a>
       </div>
     </header>
 
-    <button class="kiosk-banner" id="kioskBanner" type="button">
-      <span class="kiosk-banner-icon">🖥</span>
-      <span class="kiosk-banner-text">
-        <strong>입학 전형 안내 자세히 보기</strong>
-        <span>반영 비율 · 산출 예시 · 출결 감점 기준을 한눈에 확인하세요</span>
-      </span>
-      <span class="kiosk-banner-arrow">›</span>
-    </button>
+    <div class="home-hero-row">
+      <button type="button" class="qr-card" id="qrCardOpen" aria-label="QR 코드로 이 페이지 열기 (탭하여 확대)">
+        <span class="qr-card-box" id="qrCodeBox"></span>
+        <span class="qr-card-zoom-badge">🔍</span>
+      </button>
 
-    <div class="qr-card">
-      <div class="qr-card-box" id="qrCodeBox" aria-label="이 페이지로 접속하는 QR 코드"></div>
-      <button type="button" class="qr-card-zoom-btn" id="qrCardOpen">확대</button>
+      <button class="kiosk-banner" id="kioskBanner" type="button">
+        <span class="kiosk-banner-icon">🖥</span>
+        <span class="kiosk-banner-text">
+          <strong>입학 전형 안내 자세히 보기</strong>
+          <span>반영 비율 · 산출 예시 · 출결 감점 기준을 한눈에 확인하세요</span>
+        </span>
+        <span class="kiosk-banner-arrow">›</span>
+      </button>
     </div>
 
     <main class="layout" id="studentView">
@@ -2201,8 +2211,11 @@
       const row = document.querySelector(".kiosk-content-row");
       if (!row || !inner) return;
       inner.style.setProperty("--kiosk-fit-scale", "1");
-      const availW = row.clientWidth - 4;
-      const availH = row.clientHeight - 4;
+      const rowStyle = getComputedStyle(row);
+      const rowPadY = parseFloat(rowStyle.paddingTop) + parseFloat(rowStyle.paddingBottom);
+      const rowPadX = parseFloat(rowStyle.paddingLeft) + parseFloat(rowStyle.paddingRight);
+      const availW = row.clientWidth - rowPadX - 4;
+      const availH = row.clientHeight - rowPadY - 4;
       const natW = inner.scrollWidth;
       const natH = inner.scrollHeight;
       // 내용이 카드보다 작으면 확대(최대 1.5배까지), 크면 축소해서 모든 슬라이드가
@@ -2413,7 +2426,7 @@
         <div class="kiosk-eyebrow">출결 감점</div>
         <h2 class="kiosk-title">출결은 감점 요소입니다</h2>
         <p class="kiosk-sub">2026년 11월 20일까지의 중학교 재학 기간을 기준으로 미인정 출결을 확인합니다.</p>
-        <div class="kiosk-note-grid">
+        <div class="kiosk-note-grid" style="margin-top:30px;">
           <div class="kiosk-note-card"><span class="ic">📅</span><b>미인정 결석</b><span>1일당 0.2점씩 감점됩니다.</span></div>
           <div class="kiosk-note-card"><span class="ic">⏱️</span><b>지각·조퇴·결과</b><span>미인정 지각·조퇴·결과 3회를 결석 1일로 환산합니다.</span></div>
           <div class="kiosk-note-card warn"><span class="ic">➗</span><b>감점 계산식</b><span>(미인정 결석일 + 환산 결석일) × 0.2점 = 총 감점</span></div>
@@ -2589,6 +2602,25 @@
       }
     }
     initQrCode();
+
+    // QR 카드의 정사각형 한 변을 "입학 전형 안내 자세히 보기" 배너의 실제 렌더 높이에
+    // 정확히 맞춤 (CSS aspect-ratio + stretch 조합은 QR 캔버스의 고유 크기(160x160) 때문에
+    // 신뢰할 수 없어 JS로 직접 측정해서 픽셀 단위로 지정함)
+    function syncQrCardSize() {
+      const banner = document.getElementById("kioskBanner");
+      const qrCard = document.getElementById("qrCardOpen");
+      if (!banner || !qrCard) return;
+      const size = Math.round(banner.getBoundingClientRect().height);
+      if (size > 0) {
+        qrCard.style.width = size + "px";
+        qrCard.style.height = size + "px";
+      }
+    }
+    syncQrCardSize();
+    window.addEventListener("resize", syncQrCardSize);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(syncQrCardSize).catch(() => {});
+    }
 
     function openQrDialog() {
       const dialog = document.getElementById("qrDialog");
