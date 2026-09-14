@@ -1036,6 +1036,16 @@
     .kiosk-note-card span { display: block; font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
     .kiosk-note-card.warn { background: var(--amber-soft); border-color: #ecd9a8; }
     .kiosk-note-card.warn b { color: var(--amber); }
+    .kiosk-note-card ul { margin: 4px 0 0; padding-left: 16px; }
+    .kiosk-note-card li { font-size: 0.83rem; color: var(--muted); line-height: 1.55; }
+
+    /* 모집요강(전형 개요/일반전형 등) 슬라이드 전용 — 정원 비율 막대, 출처 안내 문구 */
+    .kiosk-quota-row { display: grid; grid-template-columns: 130px 1fr 78px; align-items: center; gap: 12px; }
+    .kiosk-quota-label { font-weight: 800; font-size: 0.95rem; color: var(--ink); }
+    .kiosk-quota-value { text-align: right; font-weight: 900; color: var(--teal-dark); font-size: 1rem; }
+    .kiosk-source-note {
+      margin: 14px 0 0; font-size: 0.78rem; color: var(--muted); text-align: center; line-height: 1.5;
+    }
 
     .kiosk-footer {
       padding: 16px 0 26px;
@@ -2389,9 +2399,113 @@
         </div>`;
     }
 
-    function kioskFlowHTML() {
+    // ===================== 모집요강 안내 슬라이드 (전형 개요 / 전형별 소개 / 원서 접수) =====================
+    // 「2027학년도 민족사관고등학교 신입생 모집요강」의 핵심 내용만 요약해서 보여주고,
+    // 세부 사항은 모집요강을 참고하도록 안내함 (모든 슬라이드 하단에 출처 문구 포함)
+    const KIOSK_YOGANG_SOURCE = `<div class="kiosk-source-note">자세한 지원 자격·제출 서류는 「2027학년도 신입생 모집요강」을 참고하세요.</div>`;
+
+    function kioskAdmissionOverviewHTML() {
       return `
         <div class="kiosk-eyebrow">전형 개요</div>
+        <h2 class="kiosk-title">총 160명, 3개 전형으로 선발합니다</h2>
+        <p class="kiosk-sub">모집 시기는 후기이며, 전국 단위로 선발합니다. 세 전형 모두 지원 방법과 평가 기준은 동일합니다.</p>
+        <div class="kiosk-bars" style="margin-top:22px;">
+          <div class="kiosk-bar-row">
+            <span class="kiosk-bar-label">일반전형</span>
+            <div class="kiosk-bar-track"><div class="kiosk-bar-fill" style="width:60%"></div></div>
+            <span class="kiosk-bar-value">96명</span>
+          </div>
+          <div class="kiosk-bar-row">
+            <span class="kiosk-bar-label">강원인재전형</span>
+            <div class="kiosk-bar-track"><div class="kiosk-bar-fill kiosk-bar-fill-w2" style="width:20%"></div></div>
+            <span class="kiosk-bar-value">32명</span>
+          </div>
+          <div class="kiosk-bar-row">
+            <span class="kiosk-bar-label">사회통합전형</span>
+            <div class="kiosk-bar-track"><div class="kiosk-bar-fill kiosk-bar-fill-w1" style="width:20%"></div></div>
+            <span class="kiosk-bar-value">32명</span>
+          </div>
+        </div>
+        <div class="kiosk-note-grid" style="margin-top:20px;">
+          <div class="kiosk-note-card"><span class="ic">🌏</span><b>정원 외 · 특례입학</b><span>모집 정원의 2% 범위 내에서 별도 선발</span></div>
+          <div class="kiosk-note-card"><span class="ic">🎖️</span><b>정원 외 · 국가유공자 자녀</b><span>모집 정원의 3% 범위 내에서 별도 선발</span></div>
+        </div>
+        ${KIOSK_YOGANG_SOURCE}`;
+    }
+
+    function kioskGeneralAdmissionHTML() {
+      return `
+        <div class="kiosk-eyebrow">일반전형</div>
+        <h2 class="kiosk-title">전국 96명 (모집 정원의 60%)</h2>
+        <p class="kiosk-sub">본교의 건학 이념과 영어 상용 정책을 수용할 수 있는 학생이면 누구나 지원할 수 있는 기본 전형입니다.</p>
+        <div class="kiosk-note-grid" style="margin-top:22px;">
+          <div class="kiosk-note-card"><span class="ic">🎓</span><b>지원 자격</b><span>국내 중학교 졸업(예정)자, 검정고시 합격자, 해외 학교 재학생 등 동등 학력 인정자</span></div>
+          <div class="kiosk-note-card"><span class="ic">✍️</span><b>온라인 제출</b><span>입학원서 · 개인정보활용 동의서 · 교과성적 · 자기소개서</span></div>
+          <div class="kiosk-note-card"><span class="ic">✉️</span><b>우편 제출</b><span>입학원서 · 개인정보활용 동의서 출력본, 학교생활기록부Ⅱ 2부</span></div>
+          <div class="kiosk-note-card warn"><span class="ic">⚠️</span><b>응시 제한</b><span>고교 재학·휴학·졸업자, 전기고 합격자, 이중 지원자는 지원 불가</span></div>
+        </div>
+        ${KIOSK_YOGANG_SOURCE}`;
+    }
+
+    function kioskGangwonAdmissionHTML() {
+      return `
+        <div class="kiosk-eyebrow">강원인재전형</div>
+        <h2 class="kiosk-title">강원 32명 (모집 정원의 20%)</h2>
+        <p class="kiosk-sub">일반전형 지원 자격을 갖추고, 강원특별자치도와 연고가 있는 학생을 위한 전형입니다.</p>
+        <div class="kiosk-note-grid" style="margin-top:22px;">
+          <div class="kiosk-note-card"><span class="ic">①</span><b>강원 내 중학교 졸업예정자</b><span>추가 서류 없이 학교생활기록부로 확인</span></div>
+          <div class="kiosk-note-card"><span class="ic">②</span><b>강원 거주 중학교 졸업자</b><span>검정고시 합격자 포함, 주민등록등본 제출</span></div>
+          <div class="kiosk-note-card"><span class="ic">③</span><b>타 시·도 중학교 졸업(예정)자</b><span>특성화·전국단위 모집 중학교 중 강원 거주자</span></div>
+          <div class="kiosk-note-card warn"><span class="ic">📌</span><b>정원 미달 시</b><span>미달 인원은 일반전형에서 충원 선발할 수 있음 (횡성지역인재 1명 포함 선발)</span></div>
+        </div>
+        ${KIOSK_YOGANG_SOURCE}`;
+    }
+
+    function kioskSocialAdmissionHTML() {
+      return `
+        <div class="kiosk-eyebrow">사회통합전형</div>
+        <h2 class="kiosk-title">전국 32명 (모집 정원의 20%)</h2>
+        <p class="kiosk-sub">일반전형 지원 자격을 갖추고, 기회균등·사회다양성 영역 중 하나에 해당하는 학생을 위한 전형입니다.</p>
+        <div class="kiosk-note-grid" style="margin-top:22px;">
+          <div class="kiosk-note-card"><span class="ic">⚖️</span><b>기회균등 영역</b><span>기초생활수급자·차상위계층·국가보훈대상자·한부모가족 등 법정 대상자</span></div>
+          <div class="kiosk-note-card"><span class="ic">🌈</span><b>사회다양성 영역</b><span>다문화가정·북한이탈주민·다자녀가정 등 19개 유형 (기준중위소득 160% 이하)</span></div>
+          <div class="kiosk-note-card"><span class="ic">📑</span><b>공통 제출 서류</b><span>학교장·학부모 확인서, 가족관계증명서, 주민등록등본 등</span></div>
+          <div class="kiosk-note-card warn"><span class="ic">✅</span><b>선발 원칙</b><span>기회균등 영역 대상자를 50% 이상 우선 선발</span></div>
+        </div>
+        ${KIOSK_YOGANG_SOURCE}`;
+    }
+
+    function kioskExtraAdmissionHTML() {
+      return `
+        <div class="kiosk-eyebrow">정원 외 특별전형</div>
+        <h2 class="kiosk-title">특례입학대상자 · 국가유공자 자녀</h2>
+        <p class="kiosk-sub">일반전형 지원 자격을 기본으로 갖춘 학생 중 아래에 해당하는 경우 정원 외로 선발합니다.</p>
+        <div class="kiosk-note-grid" style="margin-top:22px;">
+          <div class="kiosk-note-card"><span class="ic">🌏</span><b>해외 재학 후 귀국 학생</b><span>외국 학교 2년 이상 재학, 부모와 함께 2년 이상 해외 거주(모집 정원 2% 이내)</span></div>
+          <div class="kiosk-note-card"><span class="ic">🔬</span><b>과학기술자·교수요원 자녀</b><span>정부 초청·추천으로 귀국한 과학기술자 및 교수요원의 자녀</span></div>
+          <div class="kiosk-note-card"><span class="ic">🌐</span><b>외국인 학생 · 북한이탈주민</b><span>국내 중학교 전·편입학 후 졸업(예정)자, 학력인정자 포함</span></div>
+          <div class="kiosk-note-card"><span class="ic">🎖️</span><b>국가유공자 자녀</b><span>보훈청 지정 교육지원대상자(모집 정원 3% 이내)</span></div>
+        </div>
+        ${KIOSK_YOGANG_SOURCE}`;
+    }
+
+    function kioskApplicationHTML() {
+      return `
+        <div class="kiosk-eyebrow">원서 접수 및 전형료</div>
+        <h2 class="kiosk-title">온라인 접수 + 우편 서류 제출</h2>
+        <p class="kiosk-sub">온라인 접수·우편 제출 모두 <strong>2026. 12. 8(화) ~ 12. 10(목)</strong> 기간에 진행합니다.</p>
+        <div class="kiosk-note-grid" style="margin-top:22px;">
+          <div class="kiosk-note-card"><span class="ic">🖥️</span><b>온라인 접수</b><span>12.8(화) 9시 ~ 12.10(목) 12시, 본교 홈페이지 신입학 원서 접수 사이트</span></div>
+          <div class="kiosk-note-card"><span class="ic">✉️</span><b>우편 제출</b><span>12.8(화) ~ 12.10(목) 소인분까지 유효, 민족사관고 입학관리실</span></div>
+          <div class="kiosk-note-card"><span class="ic">📅</span><b>1단계 합격자 발표</b><span>12.17(목) 오전 10시, 민족사관고 홈페이지</span></div>
+          <div class="kiosk-note-card warn"><span class="ic">💳</span><b>전형료</b><span>1단계 없음 · 2단계 30,000원(1단계 합격자에 한함)</span></div>
+        </div>
+        ${KIOSK_YOGANG_SOURCE}`;
+    }
+
+    function kioskFlowHTML() {
+      return `
+        <div class="kiosk-eyebrow">전형 방법</div>
         <h2 class="kiosk-title">1단계는 이렇게 산출됩니다</h2>
         <p class="kiosk-sub">중학교 2~3학년 교과 성적과 출결 상황을 반영해 40점 만점의 1단계 점수를 계산합니다.</p>
         <div class="kiosk-flow">
@@ -2646,6 +2760,12 @@
 
     const KIOSK_SLIDES = [
       { duration: 6500, build: el => { el.innerHTML = kioskIntroHTML(); } },
+      { duration: 10000, build: el => { el.innerHTML = kioskAdmissionOverviewHTML(); } },
+      { duration: 10000, build: el => { el.innerHTML = kioskGeneralAdmissionHTML(); } },
+      { duration: 10000, build: el => { el.innerHTML = kioskGangwonAdmissionHTML(); } },
+      { duration: 10000, build: el => { el.innerHTML = kioskSocialAdmissionHTML(); } },
+      { duration: 10000, build: el => { el.innerHTML = kioskExtraAdmissionHTML(); } },
+      { duration: 10000, build: el => { el.innerHTML = kioskApplicationHTML(); } },
       { duration: 11000, build: el => { el.innerHTML = kioskFlowHTML(); } },
       { duration: 11000, build: el => { el.innerHTML = kioskSemesterHTML(); } },
       { duration: 12000, build: el => { el.innerHTML = kioskExampleHTML(); } },
