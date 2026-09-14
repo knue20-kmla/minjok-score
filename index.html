@@ -37,8 +37,7 @@
     .shell { width: min(1320px, calc(100% - 40px)); margin: 0 auto; }
     .topbar {
       /* 버튼 그룹(top-actions)을 제목/부제 옆이 아니라 아래에 배치해서
-         부제 텍스트와 버튼이 서로 부딪히지 않도록 세로로 쌓음.
-         top-actions의 가로 위치(오른쪽 정렬)는 margin-left:auto로 그대로 유지됨. */
+         부제 텍스트와 버튼이 서로 부딪히지 않도록 세로로 쌓음. */
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -84,14 +83,12 @@
     }
     .top-actions {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       align-items: center;
       gap: 6px;
       width: 100%;
-      max-width: 480px;
-      margin-left: auto;
     }
-    .top-actions .cross-link-btn { grid-column: 1 / -1; height: auto; min-height: 34px; font-size: 13px; }
+    .top-actions .cross-link-btn { display: inline-flex; align-items: center; justify-content: center; text-align: center; }
     .view-hidden { display: none !important; }
     .button {
       min-height: 38px;
@@ -679,19 +676,20 @@
       .brand p { max-width: 250px; }
       .top-actions {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-columns: repeat(5, minmax(0, 1fr));
         width: 100%;
         max-width: 100%;
         min-width: 0;
         margin-top: 16px;
+        gap: 4px;
       }
       .top-actions .button {
         width: 100%;
         min-width: 0;
         height: auto;
         min-height: 40px;
-        padding: 4px 3px;
-        font-size: 10px;
+        padding: 4px 2px;
+        font-size: 8.5px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: normal;
