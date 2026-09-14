@@ -82,13 +82,13 @@
       overflow-wrap: break-word;
     }
     .top-actions {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
       align-items: center;
       gap: 6px;
       width: 100%;
     }
-    .top-actions .cross-link-btn { display: inline-flex; align-items: center; justify-content: center; text-align: center; }
     .view-hidden { display: none !important; }
     .button {
       min-height: 38px;
@@ -103,14 +103,12 @@
     .button.primary { color: white; background: var(--teal); border-color: var(--teal); }
     .button.primary:hover { background: var(--teal-dark); }
     .top-actions .button {
-      min-height: 32px;
-      height: 32px;
-      padding: 0 6px;
+      min-height: 30px;
+      height: 30px;
+      padding: 0 10px;
       border-radius: 6px;
       font-size: 11px;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     .top-actions .settings-button {
       width: 32px;
@@ -245,6 +243,17 @@
       0%, 100% { box-shadow: 0 14px 32px rgba(15, 118, 110, 0.28); }
       50% { box-shadow: 0 16px 40px rgba(15, 118, 110, 0.46); }
     }
+    /* 민사고 영재교육과정 체험 버튼 — "입학 전형 안내 자세히 보기"와
+       같은 형태(.kiosk-banner)를 재사용해 높이를 자동으로 맞추고, 색상만 파란색으로 구분 */
+    .kiosk-banner.cross-link-hero-btn {
+      background: linear-gradient(120deg, #2563eb 0%, #1d4ed8 55%, #3b82f6 100%);
+      box-shadow: 0 14px 32px rgba(29, 78, 216, 0.28);
+      animation: none;
+      text-decoration: none;
+    }
+    .kiosk-banner.cross-link-hero-btn:hover {
+      box-shadow: 0 18px 40px rgba(29, 78, 216, 0.36);
+    }
     .kiosk-banner-icon {
       flex: 0 0 auto;
       display: grid;
@@ -323,6 +332,13 @@
     }
     @media (max-width: 480px) {
       .home-hero-row { gap: 10px; }
+    }
+    /* 좁은 화면에서는 QR+배너+체험 버튼 3개가 한 줄에 억지로 들어가면서
+       배너 폭이 너무 좁아져 글자가 세로로 쌓이는 문제가 생기므로,
+       체험 버튼만 아래 줄로 내려 2줄 구성으로 전환 */
+    @media (max-width: 480px) {
+      .home-hero-row { flex-wrap: wrap; }
+      .home-hero-row .cross-link-hero-btn { flex: 1 1 100%; margin-bottom: 0; }
     }
     .qr-dialog-inner { text-align: center; }
     .qr-dialog-box {
@@ -675,25 +691,22 @@
       .brand > div:last-child { flex: 1 1 0; width: 0; }
       .brand p { max-width: 250px; }
       .top-actions {
-        display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
         width: 100%;
         max-width: 100%;
         min-width: 0;
-        margin-top: 16px;
-        gap: 4px;
+        margin-top: 12px;
+        gap: 6px;
       }
       .top-actions .button {
-        width: 100%;
         min-width: 0;
         height: auto;
-        min-height: 40px;
-        padding: 4px 2px;
-        font-size: 8.5px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: normal;
-        overflow-wrap: anywhere;
+        min-height: 34px;
+        padding: 5px 9px;
+        font-size: 11px;
+        white-space: nowrap;
       }
       .intro { display: block; }
       .intro h2 { font-size: 23px; }
@@ -1076,7 +1089,6 @@
         <button class="button" id="printButton" type="button">결과 인쇄</button>
         <button class="button" id="resetButton" type="button">입력 초기화</button>
         <button class="button settings-button" id="adminModeButton" type="button" aria-label="설정" title="설정">⚙</button>
-        <a class="button cross-link-btn" href="https://kmla-curriculum.netlify.app" target="_blank" rel="noopener">민사고 영재교육과정 체험</a>
       </div>
     </header>
 
@@ -1094,6 +1106,14 @@
         </span>
         <span class="kiosk-banner-arrow">›</span>
       </button>
+
+      <a class="kiosk-banner cross-link-hero-btn" href="https://kmla-curriculum.netlify.app" target="_blank" rel="noopener">
+        <span class="kiosk-banner-icon">🎓</span>
+        <span class="kiosk-banner-text">
+          <strong>민사고 영재교육과정 체험</strong>
+        </span>
+        <span class="kiosk-banner-arrow">›</span>
+      </a>
     </div>
 
     <main class="layout" id="studentView">
