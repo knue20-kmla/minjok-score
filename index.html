@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0f766e">
-  <title>민족사관고등학교 1단계 성적 계산기</title>
+  <title>민족사관고등학교 입학 전형</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <style>
     :root {
       --ink: #172323;
@@ -133,6 +134,16 @@
       background: #f2f9fb;
     }
     .button.email-action:hover { background: #dff1f6; }
+    .button.cross-link-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      background: #2563eb;
+      border-color: #2563eb;
+      text-decoration: none;
+    }
+    .button.cross-link-btn:hover { background: #1d4ed8; border-color: #1d4ed8; }
     .admin-actions {
       display: flex;
       align-items: center;
@@ -180,6 +191,127 @@
       font-size: 11px;
       line-height: 1.55;
     }
+    .kiosk-banner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      margin-bottom: 22px;
+      padding: 18px 22px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(120deg, var(--teal) 0%, #0d9488 55%, #14b8a6 100%);
+      box-shadow: 0 14px 32px rgba(15, 118, 110, 0.28);
+      color: #ffffff;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      animation: kiosk-banner-pulse 2.6s ease-in-out infinite;
+    }
+    .kiosk-banner:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(15, 118, 110, 0.36);
+      animation-play-state: paused;
+    }
+    .kiosk-banner:active { transform: translateY(0); }
+    @keyframes kiosk-banner-pulse {
+      0%, 100% { box-shadow: 0 14px 32px rgba(15, 118, 110, 0.28); }
+      50% { box-shadow: 0 16px 40px rgba(15, 118, 110, 0.46); }
+    }
+    .kiosk-banner-icon {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.18);
+      font-size: 22px;
+    }
+    .kiosk-banner-text {
+      flex: 1 1 auto;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .kiosk-banner-text strong { font-size: 16px; }
+    .kiosk-banner-text span { font-size: 12.5px; opacity: 0.88; }
+    .kiosk-banner-arrow {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      font-size: 17px;
+      font-weight: 900;
+    }
+    @media (max-width: 560px) {
+      .kiosk-banner-text span { display: none; }
+    }
+
+    .qr-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100px;
+      margin-bottom: 22px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .qr-card-box {
+      width: 84px;
+      height: 84px;
+      display: grid;
+      place-items: center;
+      padding: 5px;
+      border-radius: 8px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+    }
+    .qr-card-box img, .qr-card-box canvas { display: block; width: 100%; height: 100%; }
+    .qr-card-zoom-btn {
+      width: 100%;
+      border: 1px solid #b9ddd6;
+      border-radius: 8px;
+      padding: 5px 0;
+      background: var(--teal-soft);
+      color: var(--teal-dark);
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .qr-card-zoom-btn:hover { background: #c9ece5; }
+    .qr-card-zoom-btn:active { background: #b9ddd6; }
+    .qr-dialog-inner { text-align: center; }
+    .qr-dialog-box {
+      display: grid;
+      place-items: center;
+      width: 220px;
+      height: 220px;
+      margin: 10px auto 14px;
+      padding: 10px;
+      border-radius: 12px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+    }
+    .qr-dialog-box img, .qr-dialog-box canvas { display: block; width: 100%; height: 100%; }
+    .qr-dialog-link {
+      display: block;
+      color: var(--teal-dark);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+    .qr-dialog-link:hover { text-decoration: underline; }
+
     .layout {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 330px;
@@ -530,6 +662,9 @@
       .top-actions .settings-button {
         display: none;
       }
+      .top-actions .cross-link-btn {
+        grid-column: 1 / -1;
+      }
       .mobile-settings-button {
         display: inline-grid;
         width: 24px;
@@ -571,10 +706,278 @@
       .mail-settings-grid { grid-template-columns: 1fr; }
       .section-heading { align-items: flex-start; }
     }
+    /* ===================== 전형 안내 키오스크 프리젠테이션 ===================== */
+    .kiosk-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: linear-gradient(160deg, #062522 0%, #0f766e 45%, #115e59 100%);
+      font-family: "Pretendard", "Noto Sans KR", "Malgun Gothic", sans-serif;
+    }
+    .kiosk-overlay.open { display: flex; flex-direction: column; }
+    .kiosk-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      padding: 5vh 5vw;
+      min-height: 0;
+    }
+    .kiosk-slide {
+      /* 흰색 카드 자체는 내용과 무관하게 항상 같은 크기를 유지 */
+      width: min(880px, 92vw);
+      height: min(640px, 82vh);
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      padding: 30px 46px 0;
+      background: rgba(255, 255, 255, 0.98);
+      color: var(--ink);
+      border-radius: 26px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    .kiosk-slide.kiosk-in {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .kiosk-content-row {
+      /* eyebrow 배지가 차지하는 높이를 제외한 나머지 영역 — 실제 콘텐츠가
+         이 영역 크기에 맞춰 --kiosk-fit-scale로 축소/확대됨.
+         eyebrow가 별도 고정 영역으로 분리되어 있으므로 세로 가운데 정렬해도
+         eyebrow 위치에는 영향이 없다 — 화면이 위로 쏠리지 않고 카드 전체를 채운다. */
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .kiosk-slide-inner {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0 0 42px;
+      /* 세로 중앙 정렬 시 콘텐츠가 지나치게 아래로 치우쳐 보이지 않도록
+         살짝 위로 당겨줌(빈 아래 패딩만큼 시각적 중심이 위로 이동) */
+      margin-top: -22px;
+      transform: scale(var(--kiosk-fit-scale, 1));
+      transform-origin: center center;
+    }
+    .kiosk-eyebrow {
+      /* 모든 슬라이드에서 크기·위치가 항상 동일하도록 fit-scale이 적용되는
+         .kiosk-slide-inner 밖(카드 자체의 고정 영역)에 별도로 배치됨 */
+      flex: 0 0 auto;
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: var(--teal-soft);
+      color: var(--teal-dark);
+      font-weight: 800;
+      font-size: 0.92rem;
+      white-space: nowrap;
+      margin: 24px 0 16px;
+    }
+    .kiosk-eyebrow[hidden] { display: none; }
+    .kiosk-title { font-size: 2rem; font-weight: 800; margin: 4px 0 8px; color: var(--ink); }
+    .kiosk-sub { font-size: 1.05rem; color: var(--muted); margin: 0 0 24px; line-height: 1.5; }
+    .kiosk-hero { text-align: center; padding: 40px 10px; }
+    .kiosk-hero-logo-wrap {
+      display: flex; align-items: center; justify-content: center;
+      width: 260px; height: 260px; margin: 0 auto 22px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(217, 242, 237, 0.25) 60%, rgba(217, 242, 237, 0) 100%);
+    }
+    .kiosk-hero-logo { display: block; width: 230px; height: 230px; object-fit: contain; filter: drop-shadow(0 16px 30px rgba(15, 118, 110, 0.35)); }
+    .kiosk-hero-badge {
+      display: inline-block; padding: 8px 20px; margin-bottom: 18px;
+      border-radius: 999px; font-weight: 800; font-size: 1rem;
+      background: linear-gradient(90deg, var(--teal), #0d9488); color: #fff;
+      box-shadow: 0 10px 24px rgba(15, 118, 110, 0.3);
+    }
+    .kiosk-hero-title {
+      font-size: 3.2rem; font-weight: 900; margin: 0 0 14px; letter-spacing: -0.01em;
+      background: linear-gradient(90deg, #0b4a44, var(--teal) 50%, #14b8a6);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .kiosk-hero p { font-size: 1.15rem; color: var(--muted); margin: 0; }
+    .kiosk-max {
+      display: flex; align-items: baseline; justify-content: center; gap: 10px;
+      margin: 6px 0 4px; padding: 16px 20px; border-radius: 16px;
+      background: linear-gradient(90deg, var(--teal), #0d9488, #14b8a6);
+      color: #fff; font-size: 1.05rem; font-weight: 700;
+      box-shadow: 0 12px 26px rgba(15, 118, 110, 0.3);
+    }
+    .kiosk-max strong { font-size: 2.1rem; font-weight: 900; letter-spacing: -0.01em; }
+    .kiosk-max strong { color: var(--teal-dark); font-size: 1.2rem; }
+
+    .kiosk-flow {
+      display: flex; align-items: stretch; gap: 10px; margin: 26px 0 8px; flex-wrap: wrap;
+    }
+    .kiosk-flow-card {
+      flex: 1 1 140px; min-width: 130px;
+      padding: 18px 14px; border-radius: 16px;
+      background: var(--soft); border: 1px solid var(--line); text-align: center;
+    }
+    .kiosk-flow-card .num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px; border-radius: 50%; margin-bottom: 10px;
+      background: var(--teal); color: #fff; font-weight: 800; font-size: 0.9rem;
+    }
+    .kiosk-flow-card b { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+    .kiosk-flow-card span { display: block; font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
+    .kiosk-flow-card.emph { background: var(--teal-soft); border-color: #b9ddd6; }
+    .kiosk-flow-arrow { align-self: center; font-size: 1.4rem; color: #9fbdb8; flex: 0 0 auto; }
+
+    .kiosk-bars { display: flex; flex-direction: column; gap: 14px; }
+    .kiosk-bar-row { display: grid; grid-template-columns: 96px 1fr 64px; align-items: center; gap: 14px; }
+    .kiosk-bar-label { font-weight: 800; font-size: 1rem; color: var(--ink); }
+    .kiosk-bar-track { position: relative; height: 26px; border-radius: 999px; background: #eef4f2; overflow: hidden; }
+    .kiosk-bar-fill {
+      position: absolute; inset: 0 auto 0 0; border-radius: 999px;
+      background: linear-gradient(90deg, var(--teal), #14b8a6);
+      transition: width 0.6s ease;
+    }
+    .kiosk-bar-value { text-align: right; font-weight: 800; color: var(--teal-dark); font-size: 1.05rem; }
+    .kiosk-bar-fill-w2 { background: linear-gradient(90deg, #1e40af, #3b82f6); }
+    .kiosk-bar-fill-w1 { background: linear-gradient(90deg, var(--amber), #f2b356); }
+
+    .kiosk-donut-wrap { display: flex; flex-direction: column; align-items: center; gap: 18px; margin: 8px 0 18px; }
+    .kiosk-donut { position: relative; width: 210px; height: 210px; border-radius: 50%; flex: 0 0 auto; }
+    .kiosk-donut-hole {
+      position: absolute; inset: 0; margin: auto; width: 92px; height: 92px; border-radius: 50%;
+      background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      box-shadow: 0 4px 14px rgba(15, 55, 52, 0.14);
+    }
+    .kiosk-donut-hole strong { font-size: 1.2rem; font-weight: 900; color: var(--teal-dark); }
+    .kiosk-donut-hole span { font-size: 0.62rem; color: var(--muted); }
+    .kiosk-donut-label {
+      position: absolute; top: 50%; left: 50%;
+      display: flex; flex-direction: column; align-items: center; line-height: 1.25;
+      color: #ffffff; font-weight: 900; font-size: 0.92rem;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+      pointer-events: none;
+    }
+    .kiosk-donut-label b { font-size: 0.78rem; font-weight: 800; opacity: 0.92; }
+    .kiosk-legend-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; width: 100%; }
+    .kiosk-legend-item {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      padding: 7px 4px; border-radius: 10px; background: var(--soft); border: 1px solid var(--line);
+    }
+    .kiosk-legend-dot { width: 9px; height: 9px; border-radius: 50%; }
+    .kiosk-legend-label { font-weight: 800; font-size: 0.76rem; color: var(--ink); }
+    .kiosk-legend-value { font-weight: 900; font-size: 0.92rem; color: var(--teal-dark); }
+
+    .kiosk-missing-note { padding: 16px 18px; border-radius: 16px; background: var(--amber-soft); border: 1.5px solid #d9b45c; }
+    .kiosk-missing-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 900; color: #7a5316; font-size: 1.02rem; }
+    .kiosk-missing-note p { margin: 0 0 12px; font-size: 0.9rem; color: #5c3d10; line-height: 1.55; font-weight: 600; }
+    .kiosk-missing-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .kiosk-missing-table th, .kiosk-missing-table td { padding: 8px 5px; text-align: center; border-bottom: 1px solid rgba(140, 100, 30, 0.3); }
+    .kiosk-missing-table th { color: #6b4a12; font-weight: 900; font-size: 0.8rem; }
+    .kiosk-missing-table td:first-child, .kiosk-missing-table th:first-child { text-align: left; }
+    .kiosk-missing-table td:first-child { font-weight: 800; color: #4a3009; }
+    .kiosk-missing-table td { color: #4a3009; font-weight: 700; }
+    .kiosk-missing-table tbody tr:last-child td { border-bottom: none; }
+
+    .kiosk-example-table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+    .kiosk-example-table th, .kiosk-example-table td {
+      padding: 11px 10px; border-bottom: 1px solid var(--line); text-align: center; font-size: 0.95rem;
+    }
+    .kiosk-example-table th { color: var(--muted); font-size: 0.78rem; font-weight: 800; }
+    .kiosk-example-table td:first-child { text-align: left; font-weight: 800; }
+    .kiosk-example-table tbody tr:last-child td { border-bottom: none; }
+    .kiosk-example-table td.diff { color: var(--red); font-weight: 800; }
+    .kiosk-weight-impact-title { margin: 22px 0 10px; font-size: 1.05rem; font-weight: 800; color: var(--ink); }
+    .kiosk-impact-table th, .kiosk-impact-table td { padding: 8px 6px; font-size: 0.82rem; }
+    .kiosk-impact-table td:first-child { white-space: nowrap; }
+    .kiosk-weight-impact-title-lg { margin-top: 30px; font-size: 1.25rem; font-weight: 900; }
+    .kiosk-impact-table-lg th, .kiosk-impact-table-lg td { padding: 12px 8px; font-size: 1rem; }
+    .kiosk-impact-table-lg th { font-size: 0.9rem; }
+
+    .kiosk-note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .kiosk-note-card {
+      padding: 16px 18px; border-radius: 16px; background: var(--soft); border: 1px solid var(--line);
+    }
+    .kiosk-note-card .ic { font-size: 1.3rem; margin-bottom: 6px; display: block; }
+    .kiosk-note-card b { display: block; font-size: 0.98rem; margin-bottom: 4px; }
+    .kiosk-note-card span { display: block; font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+    .kiosk-note-card.warn { background: var(--amber-soft); border-color: #ecd9a8; }
+    .kiosk-note-card.warn b { color: var(--amber); }
+
+    .kiosk-footer {
+      padding: 16px 0 26px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .kiosk-dots { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; max-width: 92vw; }
+    .kiosk-dot {
+      width: 24px; height: 24px; padding: 0; border: none; background: transparent; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .kiosk-dot::before {
+      content: ''; display: block; width: 9px; height: 9px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.35); transition: all 0.3s ease;
+    }
+    .kiosk-dot:hover::before { background: rgba(255, 255, 255, 0.65); }
+    .kiosk-dot.active::before { width: 22px; border-radius: 999px; background: #ffffff; }
+    .kiosk-tap-hint {
+      text-align: center; color: rgba(255, 255, 255, 0.65);
+      font-size: 0.68rem; margin-top: 6px; pointer-events: none;
+    }
+    .kiosk-exit-btn {
+      position: fixed; top: 16px; right: 16px; z-index: 510;
+      padding: 8px 16px; border: none; border-radius: 999px;
+      background: rgba(6, 37, 34, 0.55); color: #fff;
+      font-family: inherit; font-weight: 700; font-size: 0.82rem; letter-spacing: 0.02em;
+      cursor: pointer;
+    }
+    .kiosk-exit-btn:active { background: rgba(6, 37, 34, 0.8); }
+    .kiosk-nav-btn {
+      flex: 0 0 auto;
+      width: 52px; height: 52px; border: none; border-radius: 50%;
+      background: #ffffff; color: var(--teal-dark);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+      font-size: 2rem; font-weight: 900; line-height: 1; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .kiosk-nav-btn:hover { background: #eefaf7; }
+    .kiosk-nav-btn:active { background: #d9f2ed; }
+    @media (max-width: 640px) {
+      .kiosk-nav-btn { width: 40px; height: 40px; font-size: 1.5rem; }
+    }
+    .kiosk-speed-ctrl {
+      position: fixed; top: 16px; left: 16px; z-index: 510;
+      display: flex; gap: 3px; padding: 4px; border-radius: 999px;
+      background: rgba(6, 37, 34, 0.55);
+    }
+    .kiosk-speed-btn {
+      padding: 6px 12px; border: none; border-radius: 999px; background: transparent;
+      color: rgba(255, 255, 255, 0.75); font-family: inherit; font-weight: 700; font-size: 0.78rem; cursor: pointer;
+    }
+    .kiosk-speed-btn.active { background: #ffffff; color: var(--teal-dark); }
+    .kiosk-pause-badge {
+      display: none; position: fixed; top: 18px; left: 50%; transform: translateX(-50%); z-index: 510;
+      align-items: center; gap: 8px; padding: 8px 18px; border-radius: 999px;
+      background: rgba(6, 37, 34, 0.72); color: #fff; font-weight: 800; font-size: 0.9rem; pointer-events: none;
+    }
+    .kiosk-overlay.paused .kiosk-pause-badge { display: flex; }
+    @media (max-width: 640px) {
+      .kiosk-slide { padding: 28px 22px; border-radius: 22px; }
+      .kiosk-title { font-size: 1.5rem; }
+      .kiosk-hero-title { font-size: 2.1rem; }
+      .kiosk-note-grid { grid-template-columns: 1fr; }
+    }
+
     @media print {
       body { background: white; }
       .shell { width: 100%; }
-      .topbar, .top-actions, .admin-section { display: none; }
+      .topbar, .top-actions, .admin-section, .kiosk-banner, .qr-card { display: none; }
       .layout { display: block; }
       .side-column { position: static; }
       .section, .score-panel, .side-section { box-shadow: none; }
@@ -629,7 +1032,7 @@
         </div>
         <div>
           <h1>
-            <span>민족사관고등학교 입학 성적 계산기</span>
+            <span>민족사관고등학교 입학 전형</span>
             <button class="settings-button mobile-settings-button" id="adminModeButtonMobile" type="button" aria-label="설정" title="설정">⚙</button>
           </h1>
           <p>2027학년도 신입생 모집요강 기준, 1단계 교과성적(출결)</p>
@@ -637,12 +1040,27 @@
       </div>
       <div class="top-actions">
         <button class="button action" id="pdfButton" type="button">결과 저장 (PDF)</button>
+        <a class="button cross-link-btn" href="https://kmla-curriculum.netlify.app" target="_blank" rel="noopener">민사고 영재교육과정 체험</a>
         <button class="button email-action" id="emailButton" type="button">결과 보내기 (이메일)</button>
         <button class="button" id="printButton" type="button">결과 인쇄</button>
         <button class="button" id="resetButton" type="button">입력 초기화</button>
         <button class="button settings-button" id="adminModeButton" type="button" aria-label="설정" title="설정">⚙</button>
       </div>
     </header>
+
+    <button class="kiosk-banner" id="kioskBanner" type="button">
+      <span class="kiosk-banner-icon">🖥</span>
+      <span class="kiosk-banner-text">
+        <strong>입학 전형 안내 자세히 보기</strong>
+        <span>반영 비율 · 산출 예시 · 출결 감점 기준을 한눈에 확인하세요</span>
+      </span>
+      <span class="kiosk-banner-arrow">›</span>
+    </button>
+
+    <div class="qr-card">
+      <div class="qr-card-box" id="qrCodeBox" aria-label="이 페이지로 접속하는 QR 코드"></div>
+      <button type="button" class="qr-card-zoom-btn" id="qrCardOpen">확대</button>
+    </div>
 
     <main class="layout" id="studentView">
       <div class="main-column">
@@ -879,6 +1297,43 @@
       </div>
     </form>
   </dialog>
+
+  <dialog id="qrDialog">
+    <div class="dialog-inner qr-dialog-inner">
+      <h2>휴대폰으로 바로 열기</h2>
+      <p>카메라 앱으로 QR 코드를 비추면 이 페이지가 바로 열립니다.</p>
+      <div class="qr-dialog-box" id="qrDialogBox"></div>
+      <a class="qr-dialog-link" id="qrDialogLink" href="#" target="_blank" rel="noopener"></a>
+      <div class="dialog-actions">
+        <button class="button primary" id="closeQrDialogButton" type="button">닫기</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- 전형 안내 키오스크 프리젠테이션 -->
+  <div id="kioskOverlay" class="kiosk-overlay">
+    <button type="button" class="kiosk-exit-btn" onclick="event.stopPropagation(); kioskExit();">■ 종료</button>
+    <div class="kiosk-speed-ctrl">
+      <button type="button" class="kiosk-speed-btn" data-speed="0.5" onclick="event.stopPropagation(); kioskSetSpeed(0.5);">0.5x</button>
+      <button type="button" class="kiosk-speed-btn active" data-speed="1" onclick="event.stopPropagation(); kioskSetSpeed(1);">1x</button>
+      <button type="button" class="kiosk-speed-btn" data-speed="1.5" onclick="event.stopPropagation(); kioskSetSpeed(1.5);">1.5x</button>
+    </div>
+    <div class="kiosk-pause-badge">⏸ 일시정지 · 탭하면 계속</div>
+    <div class="kiosk-body">
+      <button type="button" class="kiosk-nav-btn kiosk-nav-prev" aria-label="이전 화면" onclick="event.stopPropagation(); kioskPrevSlide();">‹</button>
+      <div id="kioskSlide" class="kiosk-slide">
+        <div id="kioskEyebrow" class="kiosk-eyebrow"></div>
+        <div class="kiosk-content-row">
+          <div id="kioskSlideInner" class="kiosk-slide-inner"></div>
+        </div>
+      </div>
+      <button type="button" class="kiosk-nav-btn kiosk-nav-next" aria-label="다음 화면" onclick="event.stopPropagation(); kioskManualNextSlide();">›</button>
+    </div>
+    <div class="kiosk-footer">
+      <div id="kioskDots" class="kiosk-dots"></div>
+      <div class="kiosk-tap-hint">탭 1번: 일시정지/계속 · 빠르게 2번 탭: 종료</div>
+    </div>
+  </div>
 
   <script>
     const semesters = [
@@ -1237,6 +1692,7 @@
         return { s21: 50, s22: 50, s31: 0, s32: 0 };
       }
       const remaining = semesters.find(semester => !known.has(semester.id));
+      if (!remaining) return Object.fromEntries(semesters.map(semester => [semester.id, 0]));
       return Object.fromEntries(semesters.map(semester => [semester.id, semester.id === remaining.id ? 100 : 0]));
     }
 
@@ -1728,6 +2184,431 @@
       }
     });
     adminForm.addEventListener("submit", submitAdminForm);
+
+    /* ===================== 전형 안내 키오스크 프리젠테이션 ===================== */
+    let _kioskActive = false;
+    let _kioskIndex = 0;
+    let _kioskTimer = null;
+    let _kioskPaused = false;
+    let _kioskClickTimer = null;
+    let _kioskClickCount = 0;
+    let _kioskSpeed = 1;
+    let _kioskOverlayClickBound = false;
+
+    function kioskFitSlide(inner) {
+      // eyebrow 배지가 차지하는 고정 영역을 제외한 나머지 공간(.kiosk-content-row)에
+      // 맞춰서만 스케일을 계산 — eyebrow 자체는 이 스케일의 영향을 받지 않는다.
+      const row = document.querySelector(".kiosk-content-row");
+      if (!row || !inner) return;
+      inner.style.setProperty("--kiosk-fit-scale", "1");
+      const availW = row.clientWidth - 4;
+      const availH = row.clientHeight - 4;
+      const natW = inner.scrollWidth;
+      const natH = inner.scrollHeight;
+      // 내용이 카드보다 작으면 확대(최대 1.5배까지), 크면 축소해서 모든 슬라이드가
+      // 항상 같은 카드 크기(.kiosk-slide)를 유지하도록 함
+      let scale = Math.min(availW / natW, availH / natH, 1.5);
+      if (!Number.isFinite(scale) || scale <= 0) scale = 1;
+      inner.style.setProperty("--kiosk-fit-scale", scale.toFixed(3));
+    }
+    window.addEventListener("resize", () => {
+      if (!_kioskActive) return;
+      const inner = document.getElementById("kioskSlideInner");
+      if (inner) kioskFitSlide(inner);
+    });
+
+    function kioskIntroHTML() {
+      return `
+        <div class="kiosk-hero">
+          <div class="kiosk-hero-logo-wrap"><img src="https://i.imgur.com/Mo4ogKc.png" class="kiosk-hero-logo" alt="민족사관고등학교"></div>
+          <span class="kiosk-hero-badge">2027학년도 신입생 모집요강</span>
+          <h1 class="kiosk-hero-title">민족사관고등학교</h1>
+          <p>1단계 전형 안내 · 교과성적과 출결로 산출하는 40점 만점 심사</p>
+        </div>`;
+    }
+
+    function kioskFlowHTML() {
+      return `
+        <div class="kiosk-eyebrow">전형 개요</div>
+        <h2 class="kiosk-title">1단계는 이렇게 산출됩니다</h2>
+        <p class="kiosk-sub">중학교 2~3학년 교과 성적과 출결 상황을 반영해 40점 만점의 1단계 점수를 계산합니다.</p>
+        <div class="kiosk-flow">
+          <div class="kiosk-flow-card">
+            <span class="num">1</span><b>교과성적</b>
+            <span>학기별 반영비율 × 과목별 가중치 × 성취도 환산점수</span>
+          </div>
+          <div class="kiosk-flow-arrow">→</div>
+          <div class="kiosk-flow-card">
+            <span class="num">2</span><b>출결 감점</b>
+            <span>미인정 결석·지각·조퇴·결과를 환산해 차감</span>
+          </div>
+          <div class="kiosk-flow-arrow">→</div>
+          <div class="kiosk-flow-card emph">
+            <span class="num">3</span><b>1단계 점수</b>
+            <span>교과성적 − 출결 감점 = 최종 점수</span>
+          </div>
+        </div>
+        <div class="kiosk-max" style="margin-top:38px;">1단계 만점 <strong>40.00점</strong></div>`;
+    }
+
+    const KIOSK_SEMESTER_COLORS = ["#5eead4", "#2dd4bf", "#14b8a6", "#0f766e"];
+
+    function kioskSemesterHTML() {
+      const weightMap = currentSemesterWeights();
+      const values = semesters.map(semester => weightMap[semester.id] != null ? weightMap[semester.id] : semester.rate);
+      const total = values.reduce((sum, value) => sum + value, 0) || 1;
+      let acc = 0;
+      const stops = [];
+      const donutLabels = [];
+      semesters.forEach((semester, i) => {
+        const start = acc / total * 360;
+        acc += values[i];
+        const end = acc / total * 360;
+        stops.push(`${KIOSK_SEMESTER_COLORS[i]} ${start}deg ${end}deg`);
+        const mid = (start + end) / 2;
+        donutLabels.push(`<span class="kiosk-donut-label" style="transform: translate(-50%, -50%) rotate(${mid}deg) translate(0, -78px) rotate(${-mid}deg);"><b>${semester.short}</b>${values[i]}%</span>`);
+      });
+      const stopsCss = stops.join(", ");
+      const labelsHtml = donutLabels.join("");
+      const legend = semesters.map((semester, i) => `
+        <div class="kiosk-legend-item">
+          <span class="kiosk-legend-dot" style="background:${KIOSK_SEMESTER_COLORS[i]}"></span>
+          <span class="kiosk-legend-label">${semester.short}</span>
+          <span class="kiosk-legend-value">${values[i]}%</span>
+        </div>`).join("");
+
+      // 모집요강에 실제 반영되는 재분배 규칙(effectiveSemesterRates)을 그대로 사용해
+      // "성적이 없을 때" 화면에 나오는 수치가 실제 계산 로직과 항상 일치하도록 함
+      const missingRows = semesters.map(missing => {
+        const syntheticResults = semesters.map(s => ({ id: s.id, score: s.id === missing.id ? null : 30 }));
+        const rates = effectiveSemesterRates(syntheticResults, weightMap);
+        return `<tr><td>${missing.label} 없음</td>` +
+          semesters.map(s => `<td>${rates[s.id]}%</td>`).join("") + `</tr>`;
+      }).join("");
+
+      return `
+        <div class="kiosk-eyebrow">학기별 반영 비율</div>
+        <div class="kiosk-donut-wrap">
+          <div class="kiosk-donut" style="background: conic-gradient(${stopsCss});">
+            ${labelsHtml}
+            <div class="kiosk-donut-hole"><strong>100%</strong><span>전체 반영</span></div>
+          </div>
+          <div class="kiosk-legend-grid">${legend}</div>
+        </div>
+        <div class="kiosk-missing-note">
+          <div class="kiosk-missing-head"><span class="ic">⚠️</span><span>특정 학기 성적이 없다면?</span></div>
+          <p>모집요강 기준에 따라 성적이 없는 학기의 비율을 아래처럼 나머지 학기에 재분배합니다.</p>
+          <table class="kiosk-missing-table">
+            <thead><tr><th>상황</th>${semesters.map(s => `<th>${s.short}</th>`).join("")}</tr></thead>
+            <tbody>${missingRows}</tbody>
+          </table>
+        </div>`;
+    }
+
+    function kioskSubjectsHTML() {
+      const weightMap = currentSubjectWeights();
+      const values = subjects.map(subject => weightMap[subject.id] != null ? weightMap[subject.id] : subject.weight);
+      const maxWeight = Math.max(...values, 1);
+      const rows = subjects.map((subject, i) => {
+        const weight = values[i];
+        const pct = weight / maxWeight * 100;
+        const cls = weight >= 3 ? "w3" : (weight === 2 ? "w2" : "w1");
+        return `
+          <div class="kiosk-bar-row">
+            <span class="kiosk-bar-label">${subject.label}</span>
+            <div class="kiosk-bar-track"><div class="kiosk-bar-fill kiosk-bar-fill-${cls}" style="width:${pct}%"></div></div>
+            <span class="kiosk-bar-value">가중치 ${weight}</span>
+          </div>`;
+      }).join("");
+
+      // 같은 'B' 한 과목이라도 가중치에 따라 학기 환산점수에 미치는 영향이 다름을 보여주는 예시
+      const totalWeight = subjects.reduce((sum, subject) => sum + (weightMap[subject.id] || 0), 0) || 1;
+      const scoreIfOneB = subjectId => subjects.reduce((sum, subject) => {
+        const grade = subject.id === subjectId ? "B" : "A";
+        return sum + gradePoints[grade] * (weightMap[subject.id] || 0);
+      }, 0) / totalWeight;
+      const allAScore = scoreIfOneB(null);
+      const impactScenarios = [
+        { label: "전 과목 A", score: allAScore },
+        { label: "국·영·수 중 1과목만 B", score: scoreIfOneB("korean") },
+        { label: "사회·과학 중 1과목만 B", score: scoreIfOneB("social") },
+        { label: "예술·체육 중 1과목만 B", score: scoreIfOneB("arts") }
+      ];
+      // 같은 학기 환산점수라도 "어느 학기에" 받았는지에 따라 반영비율이 달라 반영점수가 달라짐을 보여줌
+      const semesterWeightMap = currentSemesterWeights();
+      const impactRows = impactScenarios.map(scenario => {
+        const semCells = semesters.map(semester => {
+          const rate = semesterWeightMap[semester.id] != null ? semesterWeightMap[semester.id] : semester.rate;
+          const contribution = scenario.score * rate / 100;
+          return `<td>${contribution.toFixed(2)}점</td>`;
+        }).join("");
+        return `
+          <tr>
+            <td>${scenario.label}</td>
+            <td>${scenario.score.toFixed(2)}점</td>
+            ${semCells}
+          </tr>`;
+      }).join("");
+      const semesterHeadCells = semesters.map(semester => `<th>${semester.short}</th>`).join("");
+
+      return `
+        <div class="kiosk-eyebrow">과목별 가중치</div>
+        <div class="kiosk-bars">${rows}</div>
+        <div class="kiosk-weight-impact-title kiosk-weight-impact-title-lg">같은 'B' 한 과목도 학기마다 반영점수가 달라집니다</div>
+        <table class="kiosk-example-table kiosk-impact-table kiosk-impact-table-lg">
+          <thead>
+            <tr><th rowspan="2">시나리오</th><th rowspan="2">학기 환산</th><th colspan="4">학기별 반영점수</th></tr>
+            <tr>${semesterHeadCells}</tr>
+          </thead>
+          <tbody>${impactRows}</tbody>
+        </table>`;
+    }
+
+    function kioskExampleHTML() {
+      // 네 학기 모두 학기 환산점수가 동일(32.00점)하도록 설계한 예시 —
+      // 반영비율(20/20/30/30%)만으로 반영점수가 어떻게 달라지는지 보여줌
+      const exampleGrades = {
+        s21: { korean: "A", english: "B", math: "B", social: "A", science: "A", arts: "A", pe: "A" },
+        s22: { korean: "B", english: "B", math: "A", social: "A", science: "A", arts: "A", pe: "A" },
+        s31: { korean: "B", english: "A", math: "A", social: "B", science: "A", arts: "B", pe: "A" },
+        s32: { korean: "A", english: "A", math: "A", social: "B", science: "B", arts: "B", pe: "B" }
+      };
+      const subjectWeightMap = currentSubjectWeights();
+      const semesterWeightMap = currentSemesterWeights();
+      let finalScore = 0;
+      const rows = semesters.map(semester => {
+        const grades = exampleGrades[semester.id];
+        let weightedTotal = 0;
+        let weightTotal = 0;
+        subjects.forEach(subject => {
+          const weight = subjectWeightMap[subject.id] || 0;
+          weightedTotal += gradePoints[grades[subject.id]] * weight;
+          weightTotal += weight;
+        });
+        const semesterScore = weightTotal ? weightedTotal / weightTotal : 0;
+        const rate = semesterWeightMap[semester.id] != null ? semesterWeightMap[semester.id] : semester.rate;
+        const contribution = semesterScore * rate / 100;
+        finalScore += contribution;
+        return { semester, semesterScore, rate, contribution };
+      });
+      const rowBg = ["#f0fdfa", "#e8fbf7", "#e0f7f2", "#d9f2ed"];
+      const rowsHtml = rows.map((item, i) => `
+        <tr style="background:${rowBg[i]};">
+          <td>${item.semester.short}</td>
+          <td>${item.semesterScore.toFixed(2)}점</td>
+          <td>${item.rate}%</td>
+          <td><strong>${item.contribution.toFixed(2)}점</strong></td>
+        </tr>`).join("");
+      return `
+        <div class="kiosk-eyebrow">학기별 산출 예시</div>
+        <table class="kiosk-example-table" style="margin-top:14px;">
+          <thead><tr><th>학기</th><th>학기 환산</th><th>반영비율</th><th>반영점수</th></tr></thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+        <div class="kiosk-max" style="margin-top:38px;"><span>예시 학생의 1단계 교과성적</span><strong>${finalScore.toFixed(2)}점</strong></div>`;
+    }
+
+    function kioskAttendanceHTML() {
+      return `
+        <div class="kiosk-eyebrow">출결 감점</div>
+        <h2 class="kiosk-title">출결은 감점 요소입니다</h2>
+        <p class="kiosk-sub">2026년 11월 20일까지의 중학교 재학 기간을 기준으로 미인정 출결을 확인합니다.</p>
+        <div class="kiosk-note-grid">
+          <div class="kiosk-note-card"><span class="ic">📅</span><b>미인정 결석</b><span>1일당 0.2점씩 감점됩니다.</span></div>
+          <div class="kiosk-note-card"><span class="ic">⏱️</span><b>지각·조퇴·결과</b><span>미인정 지각·조퇴·결과 3회를 결석 1일로 환산합니다.</span></div>
+          <div class="kiosk-note-card warn"><span class="ic">➗</span><b>감점 계산식</b><span>(미인정 결석일 + 환산 결석일) × 0.2점 = 총 감점</span></div>
+          <div class="kiosk-note-card"><span class="ic">✅</span><b>질병·기타 사유</b><span>질병 또는 기타 인정 사유 결석·지각·조퇴는 감점 대상이 아닙니다.</span></div>
+        </div>`;
+    }
+
+    function kioskClosingHTML() {
+      return `
+        <div class="kiosk-hero">
+          <h1 style="font-size:2.1rem;font-weight:900;color:var(--ink);margin:0 0 14px;">지금 나의 예상 점수를 확인해보세요</h1>
+          <p>화면을 두 번 탭하거나 종료 버튼을 누르면 성적 계산기로 돌아갑니다.</p>
+        </div>`;
+    }
+
+    const KIOSK_SLIDES = [
+      { duration: 6500, build: el => { el.innerHTML = kioskIntroHTML(); } },
+      { duration: 11000, build: el => { el.innerHTML = kioskFlowHTML(); } },
+      { duration: 11000, build: el => { el.innerHTML = kioskSemesterHTML(); } },
+      { duration: 12000, build: el => { el.innerHTML = kioskExampleHTML(); } },
+      { duration: 10000, build: el => { el.innerHTML = kioskSubjectsHTML(); } },
+      { duration: 11000, build: el => { el.innerHTML = kioskAttendanceHTML(); } },
+      { duration: 7000, build: el => { el.innerHTML = kioskClosingHTML(); } }
+    ];
+
+    function kioskRenderDots() {
+      const wrap = document.getElementById("kioskDots");
+      if (!wrap) return;
+      wrap.innerHTML = KIOSK_SLIDES.map((_, i) =>
+        `<button type="button" class="kiosk-dot${i === _kioskIndex ? " active" : ""}" aria-label="${i + 1}번째 화면으로 이동" onclick="event.stopPropagation(); kioskGoToSlide(${i});"></button>`
+      ).join("");
+    }
+
+    function kioskShowSlide() {
+      const card = document.getElementById("kioskSlide");
+      const inner = document.getElementById("kioskSlideInner");
+      const eyebrowSlot = document.getElementById("kioskEyebrow");
+      if (!card || !inner || !eyebrowSlot) return;
+      const slide = KIOSK_SLIDES[_kioskIndex];
+      card.classList.remove("kiosk-in");
+      void card.offsetWidth;
+      slide.build(inner);
+      // 콘텐츠 맨 앞의 eyebrow 배지를 고정 영역으로 옮겨, 모든 슬라이드에서
+      // 위치·크기가 항상 동일하게(내용에 따른 --kiosk-fit-scale 영향을 받지 않고) 보이도록 함
+      const contentEyebrow = inner.querySelector(".kiosk-eyebrow");
+      if (contentEyebrow) {
+        eyebrowSlot.textContent = contentEyebrow.textContent;
+        eyebrowSlot.hidden = false;
+        contentEyebrow.remove();
+      } else {
+        eyebrowSlot.textContent = "";
+        eyebrowSlot.hidden = true;
+      }
+      kioskFitSlide(inner);
+      card.classList.add("kiosk-in");
+      kioskRenderDots();
+      clearTimeout(_kioskTimer);
+      if (!_kioskPaused) _kioskTimer = window.setTimeout(kioskNextSlide, slide.duration / _kioskSpeed);
+    }
+
+    function kioskNextSlide() {
+      _kioskIndex = (_kioskIndex + 1) % KIOSK_SLIDES.length;
+      kioskShowSlide();
+    }
+
+    function kioskGoToSlide(i) {
+      if (!_kioskActive) return;
+      _kioskIndex = ((i % KIOSK_SLIDES.length) + KIOSK_SLIDES.length) % KIOSK_SLIDES.length;
+      kioskShowSlide();
+    }
+
+    function kioskManualNextSlide() {
+      kioskGoToSlide(_kioskIndex + 1);
+    }
+
+    function kioskPrevSlide() {
+      kioskGoToSlide(_kioskIndex - 1);
+    }
+
+    function kioskTogglePause() {
+      if (!_kioskActive) return;
+      _kioskPaused = !_kioskPaused;
+      const overlay = document.getElementById("kioskOverlay");
+      if (overlay) overlay.classList.toggle("paused", _kioskPaused);
+      clearTimeout(_kioskTimer);
+      if (!_kioskPaused) {
+        const slide = KIOSK_SLIDES[_kioskIndex];
+        _kioskTimer = window.setTimeout(kioskNextSlide, slide.duration / _kioskSpeed);
+      }
+    }
+
+    function kioskSetSpeed(speed) {
+      _kioskSpeed = speed;
+      document.querySelectorAll(".kiosk-speed-btn").forEach(button => {
+        button.classList.toggle("active", Number.parseFloat(button.dataset.speed) === speed);
+      });
+      if (_kioskActive && !_kioskPaused) {
+        const slide = KIOSK_SLIDES[_kioskIndex];
+        clearTimeout(_kioskTimer);
+        _kioskTimer = window.setTimeout(kioskNextSlide, slide.duration / _kioskSpeed);
+      }
+    }
+
+    function kioskExit() {
+      clearTimeout(_kioskClickTimer);
+      _kioskClickCount = 0;
+      kioskStop();
+    }
+
+    function kioskHandleOverlayClick(event) {
+      if (event.target.closest(".kiosk-exit-btn") || event.target.closest(".kiosk-speed-ctrl") || event.target.closest(".kiosk-dots") || event.target.closest(".kiosk-nav-btn")) return;
+      _kioskClickCount += 1;
+      if (_kioskClickCount === 1) {
+        _kioskClickTimer = window.setTimeout(() => {
+          kioskTogglePause();
+          _kioskClickCount = 0;
+        }, 320);
+      } else {
+        clearTimeout(_kioskClickTimer);
+        _kioskClickCount = 0;
+        kioskExit();
+      }
+    }
+
+    function kioskStart() {
+      if (_kioskActive) return;
+      _kioskActive = true;
+      _kioskIndex = 0;
+      _kioskPaused = false;
+      _kioskClickCount = 0;
+      const overlay = document.getElementById("kioskOverlay");
+      overlay.classList.add("open");
+      overlay.classList.remove("paused");
+      if (!_kioskOverlayClickBound) {
+        overlay.addEventListener("click", kioskHandleOverlayClick);
+        _kioskOverlayClickBound = true;
+      }
+      document.body.style.overflow = "hidden";
+      kioskShowSlide();
+    }
+
+    function kioskStop() {
+      if (!_kioskActive) return;
+      _kioskActive = false;
+      _kioskPaused = false;
+      clearTimeout(_kioskTimer);
+      clearTimeout(_kioskClickTimer);
+      const overlay = document.getElementById("kioskOverlay");
+      overlay.classList.remove("open", "paused");
+      document.body.style.overflow = "";
+    }
+
+    document.getElementById("kioskBanner").addEventListener("click", kioskStart);
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && _kioskActive) kioskStop();
+    });
+
+    /* ===================== 홈화면 접속 QR 코드 (카드 + 팝업) ===================== */
+    let _qrPageUrl = "";
+    let _qrDialogRendered = false;
+
+    function initQrCode() {
+      const box = document.getElementById("qrCodeBox");
+      if (!box) return;
+      const deployedUrl = "https://knue20-kmla.github.io/minjok-score/";
+      const isWebPage = location.protocol === "http:" || location.protocol === "https:";
+      _qrPageUrl = isWebPage ? (location.origin + location.pathname) : deployedUrl;
+      try {
+        if (typeof QRCode === "undefined") throw new Error("QR 라이브러리를 불러오지 못했습니다.");
+        new QRCode(box, { text: _qrPageUrl, width: 160, height: 160, correctLevel: QRCode.CorrectLevel.M });
+      } catch (error) {
+        box.textContent = "QR 생성 실패";
+      }
+    }
+    initQrCode();
+
+    function openQrDialog() {
+      const dialog = document.getElementById("qrDialog");
+      const linkEl = document.getElementById("qrDialogLink");
+      linkEl.href = _qrPageUrl;
+      linkEl.textContent = _qrPageUrl;
+      if (!_qrDialogRendered) {
+        const box = document.getElementById("qrDialogBox");
+        try {
+          if (typeof QRCode === "undefined") throw new Error("QR 라이브러리를 불러오지 못했습니다.");
+          new QRCode(box, { text: _qrPageUrl, width: 220, height: 220, correctLevel: QRCode.CorrectLevel.M });
+          _qrDialogRendered = true;
+        } catch (error) {
+          box.textContent = "QR 생성 실패";
+        }
+      }
+      if (typeof dialog.showModal === "function") dialog.showModal();
+    }
+    document.getElementById("qrCardOpen").addEventListener("click", openQrDialog);
+    document.getElementById("closeQrDialogButton").addEventListener("click", () => document.getElementById("qrDialog").close());
   </script>
 </body>
 </html>
