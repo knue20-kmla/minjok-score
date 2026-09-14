@@ -857,8 +857,9 @@
       background: linear-gradient(90deg, var(--teal), #0d9488, #14b8a6);
       color: #fff; font-size: 1.05rem; font-weight: 700;
       box-shadow: 0 12px 26px rgba(15, 118, 110, 0.3);
+      white-space: nowrap;
     }
-    .kiosk-max strong { font-size: 2.1rem; font-weight: 900; letter-spacing: -0.01em; }
+    .kiosk-max strong { font-size: 2.1rem; font-weight: 900; letter-spacing: -0.01em; white-space: nowrap; }
     .kiosk-max strong { color: var(--teal-dark); font-size: 1.2rem; }
 
     .kiosk-flow {
@@ -966,8 +967,42 @@
     .kiosk-table-scroll::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 999px; }
     .kiosk-table-scroll table { min-width: 460px; }
     .kiosk-table-scroll table.kiosk-impact-table-lg { min-width: 640px; }
+    /* 학기별 산출 예시 표는 컬럼이 4개뿐이라 다른 표만큼 넓을 필요가 없어
+       최소 폭을 별도로 좁게 지정(불필요하게 많이 축소/스크롤되는 것 방지) */
+    .kiosk-table-scroll table.kiosk-example-table:not(.kiosk-impact-table) { min-width: 300px; }
     .kiosk-scroll-hint { margin-top: 2px; font-size: 0.74rem; color: var(--muted); text-align: right; }
     .kiosk-scroll-hint[hidden] { display: none; }
+    /* 휴대폰(좁은 화면)에서는 가로 스크롤 표 대신 탭하면 펼쳐지는 아코디언을
+       보여줌 — 태블릿/PC 프리젠테이션 화면은 기존 가로 스크롤 표 그대로 유지 */
+    .kiosk-mobile-accordion { display: none; text-align: left; }
+    .kiosk-accordion-item {
+      border-bottom: 1px solid rgba(140, 100, 30, 0.25);
+    }
+    .kiosk-accordion-item:last-child { border-bottom: none; }
+    .kiosk-accordion-item summary {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 4px; font-weight: 800; font-size: 0.88rem; color: #4a3009;
+      cursor: pointer; list-style: none;
+    }
+    .kiosk-accordion-item summary::-webkit-details-marker { display: none; }
+    .kiosk-accordion-item summary::after {
+      content: "▾"; margin-left: 8px; font-size: 0.8rem; color: #8c641e; flex: 0 0 auto;
+    }
+    .kiosk-accordion-item[open] summary::after { content: "▴"; }
+    .kiosk-accordion-body {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px;
+      padding: 2px 4px 12px;
+    }
+    .kiosk-accordion-cell {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      background: rgba(255, 255, 255, 0.55); border-radius: 8px; padding: 6px 2px;
+    }
+    .kiosk-accordion-cell span { font-size: 0.68rem; font-weight: 700; color: #8c641e; }
+    .kiosk-accordion-cell strong { font-size: 0.86rem; font-weight: 900; color: #4a3009; }
+    @media (max-width: 480px) {
+      .kiosk-table-scroll.kiosk-has-accordion, .kiosk-scroll-hint.kiosk-has-accordion { display: none; }
+      .kiosk-mobile-accordion { display: block; }
+    }
     .kiosk-missing-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
     .kiosk-missing-table th, .kiosk-missing-table td { padding: 5px 5px; text-align: center; border-bottom: 1px solid rgba(140, 100, 30, 0.3); }
     .kiosk-missing-table th { color: #6b4a12; font-weight: 900; font-size: 0.8rem; }
@@ -2407,25 +2442,28 @@
 
       // 모집요강에 실제 반영되는 재분배 규칙(effectiveSemesterRates)을 그대로 사용해
       // "성적이 없을 때" 화면에 나오는 수치가 실제 계산 로직과 항상 일치하도록 함
-      const missingRows = semesters.map(missing => {
+      const missingScenarios = semesters.map(missing => {
         const syntheticResults = semesters.map(s => ({ id: s.id, score: s.id === missing.id ? null : 30 }));
-        const rates = effectiveSemesterRates(syntheticResults, weightMap);
-        return `<tr><td>${missing.label} 없음</td>` +
-          semesters.map(s => `<td>${rates[s.id]}%</td>`).join("") + `</tr>`;
-      }).join("");
-
+        return { label: `${missing.label} 없음`, rates: effectiveSemesterRates(syntheticResults, weightMap) };
+      });
       // 한 학년 전체(두 학기 모두) 없는 경우, 그리고 한 학기만 있는 경우도
       // 실제 재분배 규칙(effectiveSemesterRates)을 그대로 사용해 예시로 추가
       const missingGroups = [
         { label: "3학년 성적 없음", missingIds: ["s31", "s32"] },
         { label: "2학년 1학기만 있음", missingIds: ["s22", "s31", "s32"] }
       ];
-      const missingGroupRows = missingGroups.map(group => {
+      missingGroups.forEach(group => {
         const syntheticResults = semesters.map(s => ({ id: s.id, score: group.missingIds.includes(s.id) ? null : 30 }));
-        const rates = effectiveSemesterRates(syntheticResults, weightMap);
-        return `<tr><td>${group.label}</td>` +
-          semesters.map(s => `<td>${rates[s.id]}%</td>`).join("") + `</tr>`;
-      }).join("");
+        missingScenarios.push({ label: group.label, rates: effectiveSemesterRates(syntheticResults, weightMap) });
+      });
+      const scenarioRows = missingScenarios.map(scenario =>
+        `<tr><td>${scenario.label}</td>` + semesters.map(s => `<td>${scenario.rates[s.id]}%</td>`).join("") + `</tr>`
+      ).join("");
+      // 아코디언용 데이터: 상황별로 학기 라벨-값 쌍 배열을 만듦
+      const accordionScenarios = missingScenarios.map(scenario => ({
+        label: scenario.label,
+        cells: semesters.map(s => ({ label: s.short, value: `${scenario.rates[s.id]}%` }))
+      }));
 
       return `
         <div class="kiosk-eyebrow">학기별 반영 비율</div>
@@ -2435,14 +2473,33 @@
         <div class="kiosk-missing-note">
           <div class="kiosk-missing-head"><span class="ic">⚠️</span><span>특정 학기 성적이 없다면?</span></div>
           <p>모집요강 기준에 따라 성적이 없는 학기의 비율을 아래처럼 나머지 학기에 재분배합니다.</p>
-          <div class="kiosk-table-scroll">
+          <div class="kiosk-table-scroll kiosk-has-accordion">
             <table class="kiosk-missing-table">
               <thead><tr><th>상황</th>${semesters.map(s => `<th>${s.short}</th>`).join("")}</tr></thead>
-              <tbody>${missingRows}${missingGroupRows}</tbody>
+              <tbody>${scenarioRows}</tbody>
             </table>
           </div>
-          <div class="kiosk-scroll-hint">← 좌우로 스크롤해 전체 학기를 확인하세요 →</div>
+          <div class="kiosk-scroll-hint kiosk-has-accordion">← 좌우로 스크롤해 전체 학기를 확인하세요 →</div>
+          ${kioskBuildAccordion(accordionScenarios)}
         </div>`;
+    }
+
+    // 휴대폰처럼 좁은 화면에서는 가로 스크롤 표 대신, 상황을 탭하면 학기별
+    // 비율/점수가 펼쳐지는 아코디언 목록을 보여줌(태블릿/PC 프리젠테이션은
+    // 기존 표 그대로 유지 — CSS 미디어쿼리로 화면 폭에 따라 둘 중 하나만 표시)
+    // scenarios: [{ label, cells: [{ label, value }, ...] }, ...]
+    function kioskBuildAccordion(scenarios) {
+      const items = scenarios.map(scenario => {
+        const cells = scenario.cells.map(cell =>
+          `<div class="kiosk-accordion-cell"><span>${cell.label}</span><strong>${cell.value}</strong></div>`
+        ).join("");
+        return `
+          <details class="kiosk-accordion-item" onclick="event.stopPropagation();">
+            <summary>${scenario.label}</summary>
+            <div class="kiosk-accordion-body">${cells}</div>
+          </details>`;
+      }).join("");
+      return `<div class="kiosk-mobile-accordion">${items}</div>`;
     }
 
     function kioskSubjectsHTML() {
@@ -2490,12 +2547,23 @@
           </tr>`;
       }).join("");
       const semesterHeadCells = semesters.map(semester => `<th>${semester.short}</th>`).join("");
+      // 아코디언용 데이터: 시나리오별로 "학기 환산" + 학기별 반영점수를 라벨-값 쌍으로 정리
+      const accordionScenarios = impactScenarios.map(scenario => ({
+        label: scenario.label,
+        cells: [
+          { label: "학기 환산", value: scenario.score.toFixed(2) },
+          ...semesters.map(semester => {
+            const rate = semesterWeightMap[semester.id] != null ? semesterWeightMap[semester.id] : semester.rate;
+            return { label: semester.short, value: (scenario.score * rate / 100).toFixed(2) };
+          })
+        ]
+      }));
 
       return `
         <div class="kiosk-eyebrow">과목별 가중치</div>
         <div class="kiosk-bars">${rows}</div>
         <div class="kiosk-weight-impact-title kiosk-weight-impact-title-lg">같은 'B' 한 과목도 학기마다 반영점수가 달라집니다</div>
-        <div class="kiosk-table-scroll">
+        <div class="kiosk-table-scroll kiosk-has-accordion">
           <table class="kiosk-example-table kiosk-impact-table kiosk-impact-table-lg">
             <thead>
               <tr><th rowspan="2">시나리오</th><th rowspan="2">학기 환산</th><th colspan="4">학기별 반영점수</th></tr>
@@ -2504,7 +2572,8 @@
             <tbody>${impactRows}</tbody>
           </table>
         </div>
-        <div class="kiosk-scroll-hint">← 좌우로 스크롤해 전체 학기를 확인하세요 →</div>`;
+        <div class="kiosk-scroll-hint kiosk-has-accordion">← 좌우로 스크롤해 전체 학기를 확인하세요 →</div>
+        ${kioskBuildAccordion(accordionScenarios)}`;
     }
 
     function kioskExampleHTML() {
@@ -2544,11 +2613,14 @@
         </tr>`).join("");
       return `
         <div class="kiosk-eyebrow">학기별 산출 예시</div>
-        <table class="kiosk-example-table" style="margin-top:14px;">
-          <thead><tr><th>학기</th><th>학기 환산</th><th>반영비율</th><th>반영점수</th></tr></thead>
-          <tbody>${rowsHtml}</tbody>
-        </table>
-        <div class="kiosk-max" style="margin-top:38px;"><span>예시 학생의 1단계 교과성적</span><strong>${finalScore.toFixed(2)}점</strong></div>`;
+        <div class="kiosk-table-scroll" style="margin-top:14px;">
+          <table class="kiosk-example-table">
+            <thead><tr><th>학기</th><th>학기 환산</th><th>반영비율</th><th>반영점수</th></tr></thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+        </div>
+        <div class="kiosk-scroll-hint">← 좌우로 스크롤해 전체 내용을 확인하세요 →</div>
+        <div class="kiosk-max" style="margin-top:38px;"><span>1단계 교과성적(예시)</span><strong>${finalScore.toFixed(2)}점</strong></div>`;
     }
 
     function kioskAttendanceHTML() {
@@ -2612,6 +2684,11 @@
       }
       kioskFitSlide(inner);
       kioskSyncScrollHints(inner);
+      // 아코디언을 펼치면 슬라이드 안의 세로 길이가 늘어나므로, 펼침/접힘이
+      // 일어날 때마다 화면 맞춤 배율을 다시 계산해 내용이 잘리지 않게 함
+      inner.querySelectorAll(".kiosk-accordion-item").forEach(item => {
+        item.addEventListener("toggle", () => kioskFitSlide(inner));
+      });
       card.classList.add("kiosk-in");
       kioskRenderDots();
       clearTimeout(_kioskTimer);
