@@ -73,19 +73,16 @@
       word-break: keep-all;
     }
     .brand h1 > span { min-width: 0; }
-    /* 부제 문구를 버튼 그룹과 같은 줄에 배치해 여백을 줄임 */
     .topbar-second-row {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       gap: 8px 16px;
     }
     .topbar-subtitle {
-      flex: 1 1 auto;
-      min-width: 0;
       max-width: 100%;
-      margin: 0;
+      margin: 10px 0 0;
       color: var(--muted);
       font-size: 15px;
       word-break: keep-all;
@@ -700,7 +697,7 @@
       .brand { width: 100%; }
       .brand > div:last-child { flex: 1 1 0; width: 0; }
       .topbar-second-row { margin-top: 8px; }
-      .topbar-subtitle { max-width: 100%; flex: 1 1 100%; }
+      .topbar-subtitle { max-width: 250px; }
       .top-actions {
         display: flex;
         flex-wrap: wrap;
@@ -1091,10 +1088,10 @@
             <span>민족사관고등학교 입학 전형</span>
             <button class="settings-button mobile-settings-button" id="adminModeButtonMobile" type="button" aria-label="설정" title="설정">⚙</button>
           </h1>
+          <p class="topbar-subtitle">2027학년도 신입생 모집요강 기준, 1단계 교과성적(출결)</p>
         </div>
       </div>
       <div class="topbar-second-row">
-        <p class="topbar-subtitle">2027학년도 신입생 모집요강 기준, 1단계 교과성적(출결)</p>
         <div class="top-actions">
           <button class="button action" id="pdfButton" type="button">결과 저장 (PDF)</button>
           <button class="button email-action" id="emailButton" type="button">결과 보내기 (이메일)</button>
