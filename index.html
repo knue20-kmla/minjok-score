@@ -909,6 +909,7 @@
     .kiosk-example-table { width: 100%; border-collapse: collapse; margin-top: 6px; }
     .kiosk-example-table th, .kiosk-example-table td {
       padding: 11px 10px; border-bottom: 1px solid var(--line); text-align: center; font-size: 0.95rem;
+      white-space: nowrap;
     }
     .kiosk-example-table th { color: var(--muted); font-size: 0.78rem; font-weight: 800; }
     .kiosk-example-table td:first-child { text-align: left; font-weight: 800; }
@@ -2381,12 +2382,12 @@
         const semCells = semesters.map(semester => {
           const rate = semesterWeightMap[semester.id] != null ? semesterWeightMap[semester.id] : semester.rate;
           const contribution = scenario.score * rate / 100;
-          return `<td>${contribution.toFixed(2)}점</td>`;
+          return `<td>${contribution.toFixed(2)}</td>`;
         }).join("");
         return `
           <tr>
             <td>${scenario.label}</td>
-            <td>${scenario.score.toFixed(2)}점</td>
+            <td>${scenario.score.toFixed(2)}</td>
             ${semCells}
           </tr>`;
       }).join("");
@@ -2439,9 +2440,9 @@
       const rowsHtml = rows.map((item, i) => `
         <tr style="background:${rowBg[i]};">
           <td>${item.semester.short}</td>
-          <td>${item.semesterScore.toFixed(2)}점</td>
+          <td>${item.semesterScore.toFixed(2)}</td>
           <td>${item.rate}%</td>
-          <td><strong>${item.contribution.toFixed(2)}점</strong></td>
+          <td><strong>${item.contribution.toFixed(2)}</strong></td>
         </tr>`).join("");
       return `
         <div class="kiosk-eyebrow">학기별 산출 예시</div>
