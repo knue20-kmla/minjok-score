@@ -3359,7 +3359,7 @@
     function kioskScholarshipHTML() {
       return `
         <div class="kiosk-eyebrow">신입생 대상 장학금</div>
-        <h2 class="kiosk-title">선혜 장학생을 선발합니다</h2>
+        <h2 class="kiosk-title">선혜 장학생</h2>
         <p class="kiosk-sub">KCC그룹 정몽진 회장의 후원으로, 참된 지도자의 자세를 갖춘 신입생을 선발해 장학금을 수여합니다.</p>
         <div class="kiosk-table-scroll" style="margin:18px 0 4px;">
           <table class="kiosk-dialog-table kiosk-example-table" style="min-width:460px;">
@@ -3373,9 +3373,15 @@
         <div class="kiosk-note-grid" style="margin-top:14px;">
           <div class="kiosk-note-card"><span class="ic">🗓️</span><b>영재성·과제수행능력 평가</b><span>최종 합격자 발표 후 별도로 시행합니다.</span></div>
           <div class="kiosk-note-card warn"><span class="ic">🎓</span><b>대학 지원 지침 유의</b><span>대학 지원 시 국내·해외, 의학·비의학 계열 중 각각 하나만 선택 지원해야 하며, 위반 시 장학금 전액 반환 및 장학금 추천 대상에서 제외됩니다.</span></div>
-        </div>
-        <div class="kiosk-dialog-subhead" style="margin:18px 0 8px;">지원 시 필요한 서식·붙임 파일 다운로드</div>
-        <div class="kiosk-download-grid">
+        </div>`;
+    }
+
+    function kioskFormsHTML() {
+      return `
+        <div class="kiosk-eyebrow">필요 서식</div>
+        <h2 class="kiosk-title">신입생 입학에 필요한 서식·붙임 파일</h2>
+        <p class="kiosk-sub">지원 유형에 해당하는 파일을 눌러 내려받으세요.</p>
+        <div class="kiosk-download-grid" style="margin-top:22px;">
           <a class="kiosk-download-card" href="forms/서식1_공통제출서류.hwp" download>
             <span class="ic">📄</span><b>[서식1] 공통 제출 서류</b><span>중학교 졸업자·동등학력 인정자 공통 제출 서류</span>
           </a>
@@ -3409,13 +3415,14 @@
       { duration: 10000, build: el => { el.innerHTML = kioskGangwonAdmissionHTML(); } },
       { duration: 10000, build: el => { el.innerHTML = kioskSocialAdmissionHTML(); } },
       { duration: 10000, build: el => { el.innerHTML = kioskExtraAdmissionHTML(); } },
+      { duration: 12000, build: el => { el.innerHTML = kioskScholarshipHTML(); } },
+      { duration: 10000, build: el => { el.innerHTML = kioskFormsHTML(); } },
       { duration: 10000, build: el => { el.innerHTML = kioskApplicationHTML(); } },
       { duration: 11000, build: el => { el.innerHTML = kioskFlowHTML(); } },
       { duration: 11000, build: el => { el.innerHTML = kioskSemesterHTML(); } },
       { duration: 12000, build: el => { el.innerHTML = kioskExampleHTML(); } },
       { duration: 10000, build: el => { el.innerHTML = kioskSubjectsHTML(); } },
       { duration: 11000, build: el => { el.innerHTML = kioskAttendanceHTML(); } },
-      { duration: 12000, build: el => { el.innerHTML = kioskScholarshipHTML(); } },
       { duration: 7000, build: el => { el.innerHTML = kioskClosingHTML(); } }
     ];
 
