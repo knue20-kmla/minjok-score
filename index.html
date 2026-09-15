@@ -1898,6 +1898,71 @@
     </div>
   </dialog>
 
+  <dialog id="kioskExtraEligibilityDialog" class="kiosk-popup dialog-wide">
+    <div class="kiosk-popup-head"><span class="ic">📋</span><h2>정원 외 특별전형 영역별 지원 자격</h2></div>
+    <div class="kiosk-popup-body">
+      <div class="kiosk-dialog-subhead" style="margin-top:0;">특례입학대상자 (일반전형 지원 자격 + 아래 요건)</div>
+      <div class="kiosk-table-scroll" style="margin:0 0 4px;">
+        <table class="kiosk-dialog-table" style="min-width:480px;">
+          <thead><tr><th>구분</th><th>지원 자격</th></tr></thead>
+          <tbody>
+            <tr><td>외국에서 재학하고 귀국한 학생<br>(제2호 가목)</td><td>외국 학교에서 2년 이상 재학하고 귀국한 학생 (외국에서 부모와 함께 2년 이상 거주한 자에 한함)</td></tr>
+            <tr><td>과학기술자·교수요원의 자녀<br>(제2호 나목)</td><td>정부의 초청 또는 추천에 의하여 귀국한 과학기술자 및 교수요원의 자녀</td></tr>
+            <tr><td>외국인 학생<br>(제2호 다목)</td><td>부모 또는 부모 중 1인이 대한민국 국민인 경우, 외국에서 2년 이상의 중학교 교육과정을 이수한 학생 (순수 외국인 학생 포함)</td></tr>
+            <tr><td>북한이탈주민<br>(제3호)</td><td>「북한이탈주민의 보호 및 정착지원에 관한 법률」 상 보호대상자로, 군사분계선 이북 지역 학교에서 2년 이상 재학하고 이남 지역 중학교에 편입학하여 졸업한 자</td></tr>
+            <tr><td>학력인정자<br>(제4호)</td><td>「초·중등교육법 시행령」 제97조제1항제3호 또는 제98조의3에 따라 중학교 졸업자와 동등한 학력이 있다고 인정받은 자</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="kiosk-dialog-subhead">국가유공자 자녀</div>
+      <p style="margin:0;">일반전형 지원 자격을 갖추고, 「국가유공자 등 예우 및 지원에 관한 법률」 제23조제1항에 의거 국가유공자 자녀 중 교육지원대상자로 지정되어 보훈청에서 통보된 자</p>
+      <div class="dialog-actions">
+        <button class="button primary" id="closeKioskExtraEligibilityDialog" type="button">닫기</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="kioskExtraCommonDocsDialog" class="kiosk-popup dialog-wide">
+    <div class="kiosk-popup-head"><span class="ic">📑</span><h2>제출 서류 (특례입학대상자·국가유공자 자녀 공통)</h2></div>
+    <div class="kiosk-popup-body">
+      <ol class="kiosk-dialog-list">
+        <li>입학원서 1부 — 온라인 입력 후 출력본 우편 제출</li>
+        <li>개인정보활용 동의서 1부 — 온라인 입력 후 출력본 우편 제출</li>
+        <li>교과성적(2학년 1학기~3학년 2학기) — 온라인 입력(우편 제출 없음)</li>
+        <li>자기소개서 — 온라인 입력(우편 제출 없음)</li>
+        <li>학교생활기록부Ⅱ 2부 — 우편 제출</li>
+        <li>학교장 확인서【붙임1】 — 우편 제출</li>
+        <li>학부모 확인서【붙임2】 — 우편 제출</li>
+        <li>해당자별 추가 서류 1부씩 — 우편 제출</li>
+      </ol>
+      <div class="dialog-actions">
+        <button class="button primary" id="closeKioskExtraCommonDocsDialog" type="button">닫기</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="kioskExtraAdditionalDocsDialog" class="kiosk-popup dialog-wide">
+    <div class="kiosk-popup-head"><span class="ic">🗂️</span><h2>해당자별 추가 서류</h2></div>
+    <div class="kiosk-popup-body">
+      <div class="kiosk-table-scroll" style="margin:0 0 4px;">
+        <table class="kiosk-dialog-table" style="min-width:480px;">
+          <thead><tr><th>대상</th><th>주요 추가 서류</th></tr></thead>
+          <tbody>
+            <tr><td>외국에서 재학하고 귀국한 학생</td><td>외국 학교 전학년 성적증명서·재학증명서, 국내 최종학교 재학(졸업)증명서, 여권사본 또는 출입국사실증명서(부모·학생), 전가족 주민등록등본</td></tr>
+            <tr><td>과학기술자·교수요원의 자녀</td><td>국내 최종학교 재학(졸업)증명서, 여권사본 또는 출입국사실증명서(학생), 전가족 주민등록등본, 정부 초청(추천)서 사본</td></tr>
+            <tr><td>외국인 학생</td><td>외국 학교 전학년 성적증명서·재학증명서, 여권사본 또는 출입국사실증명서, 가족관계증명서(순수 외국인은 외국정부증명서)</td></tr>
+            <tr><td>북한이탈주민</td><td>전가족 주민등록등본(말소된 주민등록등본), 북한이탈주민확인서 및 학력보증서</td></tr>
+            <tr><td>학력인정자</td><td>전가족 주민등록등본, 해당 시 북한이탈주민확인서·학력보증서 또는 제3국 수학인정서</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:11.5px;margin-top:10px;">( )표기 서류는 해당자에 한하여 제출하며, 영어를 제외한 외국어 서류는 한국어 번역 공증본으로 제출해야 합니다. 대상별 정확한 서류 매트릭스는 모집요강 원문을 참고하세요.</p>
+      <div class="dialog-actions">
+        <button class="button primary" id="closeKioskExtraAdditionalDocsDialog" type="button">닫기</button>
+      </div>
+    </div>
+  </dialog>
+
   <!-- 전형 안내 키오스크 프리젠테이션 -->
   <div id="kioskOverlay" class="kiosk-overlay">
     <button type="button" class="kiosk-exit-btn" onclick="event.stopPropagation(); kioskExit();">■ 종료</button>
@@ -2970,11 +3035,30 @@
         <h2 class="kiosk-title">특례입학대상자 · 국가유공자 자녀</h2>
         <p class="kiosk-sub">일반전형 지원 자격을 기본으로 갖춘 학생 중 아래에 해당하는 경우 정원 외로 선발합니다.</p>
         <div class="kiosk-note-grid" style="margin-top:22px;">
-          <div class="kiosk-note-card"><span class="ic">🌏</span><b>해외 재학 후 귀국 학생</b><span>외국 학교 2년 이상 재학, 부모와 함께 2년 이상 해외 거주(모집 정원 2% 이내)</span></div>
-          <div class="kiosk-note-card"><span class="ic">🔬</span><b>과학기술자·교수요원 자녀</b><span>정부 초청·추천으로 귀국한 과학기술자 및 교수요원의 자녀</span></div>
-          <div class="kiosk-note-card"><span class="ic">🌐</span><b>외국인 학생 · 북한이탈주민</b><span>국내 중학교 전·편입학 후 졸업(예정)자, 학력인정자 포함</span></div>
-          <div class="kiosk-note-card"><span class="ic">🎖️</span><b>국가유공자 자녀</b><span>보훈청 지정 교육지원대상자(모집 정원 3% 이내)</span></div>
-          <div class="kiosk-note-card"><span class="ic">📑</span><b>추가 서류</b><span>공통 제출 서류(1)~(5) + 학교장·학부모 확인서(붙임1·2) + 유형별 증빙 서류(재학증명서, 여권사본, 가족관계증명서 등)</span></div>
+          <div class="kiosk-note-card">
+            <span class="ic">🌏</span><b>해외 재학 후 귀국 학생</b><span>외국 학교 2년 이상 재학, 부모와 함께 2년 이상 해외 거주(모집 정원 2% 이내)</span>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskExtraEligibilityDialog');">📋 영역별 지원 자격 보기</button>
+          </div>
+          <div class="kiosk-note-card">
+            <span class="ic">🔬</span><b>과학기술자·교수요원 자녀</b><span>정부 초청·추천으로 귀국한 과학기술자 및 교수요원의 자녀</span>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskExtraEligibilityDialog');">📋 영역별 지원 자격 보기</button>
+          </div>
+          <div class="kiosk-note-card">
+            <span class="ic">🌐</span><b>외국인 학생 · 북한이탈주민</b><span>국내 중학교 전·편입학 후 졸업(예정)자, 학력인정자 포함</span>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskExtraEligibilityDialog');">📋 영역별 지원 자격 보기</button>
+          </div>
+          <div class="kiosk-note-card">
+            <span class="ic">🎖️</span><b>국가유공자 자녀</b><span>보훈청 지정 교육지원대상자(모집 정원 3% 이내)</span>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskExtraEligibilityDialog');">📋 영역별 지원 자격 보기</button>
+          </div>
+          <div class="kiosk-note-card">
+            <span class="ic">📑</span><b>제출 서류(공통)</b><span>입학원서·동의서·교과성적·자기소개서·학교생활기록부Ⅱ 등 (1)~(8)</span>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskExtraCommonDocsDialog');">📑 공통 제출 서류 보기</button>
+          </div>
+          <div class="kiosk-note-card">
+            <span class="ic">🗂️</span><b>해당자별 추가 서류</b><span>유형에 따라 재학증명서·여권사본·가족관계증명서 등이 달라요</span>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskExtraAdditionalDocsDialog');">🗂️ 해당자별 추가 서류 보기</button>
+          </div>
         </div>
         ${KIOSK_YOGANG_SOURCE}`;
     }
@@ -3516,7 +3600,10 @@
       ["closeKioskEqualityDocsDialog", "kioskEqualityDocsDialog"],
       ["closeKioskDiversityDialog", "kioskDiversityDialog"],
       ["closeKioskDiversityDocsDialog", "kioskDiversityDocsDialog"],
-      ["closeKioskIncomeTableDialog", "kioskIncomeTableDialog"]
+      ["closeKioskIncomeTableDialog", "kioskIncomeTableDialog"],
+      ["closeKioskExtraEligibilityDialog", "kioskExtraEligibilityDialog"],
+      ["closeKioskExtraCommonDocsDialog", "kioskExtraCommonDocsDialog"],
+      ["closeKioskExtraAdditionalDocsDialog", "kioskExtraAdditionalDocsDialog"]
     ].forEach(([btnId, dialogId]) => {
       const btn = document.getElementById(btnId);
       const dialog = document.getElementById(dialogId);
