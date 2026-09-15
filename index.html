@@ -251,17 +251,6 @@
       0%, 100% { box-shadow: 0 14px 32px rgba(15, 118, 110, 0.28); }
       50% { box-shadow: 0 16px 40px rgba(15, 118, 110, 0.46); }
     }
-    /* 민사고 영재교육과정 체험 버튼 — "입학 전형 안내 자세히 보기"와
-       같은 형태(.kiosk-banner)를 재사용해 높이를 자동으로 맞추고, 색상만 파란색으로 구분 */
-    .kiosk-banner.cross-link-hero-btn {
-      background: linear-gradient(120deg, #2563eb 0%, #1d4ed8 55%, #3b82f6 100%);
-      box-shadow: 0 14px 32px rgba(29, 78, 216, 0.28);
-      animation: none;
-      text-decoration: none;
-    }
-    .kiosk-banner.cross-link-hero-btn:hover {
-      box-shadow: 0 18px 40px rgba(29, 78, 216, 0.36);
-    }
     .kiosk-banner-icon {
       flex: 0 0 auto;
       display: grid;
@@ -340,13 +329,6 @@
     }
     @media (max-width: 480px) {
       .home-hero-row { gap: 10px; }
-    }
-    /* 좁은 화면에서는 QR+배너+체험 버튼 3개가 한 줄에 억지로 들어가면서
-       배너 폭이 너무 좁아져 글자가 세로로 쌓이는 문제가 생기므로,
-       체험 버튼만 아래 줄로 내려 2줄 구성으로 전환 */
-    @media (max-width: 480px) {
-      .home-hero-row { flex-wrap: wrap; }
-      .home-hero-row .cross-link-hero-btn { flex: 1 1 100%; margin-bottom: 0; }
     }
     .qr-dialog-inner { text-align: center; }
     .qr-dialog-box {
@@ -875,7 +857,7 @@
     .kiosk-hero-logo-wrap {
       display: flex; align-items: center; justify-content: center;
       flex: 0 0 auto;
-      width: 350px; height: 350px; margin: 0 0 8px;
+      width: 350px; height: 350px; margin: 0 0 34px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(30, 64, 175, 0.06) 88%, rgba(30, 64, 175, 0) 100%);
     }
@@ -887,13 +869,12 @@
       box-shadow: 0 10px 24px rgba(15, 118, 110, 0.3);
     }
     .kiosk-hero-year {
-      display: inline-block; position: relative; margin: 0 0 12px; padding-bottom: 9px;
-      font-size: 1.08rem; font-weight: 800; letter-spacing: .12em; color: #2563eb;
-    }
-    .kiosk-hero-year::after {
-      content: ""; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
-      width: 44px; height: 3px; border-radius: 999px;
-      background: linear-gradient(90deg, #1e3a8a, #60a5fa);
+      display: inline-flex; align-items: center; gap: 10px; margin: 0 0 18px; white-space: nowrap;
+      font-size: 1.4rem; font-weight: 800; letter-spacing: .16em; color: #1e40af;
+      padding: 8px 24px; border-radius: 999px;
+      background: linear-gradient(100deg, rgba(30, 64, 175, .08), rgba(96, 165, 250, .16));
+      border: 1px solid rgba(37, 99, 235, .3);
+      box-shadow: 0 6px 16px rgba(30, 64, 175, .1);
     }
     .kiosk-hero-title {
       font-size: 3.1rem; font-weight: 900; margin: 0; letter-spacing: -0.015em; line-height: 1.25;
@@ -1336,8 +1317,8 @@
       .kiosk-slide { padding: 28px 22px; border-radius: 22px; }
       .kiosk-title { font-size: 1.5rem; }
       .kiosk-hero-title { font-size: 1.7rem; }
-      .kiosk-hero-year { font-size: 0.85rem; }
-      .kiosk-hero-logo-wrap { width: 250px; height: 250px; margin-bottom: 4px; }
+      .kiosk-hero-year { font-size: 1rem; padding: 6px 18px; }
+      .kiosk-hero-logo-wrap { width: 250px; height: 250px; margin-bottom: 20px; }
       .kiosk-hero-logo { width: 240px; height: 240px; }
       .kiosk-note-grid { grid-template-columns: 1fr; }
     }
@@ -1422,18 +1403,11 @@
         </span>
         <span class="kiosk-banner-arrow">›</span>
       </button>
-
-      <a class="kiosk-banner cross-link-hero-btn" href="https://kmla-curriculum.netlify.app" target="_blank" rel="noopener">
-        <span class="kiosk-banner-icon">🎓</span>
-        <span class="kiosk-banner-text">
-          <strong>민사고 영재교육과정 체험</strong>
-        </span>
-        <span class="kiosk-banner-arrow">›</span>
-      </a>
     </div>
 
     <div class="topbar-second-row">
       <div class="top-actions">
+        <a class="button cross-link-btn" href="https://kmla-curriculum.netlify.app" target="_blank" rel="noopener">🎓 민사고 영재교육과정 체험</a>
         <button class="button action" id="pdfButton" type="button">결과 저장 (PDF)</button>
         <button class="button email-action" id="emailButton" type="button">결과 보내기 (이메일)</button>
         <button class="button" id="printButton" type="button">결과 인쇄</button>
