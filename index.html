@@ -857,10 +857,10 @@
     .kiosk-hero-logo-wrap {
       display: flex; align-items: center; justify-content: center;
       flex: 0 0 auto;
-      width: 460px; height: 460px; margin: 0 0 24px;
+      width: 390px; height: 390px; margin: 0 0 30px;
       border-radius: 50%;
     }
-    .kiosk-hero-logo { display: block; width: 458px; height: 458px; object-fit: contain; filter: drop-shadow(0 18px 32px rgba(30, 58, 138, 0.32)); }
+    .kiosk-hero-logo { display: block; width: 386px; height: 386px; object-fit: contain; filter: drop-shadow(0 18px 32px rgba(30, 58, 138, 0.32)); }
     .kiosk-hero-badge {
       display: inline-block; padding: 8px 20px; margin-bottom: 18px;
       border-radius: 999px; font-weight: 800; font-size: 1rem;
@@ -890,13 +890,13 @@
       box-shadow: 0 30px 90px rgba(11, 21, 56, 0.45);
     }
     .kiosk-slide.kiosk-slide-closing {
-      background-image: linear-gradient(to bottom, rgba(6, 12, 40, 0) 0%, rgba(6, 12, 40, 0.55) 62%, rgba(6, 12, 40, 0.88) 100%), linear-gradient(165deg, rgba(13, 27, 74, 0.7) 0%, rgba(29, 60, 158, 0.5) 45%, rgba(37, 99, 235, 0.4) 100%), url("assets/kiosk-photo-closing.jpg");
+      background-image: linear-gradient(to top, rgba(6, 12, 40, 0) 0%, rgba(6, 12, 40, 0.55) 60%, rgba(6, 12, 40, 0.85) 100%), linear-gradient(165deg, rgba(13, 27, 74, 0.7) 0%, rgba(29, 60, 158, 0.5) 45%, rgba(37, 99, 235, 0.4) 100%), url("assets/kiosk-photo-closing.jpg");
       background-size: cover;
-      background-position: center 5%;
+      background-position: center;
       box-shadow: 0 30px 90px rgba(11, 21, 56, 0.45);
     }
-    /* 렌즈가 화면 위쪽에 오도록 사진을 올리고, 문구는 그 아래(어두운 하단 영역)에 배치 */
-    .kiosk-slide-closing .kiosk-hero { margin-top: 300px; }
+    /* 사진(렌즈)은 그대로 두고, 문구만 사진 위쪽(어두운 상단 영역)으로 이동 */
+    .kiosk-slide-closing .kiosk-hero { margin-bottom: 320px; }
     .kiosk-slide-intro .kiosk-hero-logo { filter: drop-shadow(0 10px 28px rgba(6, 12, 40, 0.55)); }
     .kiosk-slide-intro .kiosk-hero-year {
       color: #ffffff; letter-spacing: .18em;
@@ -1352,8 +1352,8 @@
       .kiosk-title { font-size: 1.5rem; }
       .kiosk-hero-title { font-size: 1.7rem; }
       .kiosk-hero-year { font-size: 1rem; padding: 6px 18px; }
-      .kiosk-hero-logo-wrap { width: 300px; height: 300px; margin-bottom: 14px; }
-      .kiosk-hero-logo { width: 298px; height: 298px; }
+      .kiosk-hero-logo-wrap { width: 250px; height: 250px; margin-bottom: 20px; }
+      .kiosk-hero-logo { width: 240px; height: 240px; }
       .kiosk-closing-title { font-size: 1.5rem; }
       .kiosk-closing-sub { font-size: 0.95rem; }
       .kiosk-note-grid { grid-template-columns: 1fr; }
