@@ -3024,7 +3024,10 @@
         <div class="kiosk-note-grid" style="margin-top:22px;">
           <div class="kiosk-note-card">
             <span class="ic">⚖️</span><b>기회균등 영역</b><span>기초생활수급자·차상위계층·국가보훈대상자·한부모가족 등 법정 대상자</span>
-            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskEqualityDialog');">📋 대상 유형·추가 서류 보기</button>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskEqualityDialog');">📋 대상 유형 보기</button>
+              <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskEqualityDocsDialog');">📑 추가 서류 보기</button>
+            </div>
           </div>
           <div class="kiosk-note-card">
             <span class="ic">🌈</span><b>사회다양성 영역</b><span>다문화가정·북한이탈주민·다자녀가정 등 19개 유형 (기준중위소득 160% 이하)</span>
