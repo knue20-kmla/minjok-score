@@ -664,6 +664,35 @@
     .dialog-inner h2 { margin: 0; font-size: 19px; }
     .dialog-inner p { margin: 7px 0 18px; color: var(--muted); font-size: 13px; line-height: 1.55; }
     .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+
+    /* 전형 개요의 팝업(전형 일정/응시 제한/공통 제출 서류/자기소개서 배제 사항)
+       전용 스타일 — 그라데이션 헤더 + 아이콘으로 더 크고 화려하게 꾸밈 */
+    dialog.kiosk-popup {
+      width: min(520px, calc(100% - 32px));
+      border-radius: 22px;
+      overflow: hidden;
+    }
+    dialog.kiosk-popup.dialog-wide {
+      width: min(720px, calc(100% - 32px));
+      max-height: min(700px, calc(100% - 56px));
+      overflow-y: auto;
+    }
+    .kiosk-popup-head {
+      display: flex; align-items: center; gap: 14px;
+      padding: 24px 28px 20px;
+      background: linear-gradient(120deg, var(--teal) 0%, #0d9488 55%, #14b8a6 100%);
+      position: sticky; top: 0; z-index: 1;
+    }
+    .kiosk-popup-head .ic {
+      flex: 0 0 auto; width: 46px; height: 46px; border-radius: 14px;
+      background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+    }
+    .kiosk-popup-head h2 { margin: 0; font-size: 1.3rem; font-weight: 900; color: #fff; }
+    .kiosk-popup-body { padding: 22px 28px 26px; }
+    .kiosk-popup-body > p { margin: 0 0 18px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .kiosk-popup-body .dialog-actions { margin-top: 22px; }
+    .kiosk-popup-body .dialog-actions .button.primary { padding: 0 22px; min-height: 42px; font-size: 14px; }
     .email-help { margin-top: 8px; color: var(--muted); font-size: 11px; line-height: 1.5; }
     .email-status {
       min-height: 18px;
@@ -1108,15 +1137,47 @@
     }
     .kiosk-note-link-btn:hover { background: var(--teal-dark); }
     .kiosk-note-card.warn .kiosk-note-link-btn { background: var(--amber); }
-    /* 팝업(다이얼로그) 안의 표/목록 스타일 */
-    .kiosk-dialog-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 4px; }
-    .kiosk-dialog-table th, .kiosk-dialog-table td { padding: 7px 6px; text-align: left; border-bottom: 1px solid var(--line); }
-    .kiosk-dialog-table th { color: var(--muted); font-weight: 800; font-size: 11.5px; }
-    .kiosk-dialog-list { margin: 0; padding-left: 18px; }
-    .kiosk-dialog-list li { font-size: 12.5px; color: var(--ink); line-height: 1.7; }
-    .kiosk-dialog-exclude-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 14px; margin: 0; padding: 0; list-style: none; }
-    .kiosk-dialog-exclude-grid li { font-size: 12px; color: var(--ink); line-height: 1.6; padding-left: 14px; position: relative; }
-    .kiosk-dialog-exclude-grid li::before { content: "✕"; position: absolute; left: 0; color: var(--red); font-weight: 900; font-size: 10px; top: 3px; }
+    /* 팝업(다이얼로그) 안의 표/목록 스타일 — 더 크고 화려하게 */
+    .kiosk-dialog-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; margin-bottom: 4px; }
+    .kiosk-dialog-table th, .kiosk-dialog-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--line); }
+    .kiosk-dialog-table th {
+      color: #fff; font-weight: 800; font-size: 12.5px;
+      background: var(--teal-dark);
+    }
+    .kiosk-dialog-table th:first-child { border-top-left-radius: 10px; }
+    .kiosk-dialog-table th:last-child { border-top-right-radius: 10px; }
+    .kiosk-dialog-table td:first-child { font-weight: 800; color: var(--ink); }
+    .kiosk-dialog-table tbody tr:nth-child(even) { background: var(--soft); }
+    .kiosk-dialog-table tbody tr:hover { background: var(--teal-soft); }
+    .kiosk-dialog-table tbody tr:last-child td { border-bottom: none; }
+
+    .kiosk-dialog-list { margin: 0; padding: 0; list-style: none; counter-reset: kiosk-dialog-item; }
+    .kiosk-dialog-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 14px; color: var(--ink); line-height: 1.6;
+      padding: 12px 4px; border-bottom: 1px solid var(--line);
+      counter-increment: kiosk-dialog-item;
+    }
+    .kiosk-dialog-list li:last-child { border-bottom: none; }
+    .kiosk-dialog-list li::before {
+      content: counter(kiosk-dialog-item);
+      flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%;
+      background: var(--amber); color: #fff; font-weight: 900; font-size: 12.5px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .kiosk-dialog-exclude-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .kiosk-dialog-exclude-grid li {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 13px; color: var(--ink); line-height: 1.5;
+      background: #fff1f0; border: 1px solid #ffd8d4; border-radius: 12px;
+      padding: 10px 12px;
+    }
+    .kiosk-dialog-exclude-grid li::before {
+      content: "✕"; flex: 0 0 auto; width: 18px; height: 18px; border-radius: 50%;
+      background: var(--red); color: #fff; font-weight: 900; font-size: 10px;
+      display: flex; align-items: center; justify-content: center; margin-top: 1px;
+    }
     @media (max-width: 480px) {
       .kiosk-dialog-exclude-grid { grid-template-columns: 1fr; }
     }
@@ -1540,9 +1601,9 @@
   </dialog>
 
   <!-- 전형 개요 프리젠테이션에서 열리는 팝업들 (전형 일정 / 응시 제한 / 자기소개서 작성 배제 사항) -->
-  <dialog id="kioskScheduleDialog" class="dialog-wide">
-    <div class="dialog-inner">
-      <h2>전형 일정</h2>
+  <dialog id="kioskScheduleDialog" class="kiosk-popup dialog-wide">
+    <div class="kiosk-popup-head"><span class="ic">📅</span><h2>전형 일정</h2></div>
+    <div class="kiosk-popup-body">
       <p>정확한 일정은 모집요강 및 홈페이지 공지를 다시 확인하세요.</p>
       <div class="kiosk-table-scroll" style="margin:0 0 4px;">
         <table class="kiosk-dialog-table" style="min-width:420px;">
@@ -1564,9 +1625,9 @@
     </div>
   </dialog>
 
-  <dialog id="kioskEligibilityDialog">
-    <div class="dialog-inner">
-      <h2>응시 제한</h2>
+  <dialog id="kioskEligibilityDialog" class="kiosk-popup">
+    <div class="kiosk-popup-head"><span class="ic">🚫</span><h2>응시 제한</h2></div>
+    <div class="kiosk-popup-body">
       <p>아래 사항에 해당하면 지원할 수 없습니다.</p>
       <ol class="kiosk-dialog-list">
         <li>고등학교 재학생, 휴학생, 졸업자는 지원할 수 없음</li>
@@ -1579,9 +1640,9 @@
     </div>
   </dialog>
 
-  <dialog id="kioskCommonDocsDialog" class="dialog-wide">
-    <div class="dialog-inner">
-      <h2>공통 제출 서류</h2>
+  <dialog id="kioskCommonDocsDialog" class="kiosk-popup dialog-wide">
+    <div class="kiosk-popup-head"><span class="ic">📑</span><h2>공통 제출 서류</h2></div>
+    <div class="kiosk-popup-body">
       <p>일반전형·강원인재전형 지원자는 아래 (1)~(5) 서류를 공통으로 제출합니다.</p>
       <div class="kiosk-table-scroll" style="margin:0 0 4px;">
         <table class="kiosk-dialog-table" style="min-width:380px;">
@@ -1602,9 +1663,9 @@
     </div>
   </dialog>
 
-  <dialog id="kioskExcludeDialog" class="dialog-wide">
-    <div class="dialog-inner">
-      <h2>자기소개서 작성 배제 사항</h2>
+  <dialog id="kioskExcludeDialog" class="kiosk-popup dialog-wide">
+    <div class="kiosk-popup-head"><span class="ic">✍️</span><h2>자기소개서 작성 배제 사항</h2></div>
+    <div class="kiosk-popup-body">
       <p>아래 내용을 기재하면 0점 또는 감점 처리됩니다. (지원자 본인이 온라인으로만 작성)</p>
       <ul class="kiosk-dialog-exclude-grid">
         <li>각종 공인어학시험 참여사실, 점수</li>
