@@ -2577,6 +2577,16 @@
         <div class="kiosk-note-grid" style="margin-top:22px;">
           <div class="kiosk-note-card"><span class="ic">🎓</span><b>지원 자격</b><span>국내 중학교 졸업(예정)자, 검정고시 합격자, 해외 학교 재학생 등 동등 학력 인정자</span></div>
           <div class="kiosk-note-card"><span class="ic">📑</span><b>제출 서류</b><span>공통 제출 서류 (1)~(5)만 제출 — <strong>추가 서류 없음</strong></span></div>
+          <div class="kiosk-note-card"><span class="ic">✍️</span><b>온라인 제출</b><span>입학원서 · 개인정보활용 동의서 · 교과성적 · 자기소개서</span></div>
+          <div class="kiosk-note-card"><span class="ic">✉️</span><b>우편 제출</b><span>입학원서 · 동의서 출력본, 학교생활기록부Ⅱ 2부</span></div>
+          <div class="kiosk-note-card">
+            <span class="ic">✍️</span><b>자기소개서 유의사항</b><span>기재하면 감점되는 배제 사항이 있어요</span>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskExcludeDialog');">배제 사항 보기</button>
+          </div>
+          <div class="kiosk-note-card warn">
+            <span class="ic">🚫</span><b>응시 제한</b><span>재학생·전기고 합격자·이중 지원자는 지원할 수 없어요</span>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskEligibilityDialog');">확인하기</button>
+          </div>
         </div>
         ${KIOSK_YOGANG_SOURCE}`;
     }
@@ -2605,7 +2615,9 @@
           <div class="kiosk-note-card"><span class="ic">⚖️</span><b>기회균등 영역</b><span>기초생활수급자·차상위계층·국가보훈대상자·한부모가족 등 법정 대상자</span></div>
           <div class="kiosk-note-card"><span class="ic">🌈</span><b>사회다양성 영역</b><span>다문화가정·북한이탈주민·다자녀가정 등 19개 유형 (기준중위소득 160% 이하)</span></div>
           <div class="kiosk-note-card"><span class="ic">📑</span><b>추가 서류</b><span>공통 제출 서류(1)~(5) + 학교장·학부모 확인서(붙임1·2), 주민등록등본, 가족관계증명서 + 유형별 증빙 서류</span></div>
+          <div class="kiosk-note-card"><span class="ic">💰</span><b>사회다양성 영역 소득 기준</b><span>부모 건강보험료 기준 소득 8분위(기준중위소득 160%) 이하 가정의 자녀만 해당</span></div>
           <div class="kiosk-note-card warn"><span class="ic">✅</span><b>선발 원칙</b><span>기회균등 영역 대상자를 50% 이상 우선 선발</span></div>
+          <div class="kiosk-note-card"><span class="ic">🔁</span><b>탈락·미달 시 처리</b><span>탈락 시 희망에 따라 일반전형 포함 가능, 정원 미달 시 미달 인원의 50%까지 일반전형에서 충원</span></div>
         </div>
         ${KIOSK_YOGANG_SOURCE}`;
     }
