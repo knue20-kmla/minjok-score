@@ -1136,6 +1136,20 @@
       background: var(--teal); color: #fff; font-weight: 800; font-size: 0.78rem;
     }
     .kiosk-note-link-btn:hover { background: var(--teal-dark); }
+    .kiosk-download-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .kiosk-download-card {
+      display: flex; flex-direction: column; gap: 3px; padding: 14px 16px; border-radius: 14px;
+      background: var(--soft); border: 1px solid var(--line); text-decoration: none; color: inherit;
+      transition: border-color .15s, background .15s;
+    }
+    .kiosk-download-card:hover { background: #eafaf6; border-color: var(--teal); }
+    .kiosk-download-card .ic { font-size: 1.2rem; }
+    .kiosk-download-card b { font-size: 0.92rem; color: var(--ink); }
+    .kiosk-download-card b::after { content: " ⬇"; font-size: 0.78rem; color: var(--teal-dark); font-weight: 700; }
+    .kiosk-download-card span { font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
+    @media (max-width: 480px) {
+      .kiosk-download-grid { grid-template-columns: 1fr; }
+    }
     .kiosk-note-card.warn .kiosk-note-link-btn { background: var(--amber); }
     /* 팝업(다이얼로그) 안의 표/목록 스타일 — 더 크고 화려하게 */
     .kiosk-dialog-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; margin-bottom: 4px; }
@@ -3342,6 +3356,44 @@
         </div>`;
     }
 
+    function kioskScholarshipHTML() {
+      return `
+        <div class="kiosk-eyebrow">신입생 대상 장학금</div>
+        <h2 class="kiosk-title">선혜 장학생을 선발합니다</h2>
+        <p class="kiosk-sub">KCC그룹 정몽진 회장의 후원으로, 참된 지도자의 자세를 갖춘 신입생을 선발해 장학금을 수여합니다.</p>
+        <div class="kiosk-table-scroll" style="margin:18px 0 4px;">
+          <table class="kiosk-dialog-table kiosk-example-table" style="min-width:460px;">
+            <thead><tr><th>구분</th><th>선발 인원</th><th>장학금</th><th>선발 방법</th></tr></thead>
+            <tbody>
+              <tr><td>선혜(A) 장학생</td><td>5명</td><td>2천만원</td><td rowspan="2" style="vertical-align:middle;">신입학 성적, 영재성, 과제 수행 능력 등을 평가한 결과로 장학위원회에서 선발</td></tr>
+              <tr><td>선혜(B) 장학생</td><td>10명</td><td>1천만원</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="kiosk-note-grid" style="margin-top:14px;">
+          <div class="kiosk-note-card"><span class="ic">🗓️</span><b>영재성·과제수행능력 평가</b><span>최종 합격자 발표 후 별도로 시행합니다.</span></div>
+          <div class="kiosk-note-card warn"><span class="ic">🎓</span><b>대학 지원 지침 유의</b><span>대학 지원 시 국내·해외, 의학·비의학 계열 중 각각 하나만 선택 지원해야 하며, 위반 시 장학금 전액 반환 및 장학금 추천 대상에서 제외됩니다.</span></div>
+        </div>
+        <div class="kiosk-dialog-subhead" style="margin:18px 0 8px;">지원 시 필요한 서식·붙임 파일 다운로드</div>
+        <div class="kiosk-download-grid">
+          <a class="kiosk-download-card" href="forms/서식1_공통제출서류.hwp" download>
+            <span class="ic">📄</span><b>[서식1] 공통 제출 서류</b><span>중학교 졸업자·동등학력 인정자 공통 제출 서류</span>
+          </a>
+          <a class="kiosk-download-card" href="forms/서식2_배정사실없음_중학교발급용.hwp" download>
+            <span class="ic">📄</span><b>[서식2] 배정 사실 없음</b><span>고등학교 배정(선발)받은 사실이 없는 경우 (중학교 발급용)</span>
+          </a>
+          <a class="kiosk-download-card" href="forms/서식3_배정사실있음_고등학교발급용.hwp" download>
+            <span class="ic">📄</span><b>[서식3] 배정 사실 있음</b><span>고등학교 배정(선발)받은 사실이 있는 경우 (고등학교 발급용)</span>
+          </a>
+          <a class="kiosk-download-card" href="forms/붙임1_학교장확인서.hwp" download>
+            <span class="ic">📎</span><b>【붙임1】 학교장 확인서</b><span>사회통합·특례입학대상자·국가유공자 자녀 전형</span>
+          </a>
+          <a class="kiosk-download-card" href="forms/붙임2_학부모확인서.hwp" download>
+            <span class="ic">📎</span><b>【붙임2】 학부모 확인서</b><span>사회통합·특례입학대상자·국가유공자 자녀 전형</span>
+          </a>
+        </div>`;
+    }
+
     function kioskClosingHTML() {
       return `
         <div class="kiosk-hero">
@@ -3363,6 +3415,7 @@
       { duration: 12000, build: el => { el.innerHTML = kioskExampleHTML(); } },
       { duration: 10000, build: el => { el.innerHTML = kioskSubjectsHTML(); } },
       { duration: 11000, build: el => { el.innerHTML = kioskAttendanceHTML(); } },
+      { duration: 12000, build: el => { el.innerHTML = kioskScholarshipHTML(); } },
       { duration: 7000, build: el => { el.innerHTML = kioskClosingHTML(); } }
     ];
 
