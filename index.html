@@ -791,11 +791,6 @@
       transform: translateY(0);
       transition: opacity 0.6s ease, transform 0.6s ease;
     }
-    /* 프리젠테이션 첫 화면(인트로)만 학교 상징색인 옅은 블루 계열 배경으로 표시 */
-    .kiosk-slide.kiosk-slide-intro {
-      background: linear-gradient(150deg, #f3f8ff 0%, #e3edfd 45%, #d3e2fb 100%);
-      box-shadow: 0 30px 80px rgba(37, 99, 235, 0.18);
-    }
     /* PC·태블릿처럼 화면이 넓을 때는 카드(흰 배경+내용)를 가로세로 비율(11:8)을
        유지한 채 더 크게 표시해 가독성을 높임. 휴대폰(768px 미만)은 위 기본
        크기(880x640 기준)를 그대로 유지함 */
@@ -862,11 +857,10 @@
     .kiosk-hero-logo-wrap {
       display: flex; align-items: center; justify-content: center;
       flex: 0 0 auto;
-      width: 350px; height: 350px; margin: 0 0 34px;
+      width: 390px; height: 390px; margin: 0 0 30px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(30, 64, 175, 0.06) 88%, rgba(30, 64, 175, 0) 100%);
     }
-    .kiosk-hero-logo { display: block; width: 336px; height: 336px; object-fit: contain; filter: drop-shadow(0 18px 32px rgba(30, 58, 138, 0.32)); }
+    .kiosk-hero-logo { display: block; width: 386px; height: 386px; object-fit: contain; filter: drop-shadow(0 18px 32px rgba(30, 58, 138, 0.32)); }
     .kiosk-hero-badge {
       display: inline-block; padding: 8px 20px; margin-bottom: 18px;
       border-radius: 999px; font-weight: 800; font-size: 1rem;
@@ -888,22 +882,46 @@
       -webkit-background-clip: text; background-clip: text; color: transparent;
     }
     .kiosk-hero p { font-size: 1.15rem; color: var(--muted); margin: 0; }
-    /* 인트로(옅은 블루 배경) 전용 대비 색상 — 로고에 은은한 그림자, 짙은 남색 글자 */
-    .kiosk-slide-intro .kiosk-hero-logo-wrap {
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.55) 55%, rgba(255, 255, 255, 0) 100%);
+    /* 인트로 · 마무리 화면 — 학교 사진 위에 블루 톤 오버레이를 얹어 배경으로 사용 */
+    .kiosk-slide.kiosk-slide-intro {
+      background-image: linear-gradient(165deg, rgba(13, 27, 74, 0.84) 0%, rgba(29, 60, 158, 0.7) 45%, rgba(37, 99, 235, 0.56) 100%), url("assets/kiosk-photo-intro.jpg");
+      background-size: cover;
+      background-position: center 32%;
+      box-shadow: 0 30px 90px rgba(11, 21, 56, 0.45);
     }
-    .kiosk-slide-intro .kiosk-hero-logo { filter: drop-shadow(0 14px 26px rgba(30, 58, 138, 0.22)); }
+    .kiosk-slide.kiosk-slide-closing {
+      background-image: linear-gradient(165deg, rgba(13, 27, 74, 0.84) 0%, rgba(29, 60, 158, 0.7) 45%, rgba(37, 99, 235, 0.56) 100%), url("assets/kiosk-photo-closing.jpg");
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 30px 90px rgba(11, 21, 56, 0.45);
+    }
+    .kiosk-slide-intro .kiosk-hero-logo { filter: drop-shadow(0 10px 28px rgba(6, 12, 40, 0.55)); }
     .kiosk-slide-intro .kiosk-hero-year {
-      color: #1e3a8a; letter-spacing: .18em;
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(37, 99, 235, 0.28);
-      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.12);
+      color: #ffffff; letter-spacing: .18em;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      box-shadow: 0 8px 20px rgba(6, 12, 40, 0.25);
+      backdrop-filter: blur(3px);
     }
     .kiosk-slide-intro .kiosk-hero-title {
-      background: linear-gradient(100deg, #1e3a8a, #1d4ed8 50%, #2563eb);
+      background: linear-gradient(100deg, #ffffff, #dbeafe 55%, #bfdbfe);
       -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 2px 12px rgba(6, 12, 40, 0.4));
     }
-    .kiosk-slide-intro .kiosk-source-note { color: rgba(30, 58, 138, 0.65); }
+    .kiosk-slide-intro .kiosk-source-note { color: rgba(255, 255, 255, 0.78); }
+    .kiosk-closing-title {
+      font-size: 2.2rem; font-weight: 900; margin: 0 0 14px; color: #ffffff;
+      text-shadow: 0 2px 14px rgba(6, 12, 40, 0.45);
+      word-break: keep-all;
+    }
+    .kiosk-closing-sub { font-size: 1.1rem; color: rgba(255, 255, 255, 0.92); margin: 0; text-shadow: 0 2px 10px rgba(6, 12, 40, 0.45); }
+    .kiosk-closing-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 64px; height: 64px; margin-bottom: 22px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.16); border: 1px solid rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(3px); font-size: 1.7rem;
+      box-shadow: 0 8px 20px rgba(6, 12, 40, 0.25);
+    }
     .kiosk-max {
       display: flex; align-items: baseline; justify-content: center; gap: 10px;
       margin: 6px 0 4px; padding: 16px 20px; border-radius: 16px;
@@ -1339,8 +1357,10 @@
       .kiosk-title { font-size: 1.5rem; }
       .kiosk-hero-title { font-size: 1.7rem; }
       .kiosk-hero-year { font-size: 1rem; padding: 6px 18px; }
-      .kiosk-hero-logo-wrap { width: 250px; height: 250px; margin-bottom: 20px; }
-      .kiosk-hero-logo { width: 240px; height: 240px; }
+      .kiosk-hero-logo-wrap { width: 270px; height: 270px; margin-bottom: 16px; }
+      .kiosk-hero-logo { width: 264px; height: 264px; }
+      .kiosk-closing-title { font-size: 1.5rem; }
+      .kiosk-closing-sub { font-size: 0.95rem; }
       .kiosk-note-grid { grid-template-columns: 1fr; }
     }
 
@@ -3482,8 +3502,9 @@
     function kioskClosingHTML() {
       return `
         <div class="kiosk-hero">
-          <h1 style="font-size:2.1rem;font-weight:900;color:var(--ink);margin:0 0 14px;">지금 나의 예상 점수를 확인해보세요</h1>
-          <p>화면을 두 번 탭하거나 종료 버튼을 누르면 성적 계산기로 돌아갑니다.</p>
+          <div class="kiosk-closing-badge">🎓</div>
+          <h1 class="kiosk-closing-title">지금 나의 예상 점수를 확인해보세요</h1>
+          <p class="kiosk-closing-sub">화면을 두 번 탭하거나 종료 버튼을 누르면 성적 계산기로 돌아갑니다.</p>
         </div>`;
     }
 
@@ -3521,6 +3542,7 @@
       const slide = KIOSK_SLIDES[_kioskIndex];
       card.classList.remove("kiosk-in");
       card.classList.toggle("kiosk-slide-intro", _kioskIndex === 0);
+      card.classList.toggle("kiosk-slide-closing", _kioskIndex === KIOSK_SLIDES.length - 1);
       void card.offsetWidth;
       slide.build(inner);
       // 콘텐츠 맨 앞의 eyebrow 배지를 고정 영역으로 옮겨, 모든 슬라이드에서
