@@ -1371,7 +1371,17 @@
     }
     .kiosk-overlay.paused .kiosk-pause-badge { display: flex; }
     @media (max-width: 640px) {
-      .kiosk-slide { padding: 28px 22px; border-radius: 22px; }
+      /* 모바일에서는 좌우 이전/다음 버튼이 flex 공간을 나눠 가지면
+         카드 너비가 지나치게 좁아져(약 200px) 내부 표·다운로드 카드의
+         글자가 세로로 한 글자씩 줄바꿈되는 문제가 있었음.
+         버튼을 카드 레이아웃 흐름에서 빼서(position:absolute) 카드가
+         팝업창과 비슷한 너비(뷰포트 대부분)를 그대로 쓰도록 함 */
+      .kiosk-body { position: relative; padding: 3vh 10px; }
+      .kiosk-slide { width: calc(100vw - 20px); padding: 28px 22px; border-radius: 22px; }
+      .kiosk-nav-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 6; }
+      .kiosk-nav-prev { left: 2px; }
+      .kiosk-nav-next { right: 2px; }
+      .kiosk-nav-btn:active { transform: translateY(-50%) scale(0.9); }
       .kiosk-controls-bar { gap: 2px; padding: 4px; }
       .kiosk-autoplay-btn, .kiosk-exit-btn { padding: 6px 11px; font-size: 0.7rem; }
       .kiosk-speed-btn { padding: 5px 9px; font-size: 0.68rem; }
