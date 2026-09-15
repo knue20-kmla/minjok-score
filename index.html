@@ -969,10 +969,10 @@
     }
     .kiosk-vstep.emph .kiosk-vstep-body b { color: var(--teal-dark); }
 
-    .kiosk-bars { display: flex; flex-direction: column; gap: 10px; }
+    .kiosk-bars { display: flex; flex-direction: column; gap: 8px; }
     .kiosk-bar-row { display: grid; grid-template-columns: 96px 1fr 64px; align-items: center; gap: 14px; }
     .kiosk-bar-label { font-weight: 800; font-size: 1rem; color: var(--ink); }
-    .kiosk-bar-track { position: relative; height: 22px; border-radius: 999px; background: #eef4f2; overflow: hidden; }
+    .kiosk-bar-track { position: relative; height: 20px; border-radius: 999px; background: #eef4f2; overflow: hidden; }
     .kiosk-bar-fill {
       position: absolute; inset: 0 auto 0 0; border-radius: 999px;
       background: linear-gradient(90deg, var(--teal), #14b8a6);
@@ -1141,6 +1141,19 @@
     .kiosk-impact-table-lg th { font-size: 0.9rem; }
 
     .kiosk-note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    /* 전형 개요/일반전형/강원인재/사회통합/정원외 슬라이드 전용 —
+       안내 카드를 2열이 아닌 1열 전체 폭으로 펼쳐서, 뒤쪽 슬라이드의
+       표·다운로드 카드처럼 카드 가로 폭을 그대로 채우도록 함 */
+    .kiosk-note-grid-1col { grid-template-columns: 1fr; gap: 4px; }
+    .kiosk-note-grid-1col .kiosk-note-card { padding: 5px 16px; }
+    .kiosk-note-grid-1col .kiosk-note-card .ic {
+      display: inline-block; margin: 0 8px 0 0; vertical-align: middle; font-size: 1.05rem;
+    }
+    .kiosk-note-grid-1col .kiosk-note-card b { display: inline; margin-bottom: 0; font-size: 0.92rem; }
+    .kiosk-note-grid-1col .kiosk-note-card span { margin-top: 1px; font-size: 0.8rem; line-height: 1.3; }
+    .kiosk-note-grid-1col .kiosk-note-card .kiosk-note-link-btn {
+      margin-top: 4px; padding: 4px 10px; font-size: 0.72rem;
+    }
     .kiosk-note-card {
       padding: 13px 16px; border-radius: 16px; background: var(--soft); border: 1px solid var(--line);
     }
@@ -3055,7 +3068,7 @@
         <div class="kiosk-eyebrow">전형 개요</div>
         <h2 class="kiosk-title">총 160명, 3개 전형으로 선발합니다</h2>
         <p class="kiosk-sub">모집 시기는 후기이며, 전국 단위로 선발합니다. 세 전형 모두 지원 방법과 평가 기준은 동일합니다.</p>
-        <div class="kiosk-bars" style="margin-top:12px;">
+        <div class="kiosk-bars" style="margin-top:8px;">
           <div class="kiosk-bar-row">
             <span class="kiosk-bar-label">일반전형</span>
             <div class="kiosk-bar-track"><div class="kiosk-bar-fill" style="width:60%"></div></div>
@@ -3083,7 +3096,7 @@
             <span class="kiosk-bar-value kiosk-bar-value-sm">3%</span>
           </div>
         </div>
-        <div class="kiosk-note-grid" style="margin-top:10px;">
+        <div class="kiosk-note-grid kiosk-note-grid-1col" style="margin-top:8px;">
           <div class="kiosk-note-card">
             <span class="ic">📅</span><b>전형 일정</b><span>원서 접수부터 합격자 등록까지 일정을 한눈에 확인하세요</span>
             <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskScheduleDialog');">일정 보기</button>
@@ -3109,7 +3122,7 @@
         <div class="kiosk-eyebrow">일반전형</div>
         <h2 class="kiosk-title">전국 96명 (모집 정원의 60%)</h2>
         <p class="kiosk-sub">본교의 건학 이념과 영어 상용 정책을 수용할 수 있는 학생이면 누구나 지원할 수 있는 기본 전형입니다.</p>
-        <div class="kiosk-note-grid" style="margin-top:14px;">
+        <div class="kiosk-note-grid kiosk-note-grid-1col" style="margin-top:14px;">
           <div class="kiosk-note-card"><span class="ic">🎓</span><b>지원 자격</b><span>국내 중학교 졸업(예정)자, 검정고시 합격자, 해외 학교 재학생 등 동등 학력 인정자</span></div>
           <div class="kiosk-note-card"><span class="ic">📑</span><b>제출 서류</b><span>공통 제출 서류 (1)~(5)만 제출 — <strong>추가 서류 없음</strong></span></div>
           <div class="kiosk-note-card"><span class="ic">✍️</span><b>온라인 제출</b><span>입학원서 · 개인정보활용 동의서 · 교과성적 · 자기소개서</span></div>
@@ -3134,7 +3147,7 @@
         <div class="kiosk-eyebrow">강원인재전형</div>
         <h2 class="kiosk-title">강원 32명 (모집 정원의 20%)</h2>
         <p class="kiosk-sub">일반전형 지원 자격을 갖추고, 강원특별자치도와 연고가 있는 학생을 위한 전형입니다.</p>
-        <div class="kiosk-note-grid" style="margin-top:14px;">
+        <div class="kiosk-note-grid kiosk-note-grid-1col" style="margin-top:14px;">
           <div class="kiosk-note-card"><span class="ic">①</span><b>강원 내 중학교 졸업예정자</b><span>추가 서류 없이 학교생활기록부로 확인</span></div>
           <div class="kiosk-note-card"><span class="ic">②</span><b>강원 거주 중학교 졸업자</b><span>검정고시 합격자 포함, 주민등록등본 제출</span></div>
           <div class="kiosk-note-card"><span class="ic">③</span><b>타 시·도 중학교 졸업(예정)자</b><span>특성화·전국단위 모집 중학교 중 강원 거주자</span></div>
@@ -3152,7 +3165,7 @@
         <div class="kiosk-eyebrow">사회통합전형</div>
         <h2 class="kiosk-title">전국 32명 (모집 정원의 20%)</h2>
         <p class="kiosk-sub">일반전형 지원 자격을 갖추고, 기회균등·사회다양성 영역 중 하나에 해당하는 학생을 위한 전형입니다.</p>
-        <div class="kiosk-note-grid" style="margin-top:14px;">
+        <div class="kiosk-note-grid kiosk-note-grid-1col" style="margin-top:14px;">
           <div class="kiosk-note-card">
             <span class="ic">⚖️</span><b>기회균등 영역</b><span>기초생활수급자·차상위계층·국가보훈대상자·한부모가족 등 법정 대상자</span>
             <div style="display:flex;flex-wrap:wrap;gap:6px;">
@@ -3186,7 +3199,7 @@
         <div class="kiosk-eyebrow">정원 외 특별전형</div>
         <h2 class="kiosk-title">특례입학대상자 · 국가유공자 자녀</h2>
         <p class="kiosk-sub">일반전형 지원 자격을 기본으로 갖춘 학생 중 아래에 해당하는 경우 정원 외로 선발합니다.</p>
-        <div class="kiosk-note-grid" style="margin-top:14px;">
+        <div class="kiosk-note-grid kiosk-note-grid-1col" style="margin-top:8px;">
           <div class="kiosk-note-card">
             <span class="ic">🌏</span><b>해외 재학 후 귀국 학생</b><span>외국 학교 2년 이상 재학, 부모와 함께 2년 이상 해외 거주(모집 정원 2% 이내)</span>
             <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenEligibility('return','return');">📋 지원 자격 보기</button>
