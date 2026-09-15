@@ -892,6 +892,29 @@
     .kiosk-flow-card.emph { background: var(--teal-soft); border-color: #b9ddd6; }
     .kiosk-flow-arrow { align-self: center; font-size: 1.4rem; color: #9fbdb8; flex: 0 0 auto; }
 
+    /* 전형 방법 — 1·2·3단계를 세로 타임라인으로 배치해 넓은 화면 폭을
+       설명 텍스트에 쓰고, 점을 잇는 선으로 흐름을 표현함 */
+    .kiosk-vsteps { display: flex; flex-direction: column; margin: 30px auto 0; max-width: 640px; width: 100%; }
+    .kiosk-vstep { display: flex; gap: 20px; position: relative; }
+    .kiosk-vstep-track {
+      flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; width: 48px;
+    }
+    .kiosk-vstep-dot {
+      width: 48px; height: 48px; border-radius: 50%; flex: 0 0 auto;
+      background: var(--soft); border: 2px solid var(--line); color: var(--teal-dark);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 1.15rem;
+    }
+    .kiosk-vstep-line { width: 3px; flex: 1 1 auto; background: var(--line); margin: 2px 0; border-radius: 2px; }
+    .kiosk-vstep-body { flex: 1 1 auto; padding-bottom: 26px; }
+    .kiosk-vstep-body b { display: block; font-size: 1.2rem; margin: 6px 0 5px; color: var(--ink); }
+    .kiosk-vstep-body span { display: block; font-size: 0.92rem; color: var(--muted); line-height: 1.55; }
+    .kiosk-vstep.emph .kiosk-vstep-dot {
+      background: var(--teal); border-color: var(--teal); color: #fff;
+      box-shadow: 0 0 0 6px var(--teal-soft);
+    }
+    .kiosk-vstep.emph .kiosk-vstep-body b { color: var(--teal-dark); }
+
     .kiosk-bars { display: flex; flex-direction: column; gap: 14px; }
     .kiosk-bar-row { display: grid; grid-template-columns: 96px 1fr 64px; align-items: center; gap: 14px; }
     .kiosk-bar-label { font-weight: 800; font-size: 1rem; color: var(--ink); }
@@ -2656,23 +2679,21 @@
         <div class="kiosk-eyebrow">전형 방법</div>
         <h2 class="kiosk-title">1단계는 이렇게 산출됩니다</h2>
         <p class="kiosk-sub">중학교 2~3학년 교과 성적과 출결 상황을 반영해 40점 만점의 1단계 점수를 계산합니다.</p>
-        <div class="kiosk-flow">
-          <div class="kiosk-flow-card">
-            <span class="num">1</span><b>교과성적</b>
-            <span>학기별 반영비율 × 과목별 가중치 × 성취도 환산점수</span>
+        <div class="kiosk-vsteps">
+          <div class="kiosk-vstep">
+            <div class="kiosk-vstep-track"><div class="kiosk-vstep-dot">1</div><div class="kiosk-vstep-line"></div></div>
+            <div class="kiosk-vstep-body"><b>교과성적</b><span>학기별 반영비율 × 과목별 가중치 × 성취도 환산점수</span></div>
           </div>
-          <div class="kiosk-flow-arrow">→</div>
-          <div class="kiosk-flow-card">
-            <span class="num">2</span><b>출결 감점</b>
-            <span>미인정 결석·지각·조퇴·결과를 환산해 차감</span>
+          <div class="kiosk-vstep">
+            <div class="kiosk-vstep-track"><div class="kiosk-vstep-dot">2</div><div class="kiosk-vstep-line"></div></div>
+            <div class="kiosk-vstep-body"><b>출결 감점</b><span>미인정 결석·지각·조퇴·결과를 환산해 차감</span></div>
           </div>
-          <div class="kiosk-flow-arrow">→</div>
-          <div class="kiosk-flow-card emph">
-            <span class="num">3</span><b>1단계 점수</b>
-            <span>교과성적 − 출결 감점 = 최종 점수</span>
+          <div class="kiosk-vstep emph">
+            <div class="kiosk-vstep-track"><div class="kiosk-vstep-dot">3</div></div>
+            <div class="kiosk-vstep-body"><b>1단계 점수</b><span>교과성적 − 출결 감점 = 최종 점수</span></div>
           </div>
         </div>
-        <div class="kiosk-max" style="margin-top:38px;">1단계 만점 <strong>40.00점</strong></div>`;
+        <div class="kiosk-max" style="margin:8px auto 0;max-width:640px;">1단계 만점 <strong>40.00점</strong></div>`;
     }
 
     const KIOSK_SEMESTER_COLORS = ["#5eead4", "#2dd4bf", "#14b8a6", "#0f766e"];
