@@ -981,6 +981,11 @@
     .kiosk-bar-value { text-align: right; font-weight: 800; color: var(--teal-dark); font-size: 1.05rem; }
     .kiosk-bar-fill-w2 { background: linear-gradient(90deg, #1e40af, #3b82f6); }
     .kiosk-bar-fill-w1 { background: linear-gradient(90deg, var(--amber), #f2b356); }
+    .kiosk-bars-divider { height: 1px; background: var(--line); margin: 2px 0; }
+    .kiosk-bar-row-extra { grid-template-columns: 168px 1fr 40px; }
+    .kiosk-bar-label-sm { font-size: 0.82rem; line-height: 1.3; white-space: nowrap; }
+    .kiosk-bar-note { color: var(--muted); font-size: 0.82rem; white-space: nowrap; }
+    .kiosk-bar-value-sm { font-size: 0.85rem; color: var(--muted); font-weight: 700; }
 
     /* 학기별 반영 비율 — 학년·학기가 오를수록 비율이 커지는 흐름이 한눈에
        보이도록 계단식 막대그래프로 표현 (원형 도넛은 순서가 잘 드러나지 않아 교체) */
@@ -3047,6 +3052,17 @@
             <div class="kiosk-bar-track"><div class="kiosk-bar-fill kiosk-bar-fill-w1" style="width:20%"></div></div>
             <span class="kiosk-bar-value">32명</span>
           </div>
+          <div class="kiosk-bars-divider"></div>
+          <div class="kiosk-bar-row kiosk-bar-row-extra">
+            <span class="kiosk-bar-label kiosk-bar-label-sm">정원 외 · 특례입학</span>
+            <span class="kiosk-bar-note">모집 정원의 2% 범위 내에서 별도 선발</span>
+            <span class="kiosk-bar-value kiosk-bar-value-sm">2%</span>
+          </div>
+          <div class="kiosk-bar-row kiosk-bar-row-extra">
+            <span class="kiosk-bar-label kiosk-bar-label-sm">정원 외 · 국가유공자 자녀</span>
+            <span class="kiosk-bar-note">모집 정원의 3% 범위 내에서 별도 선발</span>
+            <span class="kiosk-bar-value kiosk-bar-value-sm">3%</span>
+          </div>
         </div>
         <div class="kiosk-note-grid" style="margin-top:20px;">
           <div class="kiosk-note-card">
@@ -3065,8 +3081,6 @@
             <span class="ic">✍️</span><b>자기소개서 유의사항</b><span>기재하면 감점되는 배제 사항이 있어요</span>
             <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskExcludeDialog');">배제 사항 보기</button>
           </div>
-          <div class="kiosk-note-card"><span class="ic">🌏</span><b>정원 외 · 특례입학</b><span>모집 정원의 2% 범위 내에서 별도 선발</span></div>
-          <div class="kiosk-note-card"><span class="ic">🎖️</span><b>정원 외 · 국가유공자 자녀</b><span>모집 정원의 3% 범위 내에서 별도 선발</span></div>
         </div>
         ${KIOSK_YOGANG_SOURCE}`;
     }
