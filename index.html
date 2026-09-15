@@ -1752,9 +1752,9 @@
   </dialog>
 
   <dialog id="kioskEqualityDialog" class="kiosk-popup dialog-wide">
-    <div class="kiosk-popup-head"><span class="ic">⚖️</span><h2>기회균등 영역 대상 유형 및 서류</h2></div>
+    <div class="kiosk-popup-head"><span class="ic">⚖️</span><h2>기회균등 영역 대상 유형</h2></div>
     <div class="kiosk-popup-body">
-      <div class="kiosk-dialog-subhead">대상 유형 (1)~(6)</div>
+      <div class="kiosk-dialog-subhead" style="margin-top:0;">대상 유형 (1)~(6)</div>
       <div class="kiosk-table-scroll" style="margin:0 0 4px;">
         <table class="kiosk-dialog-table" style="min-width:420px;">
           <thead><tr><th>번호</th><th>대상 유형</th></tr></thead>
@@ -1768,8 +1768,16 @@
           </tbody>
         </table>
       </div>
+      <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskEqualityDocsDialog');">📑 기회균등 영역 추가 서류 보기</button>
+      <div class="dialog-actions">
+        <button class="button primary" id="closeKioskEqualityDialog" type="button">닫기</button>
+      </div>
+    </div>
+  </dialog>
 
-      <div class="kiosk-dialog-subhead">기회균등 영역 지원자 추가 서류</div>
+  <dialog id="kioskEqualityDocsDialog" class="kiosk-popup dialog-wide">
+    <div class="kiosk-popup-head"><span class="ic">📑</span><h2>기회균등 영역 지원자 추가 서류</h2></div>
+    <div class="kiosk-popup-body">
       <div class="kiosk-table-scroll" style="margin:0 0 4px;">
         <table class="kiosk-dialog-table" style="min-width:460px;">
           <thead><tr><th>대상</th><th>제출 서류</th></tr></thead>
@@ -1784,7 +1792,7 @@
         </table>
       </div>
       <div class="dialog-actions">
-        <button class="button primary" id="closeKioskEqualityDialog" type="button">닫기</button>
+        <button class="button primary" id="closeKioskEqualityDocsDialog" type="button">닫기</button>
       </div>
     </div>
   </dialog>
@@ -1819,9 +1827,45 @@
           </tbody>
         </table>
       </div>
-      <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskIncomeTableDialog');">💰 소득 기준표 보기</button>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskDiversityDocsDialog');">📑 유형별 추가 서류 보기</button>
+        <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskIncomeTableDialog');">💰 소득 기준표 보기</button>
+      </div>
       <div class="dialog-actions">
         <button class="button primary" id="closeKioskDiversityDialog" type="button">닫기</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="kioskDiversityDocsDialog" class="kiosk-popup dialog-wide">
+    <div class="kiosk-popup-head"><span class="ic">📑</span><h2>사회다양성 영역 지원자 유형별 추가 서류</h2></div>
+    <div class="kiosk-popup-body">
+      <div class="kiosk-dialog-subhead" style="margin-top:0;">사회다양성 영역 지원자 공통 서류</div>
+      <p style="margin:0 0 10px;">부모 모두의 건강보험료 납부 확인 자료(영수증·고지서·납부확인서 중 택1) + 부모 모두의 건강보험료 자격득실확인서</p>
+      <div class="kiosk-dialog-subhead">유형별 추가 서류</div>
+      <div class="kiosk-table-scroll" style="margin:0 0 4px;">
+        <table class="kiosk-dialog-table" style="min-width:460px;">
+          <thead><tr><th>대상 유형</th><th>제출 서류</th></tr></thead>
+          <tbody>
+            <tr><td>다문화가족의 자녀</td><td>귀화인 기본증명서 또는 외국인등록증 사본 중 택1 1부</td></tr>
+            <tr><td>북한이탈주민 또는 그 자녀</td><td>북한이탈주민확인서 1부</td></tr>
+            <tr><td>특수교육대상자</td><td>해당 증빙 서류 1부</td></tr>
+            <tr><td>아동복지시설 보호 아동</td><td>입소사실확인서 또는 가정위탁보호확인서 중 택1 1부</td></tr>
+            <tr><td>도서·벽지 거주 졸업(예정)자</td><td>추가 서류 없음 (학교생활기록부로 확인)</td></tr>
+            <tr><td>소년·소녀가정 / 조손가정 / 입양된 자녀</td><td>해당 증빙 서류 1부</td></tr>
+            <tr><td>장애인의 자녀</td><td>장애인등록증(복지카드) 사본 1부</td></tr>
+            <tr><td>순직공무원 자녀</td><td>해당 증빙 서류 1부</td></tr>
+            <tr><td>한부모가정 자녀</td><td>학부모 기준 가족관계증명서 1부</td></tr>
+            <tr><td>다자녀가정(3자녀 이상)의 자녀</td><td>추가 서류 없음 (가족관계증명서로 확인)</td></tr>
+            <tr><td>환경미화원의 자녀</td><td>재직증명서 1부</td></tr>
+            <tr><td>군인·경찰공무원·소방공무원 자녀<br>(15년 이상 재직 중, 준부사관·경위·소방위 이하)</td><td>15년 이상 재직 중임을 확인할 수 있는 증빙 서류 1부</td></tr>
+            <tr><td>우편집배원 자녀 / 선원 자녀</td><td>재직증명서 1부</td></tr>
+            <tr><td>사회복지시설 운영자 자녀 / 소규모학교 졸업(예정)자 / 산업재해근로자 자녀</td><td>해당 증빙 서류 1부</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="dialog-actions">
+        <button class="button primary" id="closeKioskDiversityDocsDialog" type="button">닫기</button>
       </div>
     </div>
   </dialog>
@@ -2905,14 +2949,11 @@
           </div>
           <div class="kiosk-note-card">
             <span class="ic">📑</span><b>추가 서류</b><span>공통 제출 서류(1)~(5) + 학교장·학부모 확인서(붙임1·2), 주민등록등본, 가족관계증명서 + 유형별 증빙 서류</span>
-            <div style="display:flex;flex-wrap:wrap;gap:6px;">
-              <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskSocialCommonDocsDialog');">📑 사회통합전형 공통 서류 보기</button>
-              <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskDocsPhotoDialog');">📷 학교생활기록부Ⅱ 사진 자료 보기</button>
-            </div>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskSocialCommonDocsDialog');">📑 사회통합전형 공통 서류 보기</button>
           </div>
-          <div class="kiosk-note-card">
+          <div class="kiosk-note-card" style="display:flex;flex-direction:column;">
             <span class="ic">💰</span><b>사회다양성 영역 소득 기준</b><span>부모 건강보험료 기준 소득 8분위(기준중위소득 160%) 이하 가정의 자녀만 해당</span>
-            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskIncomeTableDialog');">💰 소득 기준표 보기</button>
+            <button type="button" class="kiosk-note-link-btn" style="margin-top:auto;" onclick="event.stopPropagation(); kioskOpenDialog('kioskIncomeTableDialog');">💰 소득 기준표 보기</button>
           </div>
           <div class="kiosk-note-card warn"><span class="ic">✅</span><b>선발 원칙</b><span>기회균등 영역 대상자를 50% 이상 우선 선발</span></div>
           <div class="kiosk-note-card"><span class="ic">🔁</span><b>탈락·미달 시 처리</b><span>탈락 시 희망에 따라 일반전형 포함 가능, 정원 미달 시 미달 인원의 50%까지 일반전형에서 충원</span></div>
@@ -3469,7 +3510,9 @@
       ["closeKioskDocsPhotoDialog", "kioskDocsPhotoDialog"],
       ["closeKioskSocialCommonDocsDialog", "kioskSocialCommonDocsDialog"],
       ["closeKioskEqualityDialog", "kioskEqualityDialog"],
+      ["closeKioskEqualityDocsDialog", "kioskEqualityDocsDialog"],
       ["closeKioskDiversityDialog", "kioskDiversityDialog"],
+      ["closeKioskDiversityDocsDialog", "kioskDiversityDocsDialog"],
       ["closeKioskIncomeTableDialog", "kioskIncomeTableDialog"]
     ].forEach(([btnId, dialogId]) => {
       const btn = document.getElementById(btnId);
