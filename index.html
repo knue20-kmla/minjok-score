@@ -1303,8 +1303,11 @@
       text-align: center; color: rgba(255, 255, 255, 0.65);
       font-size: 0.68rem; margin-top: 6px; pointer-events: none;
     }
+    .kiosk-controls-bar {
+      display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+      gap: 10px; margin: 14px auto 0; position: relative; z-index: 510;
+    }
     .kiosk-exit-btn {
-      position: fixed; top: 16px; right: 16px; z-index: 510;
       padding: 8px 16px; border: none; border-radius: 999px;
       background: rgba(6, 37, 34, 0.55); color: #fff;
       font-family: inherit; font-weight: 700; font-size: 0.82rem; letter-spacing: 0.02em;
@@ -1325,7 +1328,6 @@
       .kiosk-nav-btn { width: 40px; height: 40px; font-size: 1.5rem; }
     }
     .kiosk-speed-ctrl {
-      position: fixed; top: 16px; left: 16px; z-index: 510;
       display: flex; gap: 3px; padding: 4px; border-radius: 999px;
       background: rgba(6, 37, 34, 0.55);
     }
@@ -1335,9 +1337,9 @@
     }
     .kiosk-speed-btn.active { background: #ffffff; color: var(--teal-dark); }
     .kiosk-autoplay-btn {
-      padding: 6px 12px; margin-right: 4px; border: none; border-radius: 999px;
-      background: transparent; color: rgba(255, 255, 255, 0.85);
-      font-family: inherit; font-weight: 800; font-size: 0.78rem; cursor: pointer;
+      padding: 8px 16px; border: none; border-radius: 999px;
+      background: rgba(6, 37, 34, 0.55); color: rgba(255, 255, 255, 0.9);
+      font-family: inherit; font-weight: 800; font-size: 0.82rem; cursor: pointer;
       white-space: nowrap;
     }
     .kiosk-autoplay-btn.active { background: var(--teal); color: #fff; }
@@ -2042,13 +2044,6 @@
 
   <!-- 전형 안내 키오스크 프리젠테이션 -->
   <div id="kioskOverlay" class="kiosk-overlay">
-    <button type="button" class="kiosk-exit-btn" onclick="event.stopPropagation(); kioskExit();">■ 종료</button>
-    <div class="kiosk-speed-ctrl">
-      <button type="button" class="kiosk-autoplay-btn" id="kioskAutoPlayBtn" onclick="event.stopPropagation(); kioskToggleAutoPlay();">▶ 자동재생</button>
-      <button type="button" class="kiosk-speed-btn" data-speed="0.5" onclick="event.stopPropagation(); kioskSetSpeed(0.5);">0.5x</button>
-      <button type="button" class="kiosk-speed-btn active" data-speed="1" onclick="event.stopPropagation(); kioskSetSpeed(1);">1x</button>
-      <button type="button" class="kiosk-speed-btn" data-speed="1.5" onclick="event.stopPropagation(); kioskSetSpeed(1.5);">1.5x</button>
-    </div>
     <div class="kiosk-pause-badge">⏸ 일시정지 · 탭하면 계속</div>
     <div class="kiosk-body">
       <button type="button" class="kiosk-nav-btn kiosk-nav-prev" aria-label="이전 화면" onclick="event.stopPropagation(); kioskPrevSlide();">‹</button>
@@ -2059,6 +2054,15 @@
         </div>
       </div>
       <button type="button" class="kiosk-nav-btn kiosk-nav-next" aria-label="다음 화면" onclick="event.stopPropagation(); kioskManualNextSlide();">›</button>
+    </div>
+    <div class="kiosk-controls-bar">
+      <button type="button" class="kiosk-autoplay-btn" id="kioskAutoPlayBtn" onclick="event.stopPropagation(); kioskToggleAutoPlay();">▶ 자동재생</button>
+      <div class="kiosk-speed-ctrl">
+        <button type="button" class="kiosk-speed-btn" data-speed="0.5" onclick="event.stopPropagation(); kioskSetSpeed(0.5);">0.5x</button>
+        <button type="button" class="kiosk-speed-btn active" data-speed="1" onclick="event.stopPropagation(); kioskSetSpeed(1);">1x</button>
+        <button type="button" class="kiosk-speed-btn" data-speed="1.5" onclick="event.stopPropagation(); kioskSetSpeed(1.5);">1.5x</button>
+      </div>
+      <button type="button" class="kiosk-exit-btn" onclick="event.stopPropagation(); kioskExit();">■ 종료</button>
     </div>
     <div class="kiosk-footer">
       <div id="kioskDots" class="kiosk-dots"></div>
