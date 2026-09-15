@@ -915,13 +915,6 @@
       word-break: keep-all;
     }
     .kiosk-closing-sub { font-size: 1.1rem; color: rgba(255, 255, 255, 0.92); margin: 0; text-shadow: 0 2px 10px rgba(6, 12, 40, 0.45); }
-    .kiosk-closing-badge {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 64px; height: 64px; margin-bottom: 22px; border-radius: 50%;
-      background: rgba(255, 255, 255, 0.16); border: 1px solid rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(3px); font-size: 1.7rem;
-      box-shadow: 0 8px 20px rgba(6, 12, 40, 0.25);
-    }
     .kiosk-max {
       display: flex; align-items: baseline; justify-content: center; gap: 10px;
       margin: 6px 0 4px; padding: 16px 20px; border-radius: 16px;
@@ -3502,7 +3495,6 @@
     function kioskClosingHTML() {
       return `
         <div class="kiosk-hero">
-          <div class="kiosk-closing-badge">🎓</div>
           <h1 class="kiosk-closing-title">지금 나의 예상 점수를 확인해보세요</h1>
           <p class="kiosk-closing-sub">화면을 두 번 탭하거나 종료 버튼을 누르면 성적 계산기로 돌아갑니다.</p>
         </div>`;
