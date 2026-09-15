@@ -761,19 +761,26 @@
     }
     .kiosk-overlay.open { display: flex; flex-direction: column; }
     .kiosk-body {
-      flex: 1;
+      flex: 0 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 30px;
-      padding: 5vh 5vw;
+      padding: 5vh 5vw 0;
+      min-height: 0;
+    }
+    .kiosk-controls-spacer {
+      flex: 1 1 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       min-height: 0;
     }
     .kiosk-slide {
       /* 흰색 카드 자체는 내용과 무관하게 항상 같은 크기를 유지
          (모바일 기준 크기 — 768px 이상 화면에서는 아래 미디어쿼리로 더 크게 표시) */
       width: min(880px, 92vw);
-      height: min(640px, 82vh);
+      height: min(640px, calc(82vh - 96px));
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
@@ -799,7 +806,7 @@
          뺀 나머지를 실제 카드 너비로 사용해야, 버튼 때문에 카드가 의도한 크기보다
          작게 눌리지 않음 */
       .kiosk-body { padding: 3vh 2vw; gap: 18px; }
-      .kiosk-slide { width: min(1200px, calc(96vw - 140px)); height: min(873px, 88vh); }
+      .kiosk-slide { width: min(1200px, calc(96vw - 140px)); height: min(873px, calc(88vh - 96px)); }
     }
     .kiosk-content-row {
       /* eyebrow 배지가 차지하는 높이를 제외한 나머지 영역 — 실제 콘텐츠가
@@ -1305,7 +1312,7 @@
     }
     .kiosk-controls-bar {
       display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
-      gap: 10px; margin: 14px auto 0; position: relative; z-index: 510;
+      gap: 10px; position: relative; z-index: 510;
     }
     .kiosk-exit-btn {
       padding: 8px 16px; border: none; border-radius: 999px;
@@ -1711,10 +1718,9 @@
         <table class="kiosk-dialog-table" style="min-width:420px;">
           <thead><tr><th>구분</th><th>일정</th><th>장소</th></tr></thead>
           <tbody>
-            <tr><td>원서 접수(온라인)</td><td>12.8(화) 9시 ~ 12.10(목) 12시</td><td>민족사관고 홈페이지</td></tr>
+            <tr><td>원서 접수(온라인)</td><td>12.8(화) 9시 ~ 12.10(목) 12시(정오)</td><td>민족사관고 홈페이지</td></tr>
             <tr><td>원서 접수(우편)</td><td>12.8(화) ~ 12.10(목)<br>※10일 소인분까지 유효</td><td>민족사관고 입학관리실</td></tr>
             <tr><td>1단계 합격자 발표</td><td>12.17(목) 오전 10시</td><td>민족사관고 홈페이지</td></tr>
-            <tr><td>면접 대상자 발표</td><td>12.21(월) ~ 12.22(화)</td><td>-</td></tr>
             <tr><td>면접 및 체력검사</td><td>12.31(목) 12시(정오)</td><td>민족사관고</td></tr>
             <tr><td>최종합격자 발표</td><td>2027.1.4(월) ~ 1.6(수)</td><td>민족사관고 홈페이지</td></tr>
             <tr><td>합격자 등록</td><td>추후 안내</td><td>민족사관고 행정실(계좌 입금)</td></tr>
@@ -2055,14 +2061,16 @@
       </div>
       <button type="button" class="kiosk-nav-btn kiosk-nav-next" aria-label="다음 화면" onclick="event.stopPropagation(); kioskManualNextSlide();">›</button>
     </div>
-    <div class="kiosk-controls-bar">
-      <button type="button" class="kiosk-autoplay-btn" id="kioskAutoPlayBtn" onclick="event.stopPropagation(); kioskToggleAutoPlay();">▶ 자동재생</button>
-      <div class="kiosk-speed-ctrl">
-        <button type="button" class="kiosk-speed-btn" data-speed="0.5" onclick="event.stopPropagation(); kioskSetSpeed(0.5);">0.5x</button>
-        <button type="button" class="kiosk-speed-btn active" data-speed="1" onclick="event.stopPropagation(); kioskSetSpeed(1);">1x</button>
-        <button type="button" class="kiosk-speed-btn" data-speed="1.5" onclick="event.stopPropagation(); kioskSetSpeed(1.5);">1.5x</button>
+    <div class="kiosk-controls-spacer">
+      <div class="kiosk-controls-bar">
+        <button type="button" class="kiosk-autoplay-btn" id="kioskAutoPlayBtn" onclick="event.stopPropagation(); kioskToggleAutoPlay();">▶ 자동재생</button>
+        <div class="kiosk-speed-ctrl">
+          <button type="button" class="kiosk-speed-btn" data-speed="0.5" onclick="event.stopPropagation(); kioskSetSpeed(0.5);">0.5x</button>
+          <button type="button" class="kiosk-speed-btn active" data-speed="1" onclick="event.stopPropagation(); kioskSetSpeed(1);">1x</button>
+          <button type="button" class="kiosk-speed-btn" data-speed="1.5" onclick="event.stopPropagation(); kioskSetSpeed(1.5);">1.5x</button>
+        </div>
+        <button type="button" class="kiosk-exit-btn" onclick="event.stopPropagation(); kioskExit();">■ 종료</button>
       </div>
-      <button type="button" class="kiosk-exit-btn" onclick="event.stopPropagation(); kioskExit();">■ 종료</button>
     </div>
     <div class="kiosk-footer">
       <div id="kioskDots" class="kiosk-dots"></div>
