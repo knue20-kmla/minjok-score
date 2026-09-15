@@ -935,17 +935,36 @@
        분배해서 화면이 좁아도 절대 옆으로 넘치지 않도록 함(고정 px 폭 대신
        유연한 폭 사용) — 이렇게 하면 화면 맞춤 스케일 계산에 기대지 않고도
        항상 카드 폭 전체를 사용해 최대한 크게 보인다 */
-    .kiosk-rate-bars { display: flex; align-items: flex-end; width: 100%; gap: 4px; }
-    .kiosk-rate-arrow {
-      flex: 0 0 auto;
-      align-self: center;
-      font-size: 1.3rem;
-      font-weight: 900;
-      color: var(--teal);
-      padding: 0 2px 34px;
+    /* 2학년/3학년을 각각 카드로 묶어 학년별 반영비율 합계를 비교하기 쉽게 함 */
+    .kiosk-rate-groups { display: flex; align-items: stretch; width: 100%; gap: 14px; max-width: 640px; }
+    .kiosk-rate-group {
+      flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center;
+      border-radius: 18px; padding: 14px 10px 12px;
     }
+    .kiosk-rate-group.grade-2 { background: linear-gradient(160deg, #f2fdfb, #e3f8f2); border: 1.5px solid #bfe6da; }
+    .kiosk-rate-group.grade-3 { background: linear-gradient(160deg, #e3f8f2, #cdf0e2); border: 1.5px solid #94d8bd; }
+    .kiosk-rate-group-head { display: flex; align-items: baseline; gap: 7px; margin-bottom: 12px; white-space: nowrap; }
+    .kiosk-rate-group-head b { font-size: 1rem; font-weight: 900; color: var(--ink); white-space: nowrap; }
+    .kiosk-rate-group-head span {
+      font-size: 0.85rem; font-weight: 900; color: var(--teal-dark); white-space: nowrap;
+      background: #ffffff; padding: 2px 9px; border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(15, 118, 110, 0.18);
+    }
+    .kiosk-rate-group-bars { display: flex; gap: 10px; width: 100%; justify-content: center; }
+    /* "VS" 배지 대신, 2학년 -> 3학년으로 갈수록 비율이 오르내리는 방향을
+       화살표로 직접 보여줌 (오르면 ↗ 붉은기 도는 teal, 내리면 ↘, 같으면 →) */
+    .kiosk-rate-vs {
+      flex: 0 0 auto; align-self: center; display: flex; flex-direction: column;
+      align-items: center; gap: 2px; padding: 0 2px;
+    }
+    .kiosk-rate-vs-arrow { font-size: 1.6rem; font-weight: 900; color: var(--teal); line-height: 1; }
+    .kiosk-rate-vs.up .kiosk-rate-vs-arrow { color: #0d9488; }
+    .kiosk-rate-compare {
+      margin-top: 12px; font-size: 0.88rem; font-weight: 700; color: var(--muted); text-align: center;
+    }
+    .kiosk-rate-compare strong { color: var(--teal-dark); font-weight: 900; }
     .kiosk-rate-bar-col { display: flex; flex-direction: column; align-items: center; flex: 1 1 0; min-width: 0; }
-    .kiosk-rate-bar-value { font-weight: 900; font-size: 1.05rem; color: var(--ink); margin-bottom: 8px; }
+    .kiosk-rate-bar-value { font-weight: 900; font-size: 1.05rem; color: var(--ink); margin-bottom: 8px; white-space: nowrap; }
     .kiosk-rate-bar-track { display: flex; align-items: flex-end; justify-content: center; width: 100%; height: 110px; }
     .kiosk-rate-bar {
       width: 68%;
@@ -953,7 +972,7 @@
       border-radius: 12px 12px 4px 4px;
       box-shadow: 0 8px 18px rgba(15, 118, 110, 0.2);
     }
-    .kiosk-rate-bar-label { margin-top: 10px; font-weight: 800; font-size: 0.92rem; color: var(--muted); }
+    .kiosk-rate-bar-label { margin-top: 10px; font-weight: 800; font-size: 0.92rem; color: var(--muted); white-space: nowrap; }
     .kiosk-donut-wrap { display: flex; flex-direction: column; align-items: center; gap: 18px; margin: 8px 0 18px; }
     .kiosk-donut { position: relative; width: 210px; height: 210px; border-radius: 50%; flex: 0 0 auto; }
     .kiosk-donut-hole {
@@ -1152,6 +1171,13 @@
       color: rgba(255, 255, 255, 0.75); font-family: inherit; font-weight: 700; font-size: 0.78rem; cursor: pointer;
     }
     .kiosk-speed-btn.active { background: #ffffff; color: var(--teal-dark); }
+    .kiosk-autoplay-btn {
+      padding: 6px 12px; margin-right: 4px; border: none; border-radius: 999px;
+      background: transparent; color: rgba(255, 255, 255, 0.85);
+      font-family: inherit; font-weight: 800; font-size: 0.78rem; cursor: pointer;
+      white-space: nowrap;
+    }
+    .kiosk-autoplay-btn.active { background: var(--teal); color: #fff; }
     .kiosk-pause-badge {
       display: none; position: fixed; top: 18px; left: 50%; transform: translateX(-50%); z-index: 510;
       align-items: center; gap: 8px; padding: 8px 18px; border-radius: 999px;
@@ -1606,6 +1632,7 @@
   <div id="kioskOverlay" class="kiosk-overlay">
     <button type="button" class="kiosk-exit-btn" onclick="event.stopPropagation(); kioskExit();">■ 종료</button>
     <div class="kiosk-speed-ctrl">
+      <button type="button" class="kiosk-autoplay-btn" id="kioskAutoPlayBtn" onclick="event.stopPropagation(); kioskToggleAutoPlay();">▶ 자동재생</button>
       <button type="button" class="kiosk-speed-btn" data-speed="0.5" onclick="event.stopPropagation(); kioskSetSpeed(0.5);">0.5x</button>
       <button type="button" class="kiosk-speed-btn active" data-speed="1" onclick="event.stopPropagation(); kioskSetSpeed(1);">1x</button>
       <button type="button" class="kiosk-speed-btn" data-speed="1.5" onclick="event.stopPropagation(); kioskSetSpeed(1.5);">1.5x</button>
@@ -2482,6 +2509,7 @@
     let _kioskIndex = 0;
     let _kioskTimer = null;
     let _kioskPaused = false;
+    let _kioskAutoPlay = false; // 시작 시 기본값은 수동 진행 — 자동재생 버튼을 눌러야 자동으로 넘어감
     let _kioskClickTimer = null;
     let _kioskClickCount = 0;
     let _kioskSpeed = 1;
@@ -2702,26 +2730,42 @@
       const weightMap = currentSemesterWeights();
       const values = semesters.map(semester => weightMap[semester.id] != null ? weightMap[semester.id] : semester.rate);
       const maxValue = Math.max(...values, 1);
-      const maxBarPx = 110;
-      // 학년·학기(2-1 -> 2-2 -> 3-1 -> 3-2)가 바뀌면서 반영 비율이 어떻게
-      // 변하는지 계단식 막대그래프로 보여줌 — 원형 도넛은 순서가 잘 드러나지
-      // 않아 왼쪽에서 오른쪽으로 시간 순서를 읽을 수 있는 막대 형태로 교체
-      const barCols = semesters.map((semester, i) => {
-        const barPx = Math.max(Math.round(values[i] / maxValue * maxBarPx), 18);
+      const maxBarPx = 108;
+      // 2학년(1~2학기)과 3학년(1~2학기)을 각각 하나의 그룹 카드로 묶어서
+      // 학년별 반영비율 총합 차이가 한눈에 보이도록 함(이전 원형 도넛/일렬
+      // 막대그래프는 학년 구분이 잘 드러나지 않는다는 피드백을 반영)
+      const barCol = i => {
+        const barPx = Math.max(Math.round(values[i] / maxValue * maxBarPx), 16);
         return `
           <div class="kiosk-rate-bar-col">
             <span class="kiosk-rate-bar-value">${values[i]}%</span>
             <div class="kiosk-rate-bar-track">
               <div class="kiosk-rate-bar" style="height:${barPx}px; background:${KIOSK_SEMESTER_COLORS[i]};"></div>
             </div>
-            <span class="kiosk-rate-bar-label">${semester.short}</span>
+            <span class="kiosk-rate-bar-label">${semesters[i].short}</span>
           </div>`;
-      });
-      const stepsHtml = barCols.map((col, i) => {
-        if (i === 0) return col;
-        const arrow = values[i] > values[i - 1] ? "↗" : (values[i] < values[i - 1] ? "↘" : "→");
-        return `<span class="kiosk-rate-arrow">${arrow}</span>${col}`;
-      }).join("");
+      };
+      const gradeTotal = (a, b) => values[a] + values[b];
+      const grade2Total = gradeTotal(0, 1);
+      const grade3Total = gradeTotal(2, 3);
+      const gradeGroupHtml = (label, cls, total, i, j) => `
+        <div class="kiosk-rate-group ${cls}">
+          <div class="kiosk-rate-group-head"><b>${label}</b><span>${total}%</span></div>
+          <div class="kiosk-rate-group-bars">${barCol(i)}${barCol(j)}</div>
+        </div>`;
+      // 2학년 -> 3학년으로 갈 때 반영비율 합이 오르는지/내리는지를 화살표로
+      // 직접 보여줌 ("VS" 배지보다 변화의 방향이 바로 읽히도록)
+      const gradeArrow = grade3Total > grade2Total ? "↗" : (grade3Total < grade2Total ? "↘" : "→");
+      const gradeArrowUpClass = grade3Total > grade2Total ? " up" : "";
+      const stepsHtml = `
+        <div class="kiosk-rate-groups">
+          ${gradeGroupHtml("2학년", "grade-2", grade2Total, 0, 1)}
+          <div class="kiosk-rate-vs${gradeArrowUpClass}">
+            <span class="kiosk-rate-vs-arrow">${gradeArrow}</span>
+          </div>
+          ${gradeGroupHtml("3학년", "grade-3", grade3Total, 2, 3)}
+        </div>
+        ${grade3Total !== grade2Total ? `<div class="kiosk-rate-compare">${grade3Total > grade2Total ? "3학년" : "2학년"} 반영비율 합이 <strong>${Math.abs(grade3Total - grade2Total)}%p</strong> 더 높습니다</div>` : ""}`;
 
       // 모집요강에 실제 반영되는 재분배 규칙(effectiveSemesterRates)을 그대로 사용해
       // "성적이 없을 때" 화면에 나오는 수치가 실제 계산 로직과 항상 일치하도록 함
@@ -2751,7 +2795,7 @@
       return `
         <div class="kiosk-eyebrow">학기별 반영 비율</div>
         <div class="kiosk-rate-chart">
-          <div class="kiosk-rate-bars">${stepsHtml}</div>
+          ${stepsHtml}
         </div>
         <div class="kiosk-missing-note">
           <div class="kiosk-missing-head"><span class="ic">⚠️</span><span>특정 학기 성적이 없다면?</span></div>
@@ -2981,7 +3025,7 @@
       card.classList.add("kiosk-in");
       kioskRenderDots();
       clearTimeout(_kioskTimer);
-      if (!_kioskPaused) _kioskTimer = window.setTimeout(kioskNextSlide, slide.duration / _kioskSpeed);
+      if (_kioskAutoPlay && !_kioskPaused) _kioskTimer = window.setTimeout(kioskNextSlide, slide.duration / _kioskSpeed);
     }
 
     function kioskNextSlide() {
@@ -3004,7 +3048,9 @@
     }
 
     function kioskTogglePause() {
-      if (!_kioskActive) return;
+      // 자동재생이 꺼져 있을 때는 어차피 타이머가 없으므로 탭-일시정지 동작을
+      // 하지 않음(수동 모드에서는 화살표/점으로만 이동)
+      if (!_kioskActive || !_kioskAutoPlay) return;
       _kioskPaused = !_kioskPaused;
       const overlay = document.getElementById("kioskOverlay");
       if (overlay) overlay.classList.toggle("paused", _kioskPaused);
@@ -3015,12 +3061,30 @@
       }
     }
 
+    function kioskToggleAutoPlay() {
+      if (!_kioskActive) return;
+      _kioskAutoPlay = !_kioskAutoPlay;
+      const btn = document.getElementById("kioskAutoPlayBtn");
+      if (btn) {
+        btn.classList.toggle("active", _kioskAutoPlay);
+        btn.textContent = _kioskAutoPlay ? "⏸ 자동재생 끄기" : "▶ 자동재생";
+      }
+      _kioskPaused = false;
+      const overlay = document.getElementById("kioskOverlay");
+      if (overlay) overlay.classList.remove("paused");
+      clearTimeout(_kioskTimer);
+      if (_kioskAutoPlay) {
+        const slide = KIOSK_SLIDES[_kioskIndex];
+        _kioskTimer = window.setTimeout(kioskNextSlide, slide.duration / _kioskSpeed);
+      }
+    }
+
     function kioskSetSpeed(speed) {
       _kioskSpeed = speed;
       document.querySelectorAll(".kiosk-speed-btn").forEach(button => {
         button.classList.toggle("active", Number.parseFloat(button.dataset.speed) === speed);
       });
-      if (_kioskActive && !_kioskPaused) {
+      if (_kioskActive && _kioskAutoPlay && !_kioskPaused) {
         const slide = KIOSK_SLIDES[_kioskIndex];
         clearTimeout(_kioskTimer);
         _kioskTimer = window.setTimeout(kioskNextSlide, slide.duration / _kioskSpeed);
@@ -3053,10 +3117,16 @@
       _kioskActive = true;
       _kioskIndex = 0;
       _kioskPaused = false;
+      _kioskAutoPlay = false; // 시작할 때는 항상 수동 모드로 시작
       _kioskClickCount = 0;
       const overlay = document.getElementById("kioskOverlay");
       overlay.classList.add("open");
       overlay.classList.remove("paused");
+      const autoPlayBtn = document.getElementById("kioskAutoPlayBtn");
+      if (autoPlayBtn) {
+        autoPlayBtn.classList.remove("active");
+        autoPlayBtn.textContent = "▶ 자동재생";
+      }
       if (!_kioskOverlayClickBound) {
         overlay.addEventListener("click", kioskHandleOverlayClick);
         _kioskOverlayClickBound = true;
