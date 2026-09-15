@@ -1730,12 +1730,10 @@
     </div>
   </dialog>
 
-  <dialog id="kioskSocialDocsDialog" class="kiosk-popup dialog-wide">
-    <div class="kiosk-popup-head"><span class="ic">📋</span><h2>사회통합전형 제출 서류 상세</h2></div>
+  <dialog id="kioskSocialCommonDocsDialog" class="kiosk-popup dialog-wide">
+    <div class="kiosk-popup-head"><span class="ic">📑</span><h2>사회통합전형 공통 서류</h2></div>
     <div class="kiosk-popup-body">
-      <p>지원 영역(기회균등·사회다양성)에 따라 공통 서류에 더해 아래 서류를 추가로 준비하세요.</p>
-
-      <div class="kiosk-dialog-subhead">사회통합전형 지원자 전체 공통 서류</div>
+      <p>사회통합전형 지원자 전체가 공통 제출 서류(1)~(5)에 더해 아래 서류를 함께 제출합니다.</p>
       <div class="kiosk-table-scroll" style="margin:0 0 4px;">
         <table class="kiosk-dialog-table" style="min-width:420px;">
           <thead><tr><th>서류</th><th>비고</th></tr></thead>
@@ -1747,16 +1745,29 @@
           </tbody>
         </table>
       </div>
+      <div class="dialog-actions">
+        <button class="button primary" id="closeKioskSocialCommonDocsDialog" type="button">닫기</button>
+      </div>
+    </div>
+  </dialog>
 
-      <div class="kiosk-dialog-subhead">기회균등 영역 대상 유형</div>
-      <ul class="kiosk-dialog-type-grid">
-        <li><b>1</b>「국민기초생활보장법」 수급자 또는 그 자녀(법정)</li>
-        <li><b>2</b>「국민기초생활보장법」 차상위계층 또는 그 자녀(법정)</li>
-        <li><b>3</b>「국가보훈기본법」 국가보훈대상자 또는 그 자녀(법정)</li>
-        <li><b>4</b>「한부모가족지원법」 한부모가족보호대상자(법정)</li>
-        <li><b>5</b>차차상위계층(기준 중위소득 60% 이하)인 자 또는 그 자녀</li>
-        <li><b>6</b>생계 어려움으로 학교장(기초자치단체장) 추천을 받은 자</li>
-      </ul>
+  <dialog id="kioskEqualityDialog" class="kiosk-popup dialog-wide">
+    <div class="kiosk-popup-head"><span class="ic">⚖️</span><h2>기회균등 영역 대상 유형 및 서류</h2></div>
+    <div class="kiosk-popup-body">
+      <div class="kiosk-dialog-subhead">대상 유형 (1)~(6)</div>
+      <div class="kiosk-table-scroll" style="margin:0 0 4px;">
+        <table class="kiosk-dialog-table" style="min-width:420px;">
+          <thead><tr><th>번호</th><th>대상 유형</th></tr></thead>
+          <tbody>
+            <tr><td>(1)</td><td>「국민기초생활보장법」 제2조제1호에 따른 수급자 또는 그 자녀(법정)</td></tr>
+            <tr><td>(2)</td><td>「국민기초생활보장법」 제2조제10호에 따른 차상위계층 또는 그 자녀(법정)</td></tr>
+            <tr><td>(3)</td><td>「국가보훈기본법」 제3조제2호의 국가보훈대상자 또는 그 자녀(법정)</td></tr>
+            <tr><td>(4)</td><td>「한부모가족지원법」 제5조 또는 제5조의2에 따른 한부모가족보호대상자(법정)</td></tr>
+            <tr><td>(5)</td><td>차차상위계층(기준 중위소득 60% 이하)인 자 또는 그 자녀</td></tr>
+            <tr><td>(6)</td><td>부양의무자의 실직·파산·폐업 등 생계에 어려움이 있어 학교장(또는 기초자치단체장) 추천을 받은 자</td></tr>
+          </tbody>
+        </table>
+      </div>
 
       <div class="kiosk-dialog-subhead">기회균등 영역 지원자 추가 서류</div>
       <div class="kiosk-table-scroll" style="margin:0 0 4px;">
@@ -1772,32 +1783,73 @@
           </tbody>
         </table>
       </div>
-
-      <div class="kiosk-dialog-subhead">사회다양성 영역 대상 유형 <span style="font-weight:700;color:var(--muted);font-size:11.5px;">(기준중위소득 160% 이하 가정의 자녀)</span></div>
-      <ul class="kiosk-dialog-type-grid">
-        <li><b>1</b>다문화가족의 자녀</li>
-        <li><b>2</b>북한이탈주민 또는 그 자녀</li>
-        <li><b>3</b>특수교육대상자</li>
-        <li><b>4</b>아동복지시설에서 보호받는 아동</li>
-        <li><b>5</b>도서·벽지 거주 중학교 졸업(예정)자</li>
-        <li><b>6</b>소년·소녀 가정, 조손가정, 입양된 자녀</li>
-        <li><b>7</b>장애 정도가 심한 장애인의 자녀</li>
-        <li><b>8</b>순직 군경 또는 순직 공무원 자녀</li>
-        <li><b>9</b>한부모가정 자녀</li>
-        <li><b>10</b>다자녀가정(3자녀 이상)의 자녀</li>
-        <li><b>11</b>환경미화원의 자녀</li>
-        <li><b>12</b>군인 자녀(15년 이상 재직 준부사관 이하)</li>
-        <li><b>13</b>경찰공무원 자녀(15년 이상 재직 경위 이하)</li>
-        <li><b>14</b>소방공무원 자녀(15년 이상 재직 소방위 이하)</li>
-        <li><b>15</b>우편집배원의 자녀</li>
-        <li><b>16</b>선원 자녀</li>
-        <li><b>17</b>사회복지시설 운영자 자녀</li>
-        <li><b>18</b>소규모학교(졸업생 13명 이하) 졸업(예정)자</li>
-        <li><b>19</b>산업재해근로자의 자녀</li>
-      </ul>
-
       <div class="dialog-actions">
-        <button class="button primary" id="closeKioskSocialDocsDialog" type="button">닫기</button>
+        <button class="button primary" id="closeKioskEqualityDialog" type="button">닫기</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="kioskDiversityDialog" class="kiosk-popup dialog-wide">
+    <div class="kiosk-popup-head"><span class="ic">🌈</span><h2>사회다양성 영역 대상 유형</h2></div>
+    <div class="kiosk-popup-body">
+      <p>아래 (1)~(19) 유형 중 하나에 해당하고, 기준중위소득 160% 이하 가정의 자녀인 경우 지원할 수 있습니다.</p>
+      <div class="kiosk-table-scroll" style="margin:0 0 4px;">
+        <table class="kiosk-dialog-table" style="min-width:420px;">
+          <thead><tr><th>번호</th><th>대상 유형</th></tr></thead>
+          <tbody>
+            <tr><td>(1)</td><td>다문화가족의 자녀</td></tr>
+            <tr><td>(2)</td><td>북한이탈주민 또는 그 자녀</td></tr>
+            <tr><td>(3)</td><td>특수교육대상자</td></tr>
+            <tr><td>(4)</td><td>아동복지시설에서 보호받는 아동</td></tr>
+            <tr><td>(5)</td><td>도서·벽지 거주 중학교 졸업(예정)자</td></tr>
+            <tr><td>(6)</td><td>소년·소녀 가정, 조손가정, 입양된 자녀</td></tr>
+            <tr><td>(7)</td><td>장애 정도가 심한 장애인의 자녀</td></tr>
+            <tr><td>(8)</td><td>순직 군경 또는 순직 공무원 자녀</td></tr>
+            <tr><td>(9)</td><td>한부모가정 자녀</td></tr>
+            <tr><td>(10)</td><td>다자녀가정(3자녀 이상)의 자녀</td></tr>
+            <tr><td>(11)</td><td>환경미화원의 자녀</td></tr>
+            <tr><td>(12)</td><td>군인 자녀(15년 이상 재직 중인 준부사관 이하)</td></tr>
+            <tr><td>(13)</td><td>경찰공무원 자녀(15년 이상 재직 중인 경위 이하)</td></tr>
+            <tr><td>(14)</td><td>소방공무원 자녀(15년 이상 재직 중인 소방위 이하)</td></tr>
+            <tr><td>(15)</td><td>우편집배원의 자녀</td></tr>
+            <tr><td>(16)</td><td>선원 자녀</td></tr>
+            <tr><td>(17)</td><td>사회복지시설 운영자 자녀</td></tr>
+            <tr><td>(18)</td><td>소규모학교(졸업생 13명 이하) 졸업(예정)자</td></tr>
+            <tr><td>(19)</td><td>산업재해근로자의 자녀</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskIncomeTableDialog');">💰 소득 기준표 보기</button>
+      <div class="dialog-actions">
+        <button class="button primary" id="closeKioskDiversityDialog" type="button">닫기</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="kioskIncomeTableDialog" class="kiosk-popup dialog-wide">
+    <div class="kiosk-popup-head"><span class="ic">💰</span><h2>사회다양성 영역 소득 기준표</h2></div>
+    <div class="kiosk-popup-body">
+      <p>2026년 건강보험료 소득판정기준표(기준중위소득 160%) 적용 기준입니다. 가구원 수에 따른 건강보험료 본인부담금(2026년 1~10월 평균)으로 판정합니다.</p>
+      <div class="kiosk-table-scroll" style="margin:0 0 4px;">
+        <table class="kiosk-dialog-table" style="min-width:480px;">
+          <thead><tr><th>가구원수</th><th>소득 기준(월)</th><th>건보료·직장</th><th>건보료·지역</th><th>건보료·혼합</th></tr></thead>
+          <tbody>
+            <tr><td>1인</td><td>4,103,000원</td><td colspan="3">-</td></tr>
+            <tr><td>2인</td><td>6,719,000원</td><td colspan="3">-</td></tr>
+            <tr><td>3인</td><td>8,575,000원</td><td>148,138원</td><td>79,647원</td><td>-</td></tr>
+            <tr><td>4인</td><td>10,392,000원</td><td>243,833원</td><td>181,659원</td><td>247,763원</td></tr>
+            <tr><td>5인</td><td>12,091,000원</td><td>309,777원</td><td>264,935원</td><td>318,043원</td></tr>
+            <tr><td>6인</td><td>13,690,000원</td><td>374,300원</td><td>338,641원</td><td>390,974원</td></tr>
+            <tr><td>7인</td><td>15,225,000원</td><td>457,613원</td><td>435,046원</td><td>490,306원</td></tr>
+            <tr><td>8인</td><td>16,759,000원</td><td>535,512원</td><td>525,833원</td><td>584,741원</td></tr>
+            <tr><td>9인</td><td>18,294,000원</td><td>584,741원</td><td>579,249원</td><td>634,423원</td></tr>
+            <tr><td>10인</td><td>19,829,000원</td><td>634,423원</td><td>628,429원</td><td>712,921원</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:11.5px;margin-top:10px;">가구원수는 주민등록등본상 학생과 생계·주거를 같이하는 부모 및 2촌 이내 형제자매 기준(부모가 모두 없는 경우 (외)조부모 포함)이며, 정확한 산정 방식은 모집요강을 참고하세요.</p>
+      <div class="dialog-actions">
+        <button class="button primary" id="closeKioskIncomeTableDialog" type="button">닫기</button>
       </div>
     </div>
   </dialog>
@@ -2843,16 +2895,25 @@
         <h2 class="kiosk-title">전국 32명 (모집 정원의 20%)</h2>
         <p class="kiosk-sub">일반전형 지원 자격을 갖추고, 기회균등·사회다양성 영역 중 하나에 해당하는 학생을 위한 전형입니다.</p>
         <div class="kiosk-note-grid" style="margin-top:22px;">
-          <div class="kiosk-note-card"><span class="ic">⚖️</span><b>기회균등 영역</b><span>기초생활수급자·차상위계층·국가보훈대상자·한부모가족 등 법정 대상자</span></div>
-          <div class="kiosk-note-card"><span class="ic">🌈</span><b>사회다양성 영역</b><span>다문화가정·북한이탈주민·다자녀가정 등 19개 유형 (기준중위소득 160% 이하)</span></div>
+          <div class="kiosk-note-card">
+            <span class="ic">⚖️</span><b>기회균등 영역</b><span>기초생활수급자·차상위계층·국가보훈대상자·한부모가족 등 법정 대상자</span>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskEqualityDialog');">📋 대상 유형·추가 서류 보기</button>
+          </div>
+          <div class="kiosk-note-card">
+            <span class="ic">🌈</span><b>사회다양성 영역</b><span>다문화가정·북한이탈주민·다자녀가정 등 19개 유형 (기준중위소득 160% 이하)</span>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskDiversityDialog');">🌈 대상 유형 19종 보기</button>
+          </div>
           <div class="kiosk-note-card">
             <span class="ic">📑</span><b>추가 서류</b><span>공통 제출 서류(1)~(5) + 학교장·학부모 확인서(붙임1·2), 주민등록등본, 가족관계증명서 + 유형별 증빙 서류</span>
             <div style="display:flex;flex-wrap:wrap;gap:6px;">
-              <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskSocialDocsDialog');">📋 유형별 서류·대상 표 보기</button>
+              <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskSocialCommonDocsDialog');">📑 사회통합전형 공통 서류 보기</button>
               <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskDocsPhotoDialog');">📷 학교생활기록부Ⅱ 사진 자료 보기</button>
             </div>
           </div>
-          <div class="kiosk-note-card"><span class="ic">💰</span><b>사회다양성 영역 소득 기준</b><span>부모 건강보험료 기준 소득 8분위(기준중위소득 160%) 이하 가정의 자녀만 해당</span></div>
+          <div class="kiosk-note-card">
+            <span class="ic">💰</span><b>사회다양성 영역 소득 기준</b><span>부모 건강보험료 기준 소득 8분위(기준중위소득 160%) 이하 가정의 자녀만 해당</span>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskIncomeTableDialog');">💰 소득 기준표 보기</button>
+          </div>
           <div class="kiosk-note-card warn"><span class="ic">✅</span><b>선발 원칙</b><span>기회균등 영역 대상자를 50% 이상 우선 선발</span></div>
           <div class="kiosk-note-card"><span class="ic">🔁</span><b>탈락·미달 시 처리</b><span>탈락 시 희망에 따라 일반전형 포함 가능, 정원 미달 시 미달 인원의 50%까지 일반전형에서 충원</span></div>
         </div>
@@ -3406,7 +3467,10 @@
       ["closeKioskCommonDocsDialog", "kioskCommonDocsDialog"],
       ["closeKioskExcludeDialog", "kioskExcludeDialog"],
       ["closeKioskDocsPhotoDialog", "kioskDocsPhotoDialog"],
-      ["closeKioskSocialDocsDialog", "kioskSocialDocsDialog"]
+      ["closeKioskSocialCommonDocsDialog", "kioskSocialCommonDocsDialog"],
+      ["closeKioskEqualityDialog", "kioskEqualityDialog"],
+      ["closeKioskDiversityDialog", "kioskDiversityDialog"],
+      ["closeKioskIncomeTableDialog", "kioskIncomeTableDialog"]
     ].forEach(([btnId, dialogId]) => {
       const btn = document.getElementById(btnId);
       const dialog = document.getElementById(dialogId);
