@@ -1172,6 +1172,21 @@
       .kiosk-download-card b { white-space: normal; }
     }
     .kiosk-note-card.warn .kiosk-note-link-btn { background: var(--amber); }
+    .kiosk-arrow-banner {
+      margin: 16px auto 0; max-width: 620px; position: relative; text-align: center; color: #fff;
+      background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+      padding: 14px 26px 24px; clip-path: polygon(0 0, 100% 0, 100% 76%, 52% 100%, 48% 100%, 0 76%);
+    }
+    .kiosk-arrow-banner .ic { font-size: 1.25rem; display: block; margin-bottom: 3px; }
+    .kiosk-arrow-banner b { display: block; font-size: 1rem; font-weight: 800; margin-bottom: 2px; }
+    .kiosk-arrow-banner span.detail { font-size: 0.82rem; opacity: .92; }
+    .kiosk-fee-pill {
+      margin: 10px auto 0; max-width: 420px; display: flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 7px 16px; border-radius: 999px; background: var(--amber-soft); border: 1px solid #ecd9a8;
+      font-size: 0.78rem; color: var(--amber);
+    }
+    .kiosk-fee-pill b { font-weight: 800; }
+    .kiosk-fee-pill span.detail { color: var(--ink); font-weight: 500; }
     /* 팝업(다이얼로그) 안의 표/목록 스타일 — 더 크고 화려하게 */
     .kiosk-dialog-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; margin-bottom: 4px; }
     .kiosk-dialog-table th, .kiosk-dialog-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--line); }
@@ -3113,9 +3128,11 @@
         <div class="kiosk-note-grid" style="margin-top:22px;">
           <div class="kiosk-note-card"><span class="ic">🖥️</span><b>온라인 접수</b><span>12.8(화) 9시 ~ 12.10(목) 12시, 본교 홈페이지 신입학 원서 접수 사이트</span></div>
           <div class="kiosk-note-card"><span class="ic">✉️</span><b>우편 제출</b><span>12.8(화) ~ 12.10(목) 소인분까지 유효, 민족사관고 입학관리실</span></div>
-          <div class="kiosk-note-card"><span class="ic">📅</span><b>1단계 합격자 발표</b><span>12.17(목) 오전 10시, 민족사관고 홈페이지</span></div>
-          <div class="kiosk-note-card warn"><span class="ic">💳</span><b>전형료</b><span>1단계 없음 · 2단계 30,000원(1단계 합격자에 한함)</span></div>
         </div>
+        <div class="kiosk-arrow-banner">
+          <span class="ic">📅</span><b>1단계 합격자 발표</b><span class="detail">12.17(목) 오전 10시, 민족사관고 홈페이지</span>
+        </div>
+        <div class="kiosk-fee-pill"><span class="ic">💳</span><b>전형료</b><span class="detail">1단계 없음 · 2단계 30,000원(1단계 합격자에 한함)</span></div>
         ${KIOSK_YOGANG_SOURCE}`;
     }
 
