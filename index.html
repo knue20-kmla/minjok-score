@@ -761,26 +761,19 @@
     }
     .kiosk-overlay.open { display: flex; flex-direction: column; }
     .kiosk-body {
-      flex: 0 0 auto;
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 30px;
-      padding: 5vh 5vw 0;
-      min-height: 0;
-    }
-    .kiosk-controls-spacer {
-      flex: 1 1 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 5vh 5vw;
       min-height: 0;
     }
     .kiosk-slide {
       /* 흰색 카드 자체는 내용과 무관하게 항상 같은 크기를 유지
          (모바일 기준 크기 — 768px 이상 화면에서는 아래 미디어쿼리로 더 크게 표시) */
       width: min(880px, 92vw);
-      height: min(640px, calc(82vh - 96px));
+      height: min(640px, 82vh);
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
@@ -806,7 +799,7 @@
          뺀 나머지를 실제 카드 너비로 사용해야, 버튼 때문에 카드가 의도한 크기보다
          작게 눌리지 않음 */
       .kiosk-body { padding: 3vh 2vw; gap: 18px; }
-      .kiosk-slide { width: min(1200px, calc(96vw - 140px)); height: min(873px, calc(88vh - 96px)); }
+      .kiosk-slide { width: min(1200px, calc(96vw - 140px)); height: min(873px, 88vh); }
     }
     .kiosk-content-row {
       /* eyebrow 배지가 차지하는 높이를 제외한 나머지 영역 — 실제 콘텐츠가
@@ -1312,12 +1305,12 @@
     }
     .kiosk-controls-bar {
       display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
-      gap: 10px; position: relative; z-index: 510;
+      gap: 6px; position: fixed; left: 50%; transform: translateX(-50%); z-index: 510;
     }
     .kiosk-exit-btn {
-      padding: 8px 16px; border: none; border-radius: 999px;
+      padding: 4px 12px; border: none; border-radius: 999px;
       background: rgba(6, 37, 34, 0.55); color: #fff;
-      font-family: inherit; font-weight: 700; font-size: 0.82rem; letter-spacing: 0.02em;
+      font-family: inherit; font-weight: 700; font-size: 0.7rem; letter-spacing: 0.02em;
       cursor: pointer;
     }
     .kiosk-exit-btn:active { background: rgba(6, 37, 34, 0.8); }
@@ -1335,18 +1328,18 @@
       .kiosk-nav-btn { width: 40px; height: 40px; font-size: 1.5rem; }
     }
     .kiosk-speed-ctrl {
-      display: flex; gap: 3px; padding: 4px; border-radius: 999px;
+      display: flex; gap: 2px; padding: 2px; border-radius: 999px;
       background: rgba(6, 37, 34, 0.55);
     }
     .kiosk-speed-btn {
-      padding: 6px 12px; border: none; border-radius: 999px; background: transparent;
-      color: rgba(255, 255, 255, 0.75); font-family: inherit; font-weight: 700; font-size: 0.78rem; cursor: pointer;
+      padding: 3px 9px; border: none; border-radius: 999px; background: transparent;
+      color: rgba(255, 255, 255, 0.75); font-family: inherit; font-weight: 700; font-size: 0.68rem; cursor: pointer;
     }
     .kiosk-speed-btn.active { background: #ffffff; color: var(--teal-dark); }
     .kiosk-autoplay-btn {
-      padding: 8px 16px; border: none; border-radius: 999px;
+      padding: 4px 12px; border: none; border-radius: 999px;
       background: rgba(6, 37, 34, 0.55); color: rgba(255, 255, 255, 0.9);
-      font-family: inherit; font-weight: 800; font-size: 0.82rem; cursor: pointer;
+      font-family: inherit; font-weight: 800; font-size: 0.7rem; cursor: pointer;
       white-space: nowrap;
     }
     .kiosk-autoplay-btn.active { background: var(--teal); color: #fff; }
@@ -1715,15 +1708,15 @@
     <div class="kiosk-popup-body">
       <p>정확한 일정은 모집요강 및 홈페이지 공지를 다시 확인하세요.</p>
       <div class="kiosk-table-scroll" style="margin:0 0 4px;">
-        <table class="kiosk-dialog-table" style="min-width:420px;">
-          <thead><tr><th>구분</th><th>일정</th><th>장소</th></tr></thead>
+        <table class="kiosk-dialog-table" style="min-width:460px;">
+          <thead><tr><th colspan="2">구분</th><th>일정</th><th>장소</th></tr></thead>
           <tbody>
-            <tr><td>원서 접수(온라인)</td><td>12.8(화) 9시 ~ 12.10(목) 12시(정오)</td><td>민족사관고 홈페이지</td></tr>
-            <tr><td>원서 접수(우편)</td><td>12.8(화) ~ 12.10(목)<br>※10일 소인분까지 유효</td><td>민족사관고 입학관리실</td></tr>
-            <tr><td>1단계 합격자 발표</td><td>12.17(목) 오전 10시</td><td>민족사관고 홈페이지</td></tr>
-            <tr><td>면접 및 체력검사</td><td>12.31(목) 12시(정오)</td><td>민족사관고</td></tr>
-            <tr><td>최종합격자 발표</td><td>2027.1.4(월) ~ 1.6(수)</td><td>민족사관고 홈페이지</td></tr>
-            <tr><td>합격자 등록</td><td>추후 안내</td><td>민족사관고 행정실(계좌 입금)</td></tr>
+            <tr><td rowspan="2">원서 접수</td><td>온라인</td><td>2026.12.8(화) 오전 9시 ~ 12.10(목) 12시(정오)</td><td>민족사관고 홈페이지</td></tr>
+            <tr><td>우편 제출</td><td>2026.12.8(화) ~ 12.10(목)<br>※12.10(목) 소인 분까지 유효</td><td>민족사관고 입학관리실</td></tr>
+            <tr><td colspan="2">면접 대상자 발표</td><td>2026.12.17(목) 오전 10시</td><td>민족사관고 홈페이지</td></tr>
+            <tr><td colspan="2">면접 및 체력검사</td><td>2026.12.21(월) ~ 12.22(화)</td><td>민족사관고</td></tr>
+            <tr><td colspan="2">최종합격자 발표</td><td>2026.12.31(목) 12시(정오)</td><td>민족사관고 홈페이지</td></tr>
+            <tr><td colspan="2">합격자 등록</td><td>2027.1.4(월) ~ 1.6(수)</td><td>민족사관고 행정실(계좌 입금)</td></tr>
           </tbody>
         </table>
       </div>
@@ -2061,16 +2054,14 @@
       </div>
       <button type="button" class="kiosk-nav-btn kiosk-nav-next" aria-label="다음 화면" onclick="event.stopPropagation(); kioskManualNextSlide();">›</button>
     </div>
-    <div class="kiosk-controls-spacer">
-      <div class="kiosk-controls-bar">
-        <button type="button" class="kiosk-autoplay-btn" id="kioskAutoPlayBtn" onclick="event.stopPropagation(); kioskToggleAutoPlay();">▶ 자동재생</button>
-        <div class="kiosk-speed-ctrl">
-          <button type="button" class="kiosk-speed-btn" data-speed="0.5" onclick="event.stopPropagation(); kioskSetSpeed(0.5);">0.5x</button>
-          <button type="button" class="kiosk-speed-btn active" data-speed="1" onclick="event.stopPropagation(); kioskSetSpeed(1);">1x</button>
-          <button type="button" class="kiosk-speed-btn" data-speed="1.5" onclick="event.stopPropagation(); kioskSetSpeed(1.5);">1.5x</button>
-        </div>
-        <button type="button" class="kiosk-exit-btn" onclick="event.stopPropagation(); kioskExit();">■ 종료</button>
+    <div class="kiosk-controls-bar" id="kioskControlsBar">
+      <button type="button" class="kiosk-autoplay-btn" id="kioskAutoPlayBtn" onclick="event.stopPropagation(); kioskToggleAutoPlay();">▶ 자동재생</button>
+      <div class="kiosk-speed-ctrl">
+        <button type="button" class="kiosk-speed-btn" data-speed="0.5" onclick="event.stopPropagation(); kioskSetSpeed(0.5);">0.5x</button>
+        <button type="button" class="kiosk-speed-btn active" data-speed="1" onclick="event.stopPropagation(); kioskSetSpeed(1);">1x</button>
+        <button type="button" class="kiosk-speed-btn" data-speed="1.5" onclick="event.stopPropagation(); kioskSetSpeed(1.5);">1.5x</button>
       </div>
+      <button type="button" class="kiosk-exit-btn" onclick="event.stopPropagation(); kioskExit();">■ 종료</button>
     </div>
     <div class="kiosk-footer">
       <div id="kioskDots" class="kiosk-dots"></div>
@@ -2939,6 +2930,25 @@
     let _kioskSpeed = 1;
     let _kioskOverlayClickBound = false;
 
+    function kioskPositionControlsBar() {
+      // 자동재생·배속·종료 버튼을 슬라이드 카드와 하단 점(kiosk-footer) 사이
+      // 빈 공간의 정중앙에 배치 — 카드 자체의 크기/위치에는 영향을 주지 않도록
+      // fixed 포지션으로 띄우고 JS로 실측한 위치를 top 값으로 지정함
+      const card = document.getElementById("kioskSlide");
+      const bar = document.getElementById("kioskControlsBar");
+      const dots = document.getElementById("kioskDots");
+      if (!card || !bar || !dots) return;
+      const cardRect = card.getBoundingClientRect();
+      const dotsRect = dots.getBoundingClientRect();
+      const gapMid = cardRect.bottom + (dotsRect.top - cardRect.bottom) / 2;
+      let top = gapMid - bar.offsetHeight / 2;
+      const minTop = cardRect.bottom + 2;
+      const maxTop = dotsRect.top - bar.offsetHeight - 2;
+      if (maxTop >= minTop) top = Math.min(Math.max(top, minTop), maxTop);
+      bar.style.top = Math.round(top) + "px";
+    }
+    window.addEventListener("resize", () => kioskPositionControlsBar());
+
     function kioskFitSlide(inner) {
       // eyebrow 배지가 차지하는 고정 영역을 제외한 나머지 공간(.kiosk-content-row)에
       // 맞춰서만 스케일을 계산 — eyebrow 자체는 이 스케일의 영향을 받지 않는다.
@@ -3570,6 +3580,8 @@
         item.addEventListener("toggle", () => kioskFitSlide(inner));
       });
       card.classList.add("kiosk-in");
+      kioskPositionControlsBar();
+      setTimeout(kioskPositionControlsBar, 650); // 등장 트랜지션(0.6s) 종료 후 최종 위치로 보정
       kioskRenderDots();
       clearTimeout(_kioskTimer);
       if (_kioskAutoPlay && !_kioskPaused) _kioskTimer = window.setTimeout(kioskNextSlide, slide.duration / _kioskSpeed);
