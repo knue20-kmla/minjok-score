@@ -2945,7 +2945,10 @@
           </div>
           <div class="kiosk-note-card">
             <span class="ic">🌈</span><b>사회다양성 영역</b><span>다문화가정·북한이탈주민·다자녀가정 등 19개 유형 (기준중위소득 160% 이하)</span>
-            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskDiversityDialog');">🌈 대상 유형 19종 보기</button>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskDiversityDialog');">🌈 대상 유형 19종 보기</button>
+              <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskDiversityDocsDialog');">📑 추가 서류 보기</button>
+            </div>
           </div>
           <div class="kiosk-note-card">
             <span class="ic">📑</span><b>추가 서류</b><span>공통 제출 서류(1)~(5) + 학교장·학부모 확인서(붙임1·2), 주민등록등본, 가족관계증명서 + 유형별 증빙 서류</span>
@@ -2953,7 +2956,7 @@
           </div>
           <div class="kiosk-note-card" style="display:flex;flex-direction:column;">
             <span class="ic">💰</span><b>사회다양성 영역 소득 기준</b><span>부모 건강보험료 기준 소득 8분위(기준중위소득 160%) 이하 가정의 자녀만 해당</span>
-            <button type="button" class="kiosk-note-link-btn" style="margin-top:auto;" onclick="event.stopPropagation(); kioskOpenDialog('kioskIncomeTableDialog');">💰 소득 기준표 보기</button>
+            <button type="button" class="kiosk-note-link-btn" style="margin-top:auto;align-self:flex-start;" onclick="event.stopPropagation(); kioskOpenDialog('kioskIncomeTableDialog');">💰 소득 기준표 보기</button>
           </div>
           <div class="kiosk-note-card warn"><span class="ic">✅</span><b>선발 원칙</b><span>기회균등 영역 대상자를 50% 이상 우선 선발</span></div>
           <div class="kiosk-note-card"><span class="ic">🔁</span><b>탈락·미달 시 처리</b><span>탈락 시 희망에 따라 일반전형 포함 가능, 정원 미달 시 미달 인원의 50%까지 일반전형에서 충원</span></div>
