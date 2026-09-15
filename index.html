@@ -1144,15 +1144,15 @@
     /* 전형 개요/일반전형/강원인재/사회통합/정원외 슬라이드 전용 —
        안내 카드를 2열이 아닌 1열 전체 폭으로 펼쳐서, 뒤쪽 슬라이드의
        표·다운로드 카드처럼 카드 가로 폭을 그대로 채우도록 함 */
-    .kiosk-note-grid-1col { grid-template-columns: 1fr; gap: 4px; }
-    .kiosk-note-grid-1col .kiosk-note-card { padding: 5px 16px; }
+    .kiosk-note-grid-1col { grid-template-columns: 1fr; gap: 3px; }
+    .kiosk-note-grid-1col .kiosk-note-card { padding: 4px 16px; }
     .kiosk-note-grid-1col .kiosk-note-card .ic {
       display: inline-block; margin: 0 8px 0 0; vertical-align: middle; font-size: 1.05rem;
     }
     .kiosk-note-grid-1col .kiosk-note-card b { display: inline; margin-bottom: 0; font-size: 0.92rem; }
-    .kiosk-note-grid-1col .kiosk-note-card span { margin-top: 1px; font-size: 0.8rem; line-height: 1.3; }
+    .kiosk-note-grid-1col .kiosk-note-card span { margin-top: 0; font-size: 0.8rem; line-height: 1.28; }
     .kiosk-note-grid-1col .kiosk-note-card .kiosk-note-link-btn {
-      margin-top: 4px; padding: 4px 10px; font-size: 0.72rem;
+      margin-top: 3px; padding: 3px 10px; font-size: 0.72rem;
     }
     .kiosk-note-card {
       padding: 13px 16px; border-radius: 16px; background: var(--soft); border: 1px solid var(--line);
@@ -3197,8 +3197,8 @@
     function kioskExtraAdmissionHTML() {
       return `
         <div class="kiosk-eyebrow">정원 외 특별전형</div>
-        <h2 class="kiosk-title">특례입학대상자 · 국가유공자 자녀</h2>
-        <p class="kiosk-sub">일반전형 지원 자격을 기본으로 갖춘 학생 중 아래에 해당하는 경우 정원 외로 선발합니다.</p>
+        <h2 class="kiosk-title" style="margin-bottom:4px;">특례입학대상자 · 국가유공자 자녀</h2>
+        <p class="kiosk-sub" style="margin-bottom:12px;">일반전형 지원 자격을 기본으로 갖춘 학생 중 아래에 해당하는 경우 정원 외로 선발합니다.</p>
         <div class="kiosk-note-grid kiosk-note-grid-1col" style="margin-top:8px;">
           <div class="kiosk-note-card">
             <span class="ic">🌏</span><b>해외 재학 후 귀국 학생</b><span>외국 학교 2년 이상 재학, 부모와 함께 2년 이상 해외 거주(모집 정원 2% 이내)</span>
