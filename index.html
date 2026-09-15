@@ -1136,31 +1136,40 @@
       background: var(--teal); color: #fff; font-weight: 800; font-size: 0.78rem;
     }
     .kiosk-note-link-btn:hover { background: var(--teal-dark); }
-    .kiosk-download-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .kiosk-download-grid { display: flex; flex-direction: column; gap: 9px; }
     .kiosk-download-card {
-      display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-radius: 16px;
-      background: linear-gradient(155deg, #ffffff, var(--soft)); border: 1px solid var(--line);
-      text-decoration: none; color: inherit; box-shadow: 0 1px 2px rgba(15, 40, 38, .04);
-      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+      display: flex; flex-direction: column; gap: 5px; padding: 11px 14px; border-radius: 13px;
+      background: linear-gradient(100deg, var(--soft), #ffffff 60%); border: 1px solid var(--line);
+      border-left: 4px solid var(--teal); text-decoration: none; color: inherit;
+      box-shadow: 0 1px 2px rgba(15, 40, 38, .04);
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
     }
-    .kiosk-download-card:hover { transform: translateY(-2px); border-color: var(--teal); box-shadow: 0 10px 22px rgba(15, 118, 110, .16); }
+    .kiosk-download-card:hover { transform: translateX(3px); border-color: var(--teal); box-shadow: 0 8px 18px rgba(15, 118, 110, .16); }
+    .kiosk-download-card.type-attach { border-left-color: var(--amber); background: linear-gradient(100deg, var(--amber-soft), #ffffff 60%); }
+    .kiosk-download-card.type-attach:hover { border-color: var(--amber); box-shadow: 0 8px 18px rgba(180, 83, 9, .18); }
+    .kiosk-download-card .dl-row { display: flex; align-items: center; gap: 10px; }
     .kiosk-download-card .ic {
-      flex: 0 0 auto; width: 38px; height: 38px; border-radius: 11px; background: var(--teal-soft);
-      display: flex; align-items: center; justify-content: center; font-size: 1.05rem;
+      flex: 0 0 auto; width: 32px; height: 32px; border-radius: 10px; background: var(--teal-soft); color: var(--teal-dark);
+      display: flex; align-items: center; justify-content: center; font-size: 0.95rem;
     }
-    .kiosk-download-card .dl-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+    .kiosk-download-card.type-attach .ic { background: var(--amber-soft); color: var(--amber); }
     .kiosk-download-card .file-tag {
-      align-self: flex-start; font-size: 0.62rem; font-weight: 800; letter-spacing: .03em;
-      color: var(--teal-dark); background: #fff; border: 1px solid var(--teal); border-radius: 999px; padding: 1px 8px;
+      flex: 0 0 auto; font-size: 0.6rem; font-weight: 800; letter-spacing: .03em;
+      color: var(--teal-dark); background: #fff; border: 1px solid var(--teal); border-radius: 999px; padding: 2px 9px;
     }
-    .kiosk-download-card b { font-size: 0.84rem; line-height: 1.35; color: var(--ink); font-weight: 700; }
-    .kiosk-download-card span.dl-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.4; }
+    .kiosk-download-card.type-attach .file-tag { color: var(--amber); border-color: var(--amber); }
+    .kiosk-download-card b {
+      flex: 1 1 auto; min-width: 0; font-size: 0.85rem; line-height: 1.3; color: var(--ink); font-weight: 700;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
     .kiosk-download-card .dl-arrow {
-      flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%; background: var(--teal); color: #fff;
-      display: flex; align-items: center; justify-content: center; font-size: 0.72rem; margin-top: 1px;
+      flex: 0 0 auto; width: 23px; height: 23px; border-radius: 50%; background: var(--teal); color: #fff;
+      display: flex; align-items: center; justify-content: center; font-size: 0.7rem;
     }
+    .kiosk-download-card.type-attach .dl-arrow { background: var(--amber); }
+    .kiosk-download-card .dl-desc { padding-left: 42px; font-size: 0.76rem; color: var(--muted); line-height: 1.4; }
     @media (max-width: 480px) {
-      .kiosk-download-grid { grid-template-columns: 1fr; }
+      .kiosk-download-card b { white-space: normal; }
     }
     .kiosk-note-card.warn .kiosk-note-link-btn { background: var(--amber); }
     /* 팝업(다이얼로그) 안의 표/목록 스타일 — 더 크고 화려하게 */
@@ -3396,51 +3405,51 @@
         <div class="kiosk-eyebrow">필요 서식</div>
         <h2 class="kiosk-title">신입생 입학에 필요한 서식·붙임 파일</h2>
         <p class="kiosk-sub">지원 유형에 해당하는 파일을 눌러 내려받으세요.</p>
-        <div class="kiosk-download-grid" style="margin-top:22px;">
+        <div class="kiosk-download-grid" style="margin-top:20px;">
           <a class="kiosk-download-card" href="forms/서식1_공통제출서류.hwp" download>
-            <span class="ic">📄</span>
-            <span class="dl-body">
+            <span class="dl-row">
+              <span class="ic">📄</span>
               <span class="file-tag">서식1 · HWP</span>
               <b>(학교장전형) 중학교 졸업자, 중학교 졸업자와 동등 학력 인정자 공통 제출 서류</b>
-              <span class="dl-desc">중학교 졸업자·동등학력 인정자 공통 제출 서류</span>
+              <span class="dl-arrow">⬇</span>
             </span>
-            <span class="dl-arrow">⬇</span>
+            <span class="dl-desc">중학교 졸업자·동등학력 인정자 공통 제출 서류</span>
           </a>
           <a class="kiosk-download-card" href="forms/서식2_배정사실없음_중학교발급용.hwp" download>
-            <span class="ic">📄</span>
-            <span class="dl-body">
+            <span class="dl-row">
+              <span class="ic">📄</span>
               <span class="file-tag">서식2 · HWP</span>
               <b>고등학교 배정(선발)받은 사실이 없는 경우 [중학교 발급용]</b>
-              <span class="dl-desc">고등학교 배정(선발)받은 사실이 없는 경우 (중학교 발급용)</span>
+              <span class="dl-arrow">⬇</span>
             </span>
-            <span class="dl-arrow">⬇</span>
+            <span class="dl-desc">고등학교 배정(선발)받은 사실이 없는 경우 (중학교 발급용)</span>
           </a>
           <a class="kiosk-download-card" href="forms/서식3_배정사실있음_고등학교발급용.hwp" download>
-            <span class="ic">📄</span>
-            <span class="dl-body">
+            <span class="dl-row">
+              <span class="ic">📄</span>
               <span class="file-tag">서식3 · HWP</span>
               <b>고등학교 배정(선발)받은 사실이 있는 경우 [고등학교 발급용]</b>
-              <span class="dl-desc">고등학교 배정(선발)받은 사실이 있는 경우 (고등학교 발급용)</span>
+              <span class="dl-arrow">⬇</span>
             </span>
-            <span class="dl-arrow">⬇</span>
+            <span class="dl-desc">고등학교 배정(선발)받은 사실이 있는 경우 (고등학교 발급용)</span>
           </a>
-          <a class="kiosk-download-card" href="forms/붙임1_학교장확인서.hwp" download>
-            <span class="ic">📎</span>
-            <span class="dl-body">
+          <a class="kiosk-download-card type-attach" href="forms/붙임1_학교장확인서.hwp" download>
+            <span class="dl-row">
+              <span class="ic">📎</span>
               <span class="file-tag">붙임1 · HWP</span>
               <b>2027학년도 사회통합·특례입학대상자 국가유공자 자녀 전형 학교장 확인서</b>
-              <span class="dl-desc">사회통합·특례입학대상자·국가유공자 자녀 전형</span>
+              <span class="dl-arrow">⬇</span>
             </span>
-            <span class="dl-arrow">⬇</span>
+            <span class="dl-desc">사회통합·특례입학대상자·국가유공자 자녀 전형</span>
           </a>
-          <a class="kiosk-download-card" href="forms/붙임2_학부모확인서.hwp" download>
-            <span class="ic">📎</span>
-            <span class="dl-body">
+          <a class="kiosk-download-card type-attach" href="forms/붙임2_학부모확인서.hwp" download>
+            <span class="dl-row">
+              <span class="ic">📎</span>
               <span class="file-tag">붙임2 · HWP</span>
               <b>2027학년도 사회통합·특례입학대상자 국가유공자 자녀 전형 학부모 확인서</b>
-              <span class="dl-desc">사회통합·특례입학대상자·국가유공자 자녀 전형</span>
+              <span class="dl-arrow">⬇</span>
             </span>
-            <span class="dl-arrow">⬇</span>
+            <span class="dl-desc">사회통합·특례입학대상자·국가유공자 자녀 전형</span>
           </a>
         </div>`;
     }
