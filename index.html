@@ -1329,16 +1329,21 @@
     .kiosk-exit-btn:active { background: rgba(220, 60, 60, 0.55); }
     .kiosk-nav-btn {
       flex: 0 0 auto;
-      width: 52px; height: 52px; border: none; border-radius: 50%;
-      background: #ffffff; color: var(--teal-dark);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-      font-size: 2rem; font-weight: 900; line-height: 1; cursor: pointer;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(10, 32, 30, 0.5); color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
       display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
     }
-    .kiosk-nav-btn:hover { background: #eefaf7; }
-    .kiosk-nav-btn:active { background: #d9f2ed; }
+    .kiosk-nav-btn svg { width: 20px; height: 20px; display: block; }
+    .kiosk-nav-btn:hover { background: rgba(15, 118, 110, 0.6); border-color: rgba(255, 255, 255, 0.32); }
+    .kiosk-nav-btn:active { transform: scale(0.9); }
     @media (max-width: 640px) {
-      .kiosk-nav-btn { width: 40px; height: 40px; font-size: 1.5rem; }
+      .kiosk-nav-btn { width: 38px; height: 38px; }
+      .kiosk-nav-btn svg { width: 16px; height: 16px; }
     }
     .kiosk-speed-ctrl {
       display: flex; gap: 2px; padding: 3px; border-radius: 999px;
@@ -2065,14 +2070,18 @@
   <div id="kioskOverlay" class="kiosk-overlay">
     <div class="kiosk-pause-badge">⏸ 일시정지 · 탭하면 계속</div>
     <div class="kiosk-body">
-      <button type="button" class="kiosk-nav-btn kiosk-nav-prev" aria-label="이전 화면" onclick="event.stopPropagation(); kioskPrevSlide();">‹</button>
+      <button type="button" class="kiosk-nav-btn kiosk-nav-prev" aria-label="이전 화면" onclick="event.stopPropagation(); kioskPrevSlide();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
       <div id="kioskSlide" class="kiosk-slide">
         <div id="kioskEyebrow" class="kiosk-eyebrow"></div>
         <div class="kiosk-content-row">
           <div id="kioskSlideInner" class="kiosk-slide-inner"></div>
         </div>
       </div>
-      <button type="button" class="kiosk-nav-btn kiosk-nav-next" aria-label="다음 화면" onclick="event.stopPropagation(); kioskManualNextSlide();">›</button>
+      <button type="button" class="kiosk-nav-btn kiosk-nav-next" aria-label="다음 화면" onclick="event.stopPropagation(); kioskManualNextSlide();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
     </div>
     <div class="kiosk-controls-bar" id="kioskControlsBar">
       <button type="button" class="kiosk-autoplay-btn" id="kioskAutoPlayBtn" onclick="event.stopPropagation(); kioskToggleAutoPlay();">▶ 자동재생</button>
