@@ -875,28 +875,31 @@
     .kiosk-hero-logo-wrap {
       display: flex; align-items: center; justify-content: center;
       flex: 0 0 auto;
-      width: 320px; height: 320px; margin: 0 0 26px;
+      width: 350px; height: 350px; margin: 0 0 8px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(30, 64, 175, 0.14) 55%, rgba(30, 64, 175, 0) 100%);
+      background: radial-gradient(circle, rgba(30, 64, 175, 0.06) 88%, rgba(30, 64, 175, 0) 100%);
     }
-    .kiosk-hero-logo { display: block; width: 280px; height: 280px; object-fit: contain; filter: drop-shadow(0 18px 32px rgba(30, 58, 138, 0.35)); }
+    .kiosk-hero-logo { display: block; width: 336px; height: 336px; object-fit: contain; filter: drop-shadow(0 18px 32px rgba(30, 58, 138, 0.32)); }
     .kiosk-hero-badge {
       display: inline-block; padding: 8px 20px; margin-bottom: 18px;
       border-radius: 999px; font-weight: 800; font-size: 1rem;
       background: linear-gradient(90deg, var(--teal), #0d9488); color: #fff;
       box-shadow: 0 10px 24px rgba(15, 118, 110, 0.3);
     }
+    .kiosk-hero-year {
+      display: inline-block; position: relative; margin: 0 0 12px; padding-bottom: 9px;
+      font-size: 1.08rem; font-weight: 800; letter-spacing: .12em; color: #2563eb;
+    }
+    .kiosk-hero-year::after {
+      content: ""; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+      width: 44px; height: 3px; border-radius: 999px;
+      background: linear-gradient(90deg, #1e3a8a, #60a5fa);
+    }
     .kiosk-hero-title {
-      font-size: 3.6rem; font-weight: 900; margin: 0; letter-spacing: -0.015em; line-height: 1.25;
+      font-size: 3.1rem; font-weight: 900; margin: 0; letter-spacing: -0.015em; line-height: 1.25;
       word-break: keep-all; overflow-wrap: break-word;
       background: linear-gradient(100deg, #1e3a8a, #1d4ed8 45%, #3b82f6 75%, #60a5fa);
       -webkit-background-clip: text; background-clip: text; color: transparent;
-      position: relative; padding-bottom: 18px;
-    }
-    .kiosk-hero-title::after {
-      content: ""; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
-      width: 72px; height: 4px; border-radius: 999px;
-      background: linear-gradient(90deg, #1e3a8a, #60a5fa);
     }
     .kiosk-hero p { font-size: 1.15rem; color: var(--muted); margin: 0; }
     .kiosk-max {
@@ -1332,9 +1335,10 @@
     @media (max-width: 640px) {
       .kiosk-slide { padding: 28px 22px; border-radius: 22px; }
       .kiosk-title { font-size: 1.5rem; }
-      .kiosk-hero-title { font-size: 1.85rem; }
-      .kiosk-hero-logo-wrap { width: 220px; height: 220px; }
-      .kiosk-hero-logo { width: 190px; height: 190px; }
+      .kiosk-hero-title { font-size: 1.7rem; }
+      .kiosk-hero-year { font-size: 0.85rem; }
+      .kiosk-hero-logo-wrap { width: 250px; height: 250px; margin-bottom: 4px; }
+      .kiosk-hero-logo { width: 240px; height: 240px; }
       .kiosk-note-grid { grid-template-columns: 1fr; }
     }
 
@@ -2963,7 +2967,8 @@
       return `
         <div class="kiosk-hero">
           <div class="kiosk-hero-logo-wrap"><img src="https://i.imgur.com/Mo4ogKc.png" class="kiosk-hero-logo" alt="민족사관고등학교"></div>
-          <h1 class="kiosk-hero-title">2027학년도 신입생 모집 안내</h1>
+          <div class="kiosk-hero-year">2027학년도</div>
+          <h1 class="kiosk-hero-title">신입생 모집 안내</h1>
         </div>`;
     }
 
