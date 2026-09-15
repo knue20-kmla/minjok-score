@@ -759,7 +759,8 @@
       min-height: 0;
     }
     .kiosk-slide {
-      /* 흰색 카드 자체는 내용과 무관하게 항상 같은 크기를 유지 */
+      /* 흰색 카드 자체는 내용과 무관하게 항상 같은 크기를 유지
+         (모바일 기준 크기 — 768px 이상 화면에서는 아래 미디어쿼리로 더 크게 표시) */
       width: min(880px, 92vw);
       height: min(640px, 82vh);
       display: flex;
@@ -778,6 +779,16 @@
       opacity: 1;
       transform: translateY(0);
       transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    /* PC·태블릿처럼 화면이 넓을 때는 카드(흰 배경+내용)를 가로세로 비율(11:8)을
+       유지한 채 더 크게 표시해 가독성을 높임. 휴대폰(768px 미만)은 위 기본
+       크기(880x640 기준)를 그대로 유지함 */
+    @media (min-width: 768px) {
+      /* .kiosk-body의 좌우 padding(2vw*2)과 이전/다음 버튼+간격(52px+18px 양쪽)을
+         뺀 나머지를 실제 카드 너비로 사용해야, 버튼 때문에 카드가 의도한 크기보다
+         작게 눌리지 않음 */
+      .kiosk-body { padding: 3vh 2vw; gap: 18px; }
+      .kiosk-slide { width: min(1200px, calc(96vw - 140px)); height: min(873px, 88vh); }
     }
     .kiosk-content-row {
       /* eyebrow 배지가 차지하는 높이를 제외한 나머지 영역 — 실제 콘텐츠가
