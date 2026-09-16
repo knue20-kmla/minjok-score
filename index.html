@@ -1170,7 +1170,13 @@
     .kiosk-quota-label { font-weight: 800; font-size: 0.95rem; color: var(--ink); }
     .kiosk-quota-value { text-align: right; font-weight: 900; color: var(--teal-dark); font-size: 1rem; }
     .kiosk-source-note {
-      margin: 14px 0 0; font-size: 0.78rem; color: var(--muted); text-align: center; line-height: 1.5;
+      margin: 14px 0 0; font-size: 0.82rem; font-weight: 700; color: var(--teal-dark);
+      text-align: center; line-height: 1.5; white-space: nowrap;
+    }
+    /* 모바일 폭에서는 한 줄 강제 시 글자가 카드 여백 끝까지 바짝 붙으므로
+       좁은 화면에서만 줄바꿈을 허용해 여유를 둠 */
+    @media (max-width: 480px) {
+      .kiosk-source-note { white-space: normal; }
     }
     /* 전형 일정/응시 제한/자기소개서 배제사항 등을 팝업으로 여는 카드 내 버튼 */
     .kiosk-note-link-btn {
@@ -3184,9 +3190,9 @@
             <span class="ic">📑</span><b>추가 서류</b><span>공통 제출 서류(1)~(5) + 학교장·학부모 확인서(붙임1·2), 주민등록등본, 가족관계증명서 + 유형별 증빙 서류</span>
             <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskSocialCommonDocsDialog');">📑 사회통합전형 공통 서류 보기</button>
           </div>
-          <div class="kiosk-note-card" style="display:flex;flex-direction:column;">
+          <div class="kiosk-note-card">
             <span class="ic">💰</span><b>사회다양성 영역 소득 기준</b><span>부모 건강보험료 기준 소득 8분위(기준중위소득 160%) 이하 가정의 자녀만 해당</span>
-            <button type="button" class="kiosk-note-link-btn" style="margin-top:auto;align-self:flex-start;" onclick="event.stopPropagation(); kioskOpenDialog('kioskIncomeTableDialog');">💰 소득 기준표 보기</button>
+            <button type="button" class="kiosk-note-link-btn" onclick="event.stopPropagation(); kioskOpenDialog('kioskIncomeTableDialog');">💰 소득 기준표 보기</button>
           </div>
           <div class="kiosk-note-card warn"><span class="ic">✅</span><b>선발 원칙</b><span>기회균등 영역 대상자를 50% 이상 우선 선발</span></div>
           <div class="kiosk-note-card"><span class="ic">🔁</span><b>탈락·미달 시 처리</b><span>탈락 시 희망에 따라 일반전형 포함 가능, 정원 미달 시 미달 인원의 50%까지 일반전형에서 충원</span></div>
