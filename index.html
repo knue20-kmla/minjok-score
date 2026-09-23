@@ -1821,6 +1821,7 @@
         <li>고등학교 재학생, 휴학생, 졸업자는 지원할 수 없음</li>
         <li>전기고 합격자 지원 금지 : 전기 고등학교 합격자는 지원할 수 없음</li>
         <li>이중 지원 금지 : 타 자율형사립고, 외국어고, 국제고 지원자는 지원할 수 없음</li>
+        <li>고등학교 졸업자 재입학 제한 : 고등학교를 졸업한 사실이 있으면 1학년으로 다시 지원할 수 없음 (단, 검정고시 합격자·자퇴자 등 고등학교를 졸업한 사실이 없는 경우는 해당하지 않음)</li>
       </ol>
       <div class="dialog-actions">
         <button class="button primary" id="closeKioskEligibilityDialog" type="button">닫기</button>
@@ -3283,9 +3284,35 @@
         ${KIOSK_YOGANG_SOURCE}`;
     }
 
-    function kioskFlowHTML() {
+    function kioskProcessOverviewHTML() {
       return `
         <div class="kiosk-eyebrow">전형 방법</div>
+        <h2 class="kiosk-title">1단계·2단계, 두 번에 걸쳐 선발합니다</h2>
+        <p class="kiosk-sub">지원하는 전형과 관계없이 모든 지원자는 동일한 절차와 배점 기준으로 평가받습니다.</p>
+        <div class="kiosk-flow" style="margin-top:30px;">
+          <div class="kiosk-flow-card">
+            <span class="num">1</span>
+            <b>1단계 · 서류 전형</b>
+            <span>교과성적 40점 + 출결상황 감점<br>➜ 모집 정원의 <strong>2배수</strong> 이내 선발<br>(동점자는 모두 2단계 진출)</span>
+          </div>
+          <div class="kiosk-flow-arrow">➜</div>
+          <div class="kiosk-flow-card emph">
+            <span class="num">2</span>
+            <b>2단계 · 면접·체력검사</b>
+            <span>1단계 성적 40점 + 면접 60점 + 체력검사(심의)<br>➜ <strong>최종합격자</strong> 선발</span>
+          </div>
+        </div>
+        <div class="kiosk-note-grid kiosk-note-grid-1col" style="margin-top:18px;">
+          <div class="kiosk-note-card warn">
+            <span class="ic">💡</span><b>면접 비중이 가장 큽니다</b>
+            <span>2단계 100점 중 면접이 60점으로, 1단계 교과성적(40점)보다 비중이 큽니다. 이 계산기는 1단계 예상 점수를 확인하는 도구이니, 면접·체력검사 준비도 함께 챙겨주세요.</span>
+          </div>
+        </div>`;
+    }
+
+    function kioskFlowHTML() {
+      return `
+        <div class="kiosk-eyebrow">1단계 산출 방법</div>
         <h2 class="kiosk-title">1단계는 이렇게 산출됩니다</h2>
         <p class="kiosk-sub">중학교 2~3학년 교과 성적과 출결 상황을 반영해 40점 만점의 1단계 점수를 계산합니다.</p>
         <div class="kiosk-vsteps">
@@ -3544,6 +3571,49 @@
         </div>`;
     }
 
+    function kioskInterviewHTML() {
+      return `
+        <div class="kiosk-eyebrow">면접</div>
+        <h2 class="kiosk-title">2단계 면접, 무엇을 평가하나요?</h2>
+        <p class="kiosk-sub">복수의 평가위원이 지원자 한 명과 개별로 면접을 진행하며, 배점은 60점입니다.</p>
+        <div class="kiosk-note-grid kiosk-note-grid-1col" style="margin-top:18px;">
+          <div class="kiosk-note-card">
+            <span class="ic">🎯</span><b>자기주도학습 영역</b>
+            <span>세계적 지도자로 성장할 가능성과 창의적 영재성, 스스로 세운 목표·계획·학습 과정과 결과(진로 체험·동아리 활동·독서활동 등 포함), 지원 동기와 진로 계획을 평가합니다.</span>
+          </div>
+          <div class="kiosk-note-card">
+            <span class="ic">🤝</span><b>인성 영역</b>
+            <span>본교 건학 이념에 관심을 갖게 된 동기와 희생·헌신의 자세, 배려·나눔·협력·타인 존중·규칙 준수 등 핵심인성요소에 대한 중학교 활동 실적과 그 활동을 통해 배우고 느낀 점을 평가합니다.</span>
+          </div>
+          <div class="kiosk-note-card warn">
+            <span class="ic">💬</span><b>면접 준비, 이렇게 하면 좋아요</b>
+            <span>자기소개서와 학교생활기록부에 적은 내용을 바탕으로 "왜 그 활동을 했는지", "무엇을 배우고 느꼈는지"를 자신의 말로 편안하게 설명하는 연습을 해보세요. 정해진 정답을 찾는 자리가 아니라, 학생 스스로의 생각과 태도를 확인하는 자리입니다.</span>
+          </div>
+        </div>`;
+    }
+
+    function kioskFitnessHTML() {
+      return `
+        <div class="kiosk-eyebrow">체력검사</div>
+        <h2 class="kiosk-title">20m 왕복오래달리기(셔틀런)</h2>
+        <p class="kiosk-sub">면접과 같은 기간에 진행되며, 결과는 입학전형위원회 심의에 반영됩니다.</p>
+        <div class="kiosk-note-grid kiosk-note-grid-1col" style="margin-top:18px;">
+          <div class="kiosk-note-card">
+            <span class="ic">🏃</span><b>검사 내용</b><span>20m 구간을 정해진 신호에 맞춰 왕복하여 달리는 셔틀런(왕복오래달리기)</span>
+          </div>
+          <div class="kiosk-note-card">
+            <span class="ic">🎯</span><b>기준 횟수</b><span>남학생 40회 · 여학생 23회</span>
+          </div>
+          <div class="kiosk-note-card warn">
+            <span class="ic">🩺</span><b>체력검사 면제</b>
+            <span>건강상 특이사항으로 응시가 어려운 경우 상급종합병원(대학병원급) 발급 진단서를 체력검사 당일 제출, 장애로 응시가 어려운 경우 의사소견서·장애 증빙 서류를 우편 서류 접수 시 함께 제출하면 면제될 수 있습니다.</span>
+          </div>
+          <div class="kiosk-note-card">
+            <span class="ic">💡</span><b>미리 준비하면 좋아요</b><span>특별한 훈련보다는 평소 체육 시간이나 등하교 때 꾸준히 걷고 뛰는 습관만으로도 충분히 준비할 수 있는 수준입니다. 무리한 운동보다 컨디션 관리가 더 중요해요.</span>
+          </div>
+        </div>`;
+    }
+
     function kioskScholarshipHTML() {
       return `
         <div class="kiosk-eyebrow">신입생 대상 장학금</div>
@@ -3636,11 +3706,14 @@
       { duration: 12000, build: el => { el.innerHTML = kioskScholarshipHTML(); } },
       { duration: 10000, build: el => { el.innerHTML = kioskFormsHTML(); } },
       { duration: 10000, build: el => { el.innerHTML = kioskApplicationHTML(); } },
+      { duration: 11000, build: el => { el.innerHTML = kioskProcessOverviewHTML(); } },
       { duration: 11000, build: el => { el.innerHTML = kioskFlowHTML(); } },
       { duration: 11000, build: el => { el.innerHTML = kioskSemesterHTML(); } },
       { duration: 12000, build: el => { el.innerHTML = kioskExampleHTML(); } },
       { duration: 10000, build: el => { el.innerHTML = kioskSubjectsHTML(); } },
       { duration: 11000, build: el => { el.innerHTML = kioskAttendanceHTML(); } },
+      { duration: 11000, build: el => { el.innerHTML = kioskInterviewHTML(); } },
+      { duration: 11000, build: el => { el.innerHTML = kioskFitnessHTML(); } },
       { duration: 7000, build: el => { el.innerHTML = kioskClosingHTML(); } }
     ];
 
